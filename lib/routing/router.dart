@@ -11,8 +11,9 @@ import '../pages/splash/splash_page.dart';
 
 class AppRouter {
   // ── Route name constants ───────────────────────────────────────────────────
-  static const String splash      = '/splash';
-  static const String onboarding  = '/onboarding';
+ // static const String splash      = '/splash';
+  // ignore: constant_identifier_names
+  static const String GetStartedPage  = '/onboarding';
   static const String login       = '/login';
   static const String signup      = '/signup';
   static const String forgotPass  = '/forgot-password';
@@ -23,12 +24,13 @@ class AppRouter {
   static const String driverHome  = '/driver/home';
 
   // ── Initial route ──────────────────────────────────────────────────────────
-static const String initialRoute = splash; // was: home
+//static const String initialRoute = splash;
+  static const String initialRoute = GetStartedPage;
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
-    splash:     (_) => const SplashPage(),
-    onboarding: (_) => const OnboardingPage(),
+  //  splash:     (_) => const SplashPage(),
+    GetStartedPage: (_) => const OnboardingPage(),
     login:      (_) => const LoginPage(),
     signup:     (_) => const SignUpPage(),
     forgotPass: (_) => const ForgotPasswordPage(),

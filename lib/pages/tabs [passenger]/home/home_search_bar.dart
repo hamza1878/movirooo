@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
-
+import '../../search/nextdestinationsearch.dart';
 class HomeSearchBar extends StatelessWidget {
   const HomeSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const NextDestinationSearch(),
+          ),
+        );
+      },
       child: Container(
         height: 50,
         decoration: BoxDecoration(

@@ -32,14 +32,17 @@ class ThemeProvider extends ChangeNotifier {
   // ── Helpers ──────────────────────────────────────────────────────────────
 
   static String _toString(ThemeMode mode) => switch (mode) {
-        ThemeMode.dark   => 'dark',
         ThemeMode.light  => 'light',
-        ThemeMode.system => 'system',
+    ThemeMode.dark   => 'dark',
+
+    ThemeMode.system => 'system',
       };
 
   static ThemeMode _fromString(String? value) => switch (value) {
-        'dark'  => ThemeMode.dark,
-        'light' => ThemeMode.light,
-        _       => ThemeMode.system, // default for null / unknown
+    _         => ThemeMode.light,
+    'dark'  => ThemeMode.dark,
+
+    'light'=> ThemeMode.system,
+
       };
 }

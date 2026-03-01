@@ -52,6 +52,10 @@ flutter:
     - images/google.png
     - images/apple.png
     - images/ls.png
+    - images/bg.png
+    - images/trip.png
+    - images/bgstart.jpg
+    - images/img.png
     - images/splash.mov
     - images/remake.mp4
     - images/remake.gif
