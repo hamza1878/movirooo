@@ -63,5 +63,6 @@ flutter:
     - images/logo.gif
     - images/complete.gif
     - images/logob.png
+    - images/map_preview.png
     - images/translations/en.json
     - images/translations/fr.json

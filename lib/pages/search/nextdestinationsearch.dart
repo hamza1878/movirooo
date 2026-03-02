@@ -3,6 +3,8 @@ import 'package:moviroo/pages/search/RecentSearchItem.dart';
 import 'package:moviroo/pages/search/_TopBar.dart';
 import 'package:moviroo/pages/search/LocationCard.dart';
 
+import 'package:moviroo/pages/search/MapPreview.dart';
+
 import 'package:moviroo/pages/search/DateTimeRow.dart';
 import 'package:moviroo/pages/search/SectionLabel.dart';
 import 'package:moviroo/pages/tabs%20%5Bpassenger%5D/profile/edit_profile/personal_data_widgets.dart';
@@ -84,12 +86,20 @@ class NextDestinationSearch extends StatelessWidget {
                     title: item.title,
                     subtitle: item.subtitle,
                   );
+                        
                 },
               ),
             ),
+            SizedBox(height: 10),
+             Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: MapPreview()   )
+
+                 
           ],
         ),
       ),
+
       bottomNavigationBar: ConfirmButton(),
     );
   }

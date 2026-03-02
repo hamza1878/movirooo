@@ -68,9 +68,7 @@ class RouteAndCarPainter extends CustomPainter {
   // ── POIs ──────────────────────────────────────────────────────────────────
   static const _pois = [
     [0.18,  1.0, 0.28, 'Restaurant', 0xe532, 0xFFFF6B6B],
-    [0.35, -1.0, 0.28, 'Hospital',   0xe3f3, 0xFF22C55E],
-    [0.52,  1.0, 0.30, 'Hotel',      0xe549, 0xFF3B82F6],
-    [0.68, -1.0, 0.26, 'Park',       0xe3a0, 0xFF22C55E],
+    [0.35, -1.0, 0.28, 'Hotel',      0xe549, 0xFF3B82F6],
     [0.82,  1.0, 0.18, 'Mall',       0xe59c, 0xFFF59E0B],
   ];
 
