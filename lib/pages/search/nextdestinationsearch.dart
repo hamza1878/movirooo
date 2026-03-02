@@ -1,64 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:moviroo/pages/search/RecentSearchItem.dart';
 import 'package:moviroo/pages/search/_TopBar.dart';
 import 'package:moviroo/pages/search/LocationCard.dart';
 
-
+import 'package:moviroo/pages/search/DateTimeRow.dart';
+import 'package:moviroo/pages/search/SectionLabel.dart';
+import 'package:moviroo/pages/tabs%20%5Bpassenger%5D/profile/edit_profile/personal_data_widgets.dart';
+import 'package:moviroo/pages/search/ConfirmButton.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+class RecentSearch {
+  final String title;
+  final String subtitle;
+
+  const RecentSearch({
+    required this.title,
+    required this.subtitle,
+  });
+}
+const List<RecentSearch> recentSearchData = [
+  RecentSearch(
+    title: 'Golden Gate Bridge',
+    subtitle: 'San Francisco, CA 94129',
+  ),
+  RecentSearch(
+    title: 'The Ferry Building',
+    subtitle: '1 Ferry Building, San Francisco',
+  ),
+  RecentSearch(
+    title: 'Central Park',
+    subtitle: 'New York, NY',
+  ),
+    RecentSearch(
+    title: 'Golden Gate Bridge',
+    subtitle: 'San Francisco, CA 94129',
+  ),
+  RecentSearch(
+    title: 'The Ferry Building',
+    subtitle: '1 Ferry Building, San Francisco',
+  ),
+  RecentSearch(
+    title: 'Central Park',
+    subtitle: 'New York, NY',
+  ),
+];
 class NextDestinationSearch extends StatelessWidget {
   const NextDestinationSearch({super.key});
-  // ignore: non_constant_identifier_names
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
         child: Column(
           children: [
-           TopBar(),
+            TopBar(),
+
+            // Fixed widgets at the top
+          Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 20), // horizontal padding
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: const [
+      SizedBox(height: 20),
+      LocationCard(),
+      SizedBox(height: 16),
+      DateTimeRow(),
+      SizedBox(height: 28),
+      SectionLabel('RECENT SEARCHES'),
+      SizedBox(height: 10),
+    ],
+  ),
+),
+
+            // Scrollable list
             Expanded(
-              child: SingleChildScrollView(
+              child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20),
-                     LocationCard(),
-                    const SizedBox(height: 16),
-                    // _DateTimeRow(),
-                    const SizedBox(height: 28),
-                    // _SeectionLabel('RECENT SEARCHEES'),
-                    const SizedBox(height: 10),
-                    // const _RecentSearchItem(
-                    //   title: 'Golden Gate Bridge',
-                    //   subtitle: 'San Francisco, CA 94129',
-                    // ),
-                    // const _RecentSearchItem(
-                    //   title: 'The Ferry Building',
-                    //   subtitle: '1 Ferry Building, San Francisco',
-                    // ),
-                    // const SizedBox(height: 28),
-                    // _SectionLabel('NEARBY LANDMARKS'),
-                    // const SizedBox(height: 10),
-                    // const _LandmarkItem(
-                    //   title: 'Salesforce Tower',
-                    //   subtitle: '415 Mission St, San Francisco',
-                    //   distance: '0.8 mi',
-                    // ),
-
-
-                  ],
-                ),
+                itemCount: recentSearchData.length,
+                itemBuilder: (context, index) {
+                  final item = recentSearchData[index];
+                  return RecentSearchItem(
+                    title: item.title,
+                    subtitle: item.subtitle,
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
-      // bottomNavigationBar: _ConfirmButton(),
+      bottomNavigationBar: ConfirmButton(),
     );
   }
-
-
 }
-

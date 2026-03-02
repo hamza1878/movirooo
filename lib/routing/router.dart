@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moviroo/pages/search/nextdestinationsearch.dart';
+import 'package:moviroo/pages/splash/splash_page.dart';
 import '../pages/onboarding/onboarding_page.dart';
 import '../pages/auth/login_page.dart';
 import '../pages/auth/sign_up_page.dart';
@@ -7,38 +9,41 @@ import '../pages/tabs [passenger]/home/home_page.dart';
 import '../pages/tabs [passenger]/support/support_page.dart';
 import '../pages/tabs [passenger]/profile/settings_page.dart';
 import '../pages/tabs [passenger]/trajet/trajet_page.dart';
-import '../pages/splash/splash_page.dart';
+import '../pages/search/nextdestinationsearch.dart';
+import '../pages/search/nextdestinationsearch.dart';
 
 class AppRouter {
   // ── Route name constants ───────────────────────────────────────────────────
- // static const String splash      = '/splash';
+  static const String splash      = '/splash';
   // ignore: constant_identifier_names
-  static const String GetStartedPage  = '/onboarding';
-  static const String login       = '/login';
-  static const String signup      = '/signup';
-  static const String forgotPass  = '/forgot-password';
-  static const String home        = '/home';
-  static const String support     = '/support';
-  static const String ai          = '/ai';
-  static const String profile     = '/profile';
-  static const String driverHome  = '/driver/home';
+  static const String GetStartedPage = '/onboarding';
+static const String nextDestinationSearchRoute = '/nextdestinationsearch';
+
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String forgotPass = '/forgot-password';
+  static const String home = '/home';
+  static const String support = '/support';
+  static const String ai = '/ai';
+  static const String profile = '/profile';
+  static const String driverHome = '/driver/home';
 
   // ── Initial route ──────────────────────────────────────────────────────────
-//static const String initialRoute = splash;
-  static const String initialRoute = GetStartedPage;
+  //static const String initialRoute = splash;
+  static const String initialRoute =splash ;
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
-  //  splash:     (_) => const SplashPage(),
+     splash:     (_) => const SplashPage(),
     GetStartedPage: (_) => const OnboardingPage(),
-    login:      (_) => const LoginPage(),
-    signup:     (_) => const SignUpPage(),
+    login: (_) => const LoginPage(),
+    signup: (_) => const SignUpPage(),
     forgotPass: (_) => const ForgotPasswordPage(),
-    home:       (_) => const HomePage(),
-    support:    (_) => const SupportPage(),
-    profile:    (_) => const SettingsPage(),
-    driverHome: (_) => const TrajetPage(),   // ← Trajets tab
-
+    home: (_) => const HomePage(),
+    support: (_) => const SupportPage(),
+    profile: (_) => const SettingsPage(),
+    driverHome: (_) => const TrajetPage(),
+    nextDestinationSearchRoute: (_) => const NextDestinationSearch(), // ← Trajets tab
     // ── Uncomment as you build the pages ──────────────────────────
     // ai:      (_) => const AiPage(),
   };
