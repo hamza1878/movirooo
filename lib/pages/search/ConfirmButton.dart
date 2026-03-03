@@ -17,7 +17,7 @@ class ConfirmButton extends StatelessWidget {
         child: ElevatedButton(
                 
             
-                  onPressed: () => AppRouter.clearAndGo(context, AppRouter.vehicle),
+                  onPressed: () => AppRouter.clearAndGo(context, AppRouter.vehicleSelectionPage),
 
           style:ElevatedButton.styleFrom(
             backgroundColor:AppColors.primaryPurple,

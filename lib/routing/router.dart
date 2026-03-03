@@ -11,7 +11,7 @@ import '../pages/tabs [passenger]/profile/settings_page.dart';
 import '../pages/tabs [passenger]/trajet/trajet_page.dart';
 import '../pages/search/nextdestinationsearch.dart';
 import '../pages/search/nextdestinationsearch.dart';
-import '../pages/booking/vehicle_selection_page.dart';
+import '../pages/booking/VehicleSelection/vehicle_selection_page.dart';
 
 class AppRouter {
   // ── Route name constants ───────────────────────────────────────────────────
@@ -19,8 +19,7 @@ class AppRouter {
   // ignore: constant_identifier_names
   static const String GetStartedPage = '/onboarding';
 static const String nextDestinationSearchRoute = '/nextdestinationsearch';
-  static const String vehicle = '/vehicle_selection_page';
-
+static const String vehicleSelectionPage = '/vehicle_selection_page';
   static const String login = '/login';
   static const String signup = '/signup';
   static const String forgotPass = '/forgot-password';
@@ -32,12 +31,11 @@ static const String nextDestinationSearchRoute = '/nextdestinationsearch';
 
   // ── Initial route ──────────────────────────────────────────────────────────
   //static const String initialRoute = splash;
-  static const String initialRoute =splash ;
+static const String initialRoute = vehicleSelectionPage;
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
-    vehicle:     (_) => const RideBookingPage (),
-     splash:     (_) => const SplashPage(),
+  vehicleSelectionPage: (_) => const VehicleSelectionPage(),
     GetStartedPage: (_) => const OnboardingPage(),
     login: (_) => const LoginPage(),
     signup: (_) => const SignUpPage(),

@@ -64,5 +64,7 @@ flutter:
     - images/complete.gif
     - images/logob.png
     - images/map_preview.png
+    - images/bmw.png
+
     - images/translations/en.json
     - images/translations/fr.json
