@@ -9,10 +9,14 @@ class TopBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
+       IconButton(
+  icon: const Icon(Icons.arrow_back),
+  onPressed: () {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  },
+),
           const SizedBox(width: 3),
           const Text(
             "Vehicle Selection",

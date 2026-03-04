@@ -9,8 +9,8 @@ import '../pages/tabs [passenger]/home/home_page.dart';
 import '../pages/tabs [passenger]/support/support_page.dart';
 import '../pages/tabs [passenger]/profile/settings_page.dart';
 import '../pages/tabs [passenger]/trajet/trajet_page.dart';
-
 import '../pages/booking/VehicleSelection/vehicle_selection_page.dart';
+import '../pages/splash/splash_page.dart';
 
 
 class AppRouter {
@@ -33,11 +33,13 @@ static const String vehicleSelectionPage = '/vehicle_selection_page';
   static const String driverHome = '/driver/home';
 
   // ── Initial route ──────────────────────────────────────────────────────────
-  //static const String initialRoute = splash;
-static const String initialRoute = vehicleSelectionPage;
+  static const String initialRoute = splash;
+// static const String initialRoute = GetStartedPage; // ← Change to GetStartedPage after onboarding is done 
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
+        splash:     (_) => const SplashPage(),
+
     booking:(_)=> const BookingSummaryPage(), 
   vehicleSelectionPage: (_) => const VehicleSelectionPage(),
     GetStartedPage: (_) => const OnboardingPage(),

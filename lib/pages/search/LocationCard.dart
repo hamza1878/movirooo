@@ -49,7 +49,7 @@ class _LocationCardState extends State<LocationCard> {
             title: "DESTINATION",
             value: destination,
             isEditing: editingDestination,
-            icon: Icons.place_outlined, // 📍 destination icon
+            icon: Icons.place_outlined,
             onTap: () => setState(() {
               editingDestination = true;
               editingLocation = false;

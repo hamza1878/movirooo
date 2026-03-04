@@ -99,7 +99,7 @@ class MapSection extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  const Color.fromARGB(255, 0, 0, 0).withOpacity(0.45),
+                  const Color.fromARGB(255, 0, 0, 0).withOpacity(0.15),
                 ],
               ),
             ),
