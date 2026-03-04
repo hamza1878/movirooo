@@ -86,21 +86,12 @@ class MapSection extends StatelessWidget {
         fit: StackFit.expand,
         children: [
 
-          // ── VERSION A : local image ────────────────────────────────────
-          // Replace with your own map screenshot
           Image.asset(
             'images/map_preview.png',
             fit: BoxFit.cover,
-            alignment: Alignment.topCenter, // keeps top visible as it shrinks
+            alignment: Alignment.topCenter, 
           ),
 
-          // ── VERSION B : Google Maps API ────────────────────────────────
-          // Uncomment below and remove Image.asset above
-          // Also import 'package:google_maps_flutter/google_maps_flutter.dart'
-          //
-          // _GoogleMapView(),
-
-          // Dark overlay
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -116,7 +107,6 @@ class MapSection extends StatelessWidget {
 
          
 
-          // Destination popup (bottom)
          
         ],
       ),

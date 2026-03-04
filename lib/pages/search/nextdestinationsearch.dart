@@ -58,9 +58,8 @@ class NextDestinationSearch extends StatelessWidget {
           children: [
             TopBar(),
 
-            // Fixed widgets at the top
           Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 20), // horizontal padding
+  padding: const EdgeInsets.symmetric(horizontal: 20), 
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: const [
@@ -75,7 +74,6 @@ class NextDestinationSearch extends StatelessWidget {
   ),
 ),
 
-            // Scrollable list
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

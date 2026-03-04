@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moviroo/pages/booking/CarInformation/booking.dart';
 import 'package:moviroo/pages/search/nextdestinationsearch.dart';
-import 'package:moviroo/pages/splash/splash_page.dart';
 import '../pages/onboarding/onboarding_page.dart';
 import '../pages/auth/login_page.dart';
 import '../pages/auth/sign_up_page.dart';
@@ -9,15 +9,18 @@ import '../pages/tabs [passenger]/home/home_page.dart';
 import '../pages/tabs [passenger]/support/support_page.dart';
 import '../pages/tabs [passenger]/profile/settings_page.dart';
 import '../pages/tabs [passenger]/trajet/trajet_page.dart';
-import '../pages/search/nextdestinationsearch.dart';
-import '../pages/search/nextdestinationsearch.dart';
+
 import '../pages/booking/VehicleSelection/vehicle_selection_page.dart';
+
 
 class AppRouter {
   // ── Route name constants ───────────────────────────────────────────────────
   static const String splash      = '/splash';
+
   // ignore: constant_identifier_names
   static const String GetStartedPage = '/onboarding';
+      static const String booking      = '/booking';
+
 static const String nextDestinationSearchRoute = '/nextdestinationsearch';
 static const String vehicleSelectionPage = '/vehicle_selection_page';
   static const String login = '/login';
@@ -35,6 +38,7 @@ static const String initialRoute = vehicleSelectionPage;
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
+    booking:(_)=> const BookingSummaryPage(), 
   vehicleSelectionPage: (_) => const VehicleSelectionPage(),
     GetStartedPage: (_) => const OnboardingPage(),
     login: (_) => const LoginPage(),
