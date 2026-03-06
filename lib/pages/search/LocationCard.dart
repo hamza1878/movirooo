@@ -43,7 +43,7 @@ class _LocationCardState extends State<LocationCard> {
             },
           ),
 
-          Divider(color: AppColors.border(context), height: 1),
+          Divider(color: AppColors.border(context), height: 2),
 
           _buildRow(
             title: "DESTINATION",

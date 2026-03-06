@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moviroo/pages/booking/CarInformation/_TopBar.dart';
+import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
 import '_BookingSummaryCard.dart';
@@ -156,7 +157,8 @@ class _BookingSummaryPageState extends State<BookingSummaryPage> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => AppRouter.clearAndGo(context, AppRouter.rideDetails),
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryPurple,
                     foregroundColor: Colors.white,

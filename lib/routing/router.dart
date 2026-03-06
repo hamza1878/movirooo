@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviroo/pages/booking/CarInformation/booking.dart';
+import 'package:moviroo/pages/booking/RideDetailsPage/ride_details_page.dart';
 import 'package:moviroo/pages/search/nextdestinationsearch.dart';
 import '../pages/onboarding/onboarding_page.dart';
 import '../pages/auth/login_page.dart';
@@ -31,6 +32,7 @@ static const String vehicleSelectionPage = '/vehicle_selection_page';
   static const String ai = '/ai';
   static const String profile = '/profile';
   static const String driverHome = '/driver/home';
+static const String rideDetails = '/ride-details';
 
   // ── Initial route ──────────────────────────────────────────────────────────
   static const String initialRoute = splash;
@@ -38,7 +40,8 @@ static const String vehicleSelectionPage = '/vehicle_selection_page';
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
-        splash:     (_) => const SplashPage(),
+        splash:     (_) => const NextDestinationSearch(),
+rideDetails: (_) => const RideDetailsPage (),
 
     booking:(_)=> const BookingSummaryPage(), 
   vehicleSelectionPage: (_) => const VehicleSelectionPage(),
