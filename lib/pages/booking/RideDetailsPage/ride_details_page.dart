@@ -14,15 +14,12 @@ class RideDetailsPage extends StatelessWidget {
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: AppColors.surface(context),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('Cancel booking?',
             style: AppTextStyles.bodyLarge(context)
                 .copyWith(fontWeight: FontWeight.w700)),
-        content: Text(
-          'Are you sure you want to cancel this booking?',
-          style: AppTextStyles.bodyMedium(context),
-        ),
+        content: Text('Are you sure you want to cancel this booking?',
+            style: AppTextStyles.bodyMedium(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -30,7 +27,7 @@ class RideDetailsPage extends StatelessWidget {
                 style: TextStyle(color: AppColors.subtext(context))),
           ),
           ElevatedButton(
-                  onPressed: () => AppRouter.clearAndGo(context, AppRouter.home),
+            onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade400,
               foregroundColor: Colors.white,
@@ -52,7 +49,6 @@ class RideDetailsPage extends StatelessWidget {
         child: Column(
           children: [
 
-            // ── TopBar ─────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Row(
@@ -62,35 +58,26 @@ class RideDetailsPage extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                   ),
                   Expanded(
-                    child: Text(
-                      'Ride details',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.bodyLarge(context).copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 17,
-                      ),
-                    ),
+                    child: Text('Ride details',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodyLarge(context).copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 17)),
                   ),
                   const SizedBox(width: 48),
                 ],
               ),
             ),
 
-            // ── Scrollable ─────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const BookingCard(),
-                    const SizedBox(height: 20),
-                    _SectionLabel(label: 'VEHICLE CLASS'),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     const VehicleCard(),
-                    const SizedBox(height: 20),
-                    _SectionLabel(label: 'PASSENGER'),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     const PassengerCard(),
                     const SizedBox(height: 24),
                   ],
@@ -98,30 +85,27 @@ class RideDetailsPage extends StatelessWidget {
               ),
             ),
 
-            // ── Bottom buttons ─────────────────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
                 children: [
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => AppRouter.clearAndGo(context, AppRouter.Payment),
+
                       icon: const Icon(Icons.credit_card_outlined, size: 20),
-                      label: Text(
-                        'Payment',
-                        style: AppTextStyles.bodyLarge(context).copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
+                      label: Text('Payment',
+                          style: AppTextStyles.bodyLarge(context).copyWith(
+                              fontWeight: FontWeight.w700, fontSize: 16)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
+                        backgroundColor: AppColors.surface(context),
+                        foregroundColor: AppColors.text(context),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.border(context)),
                         ),
                       ),
                     ),
@@ -132,20 +116,19 @@ class RideDetailsPage extends StatelessWidget {
                     height: 52,
                     child: TextButton.icon(
                       onPressed: () => _showCancelDialog(context),
-                      icon: Icon(Icons.delete_outline_rounded,
-                          color: Colors.red.shade400, size: 20),
-                      label: Text(
-                        'Cancel booking',
-                        style: AppTextStyles.bodyLarge(context).copyWith(
-                          color: Colors.red.shade400,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
+                      icon: Icon(Icons.close_rounded,
+                          color: Colors.red.shade400, size: 18),
+                      label: Text('Cancel Booking',
+                          style: AppTextStyles.bodyLarge(context).copyWith(
+                              color: Colors.red.shade400,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16)),
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.red.withOpacity(0.10),
+                        backgroundColor: Colors.red.withOpacity(0.08),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                              color: Colors.red.withOpacity(0.25)),
                         ),
                       ),
                     ),
@@ -153,27 +136,8 @@ class RideDetailsPage extends StatelessWidget {
                 ],
               ),
             ),
-
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  final String label;
-  const _SectionLabel({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: AppTextStyles.bodySmall(context).copyWith(
-        color: AppColors.subtext(context),
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.8,
-        fontSize: 11,
       ),
     );
   }

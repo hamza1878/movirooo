@@ -8,62 +8,25 @@ class BookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.surface(context),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border(context)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-            child: Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                // ── Badge ──────────────────────────────────────
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.withOpacity(0.18),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.access_time_rounded,
-                          color: Colors.amber.shade600, size: 14),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Payment pending',
-                        style: TextStyle(
-                          color: Colors.amber.shade600,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 14),
-
-                // ── Booking ID ─────────────────────────────────
+                Text('Booking',
+                    style: AppTextStyles.bodySmall(context).copyWith(
+                        color: AppColors.subtext(context))),
+                const SizedBox(height: 2),
                 Row(
                   children: [
-                    Expanded(
-                      child: Text(
-                        '#78438620',
+                    Text('#78438620',
                         style: AppTextStyles.bodyLarge(context).copyWith(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 26,
-                        ),
-                      ),
-                    ),
+                            fontWeight: FontWeight.w800, fontSize: 22)),
+                    const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
                         Clipboard.setData(
@@ -75,73 +38,88 @@ class BookingCard extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.bg(context),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: AppColors.border(context)),
-                        ),
-                        child: Icon(Icons.copy_outlined,
-                            size: 18,
-                            color: AppColors.subtext(context)),
-                      ),
+                      child: Icon(Icons.copy_outlined,
+                          size: 16, color: AppColors.subtext(context)),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 6),
-
-                // ── Date ───────────────────────────────────────
-                Row(
-                  children: [
-                    Icon(Icons.calendar_today_outlined,
-                        size: 14,
-                        color: AppColors.subtext(context)),
-                    const SizedBox(width: 6),
-                    Text('13 February 2026, 13:00',
-                        style: AppTextStyles.bodySmall(context)),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                // ── Route stops ────────────────────────────────
-                _RouteStop(
-                  dot: _DotFilled(),
-                  title: 'Tunis Carthage Airport (TUN)',
-                  subtitle: 'Tunis, Tunisia',
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: Container(
-                    width: 1.5, height: 28,
-                    color: AppColors.primaryPurple.withOpacity(0.4),
-                  ),
-                ),
-                _RouteStop(
-                  dot: _DotFilled(),
-                  title: 'Enfidha Hammamet Airport (NBE)',
-                  subtitle: 'Enfidha, Tunisia',
-                ),
               ],
             ),
-          ),
-
-          // ── Map preview ────────────────────────────────────
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(20)),
-            child: Image.asset(
-              'images/map_preview.png',
-              width: double.infinity,
-              height: 150,
-              fit: BoxFit.cover,
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.amber.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.access_time_rounded,
+                      color: Colors.amber.shade600, size: 13),
+                  const SizedBox(width: 5),
+                  Text('Payment pending',
+                      style: TextStyle(
+                        color: Colors.amber.shade600,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11,
+                      )),
+                ],
+              ),
             ),
+          ],
+        ),
+
+        const SizedBox(height: 14),
+
+        // ── Route card ───────────────────────────────────────
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface(context),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: AppColors.border(context)),
           ),
-        ],
-      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Date
+              Row(
+                children: [
+                  Icon(Icons.calendar_today_outlined,
+                      size: 13, color: AppColors.subtext(context)),
+                  const SizedBox(width: 6),
+                  Text('13 February 2026, 13:00',
+                      style: AppTextStyles.bodySmall(context)),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Stop 1
+              _RouteStop(
+                dot: _DotFilled(),
+                title: 'Tunis Carthage Airport (TUN)',
+                subtitle: 'Tunis, Tunisia',
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: Container(
+                  width: 1.5, height: 28,
+                  color: AppColors.primaryPurple.withOpacity(0.4),
+                ),
+              ),
+              // Stop 2
+              _RouteStop(
+                dot: _DotOutline(),
+                title: 'Enfidha Hammamet Airport (NBE)',
+                subtitle: 'Enfidha, Tunisia',
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -182,6 +160,18 @@ class _DotFilled extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.primaryPurple,
           shape: BoxShape.circle,
+        ),
+      );
+}
+
+class _DotOutline extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 13, height: 13,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+              color: AppColors.primaryPurple, width: 2),
         ),
       );
 }

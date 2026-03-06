@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moviroo/pages/booking/CarInformation/booking.dart';
 import 'package:moviroo/pages/booking/RideDetailsPage/ride_details_page.dart';
+import 'package:moviroo/pages/booking/payment/payment_page.dart';
 import 'package:moviroo/pages/search/nextdestinationsearch.dart';
 import '../pages/onboarding/onboarding_page.dart';
 import '../pages/auth/login_page.dart';
@@ -21,6 +22,9 @@ class AppRouter {
   // ignore: constant_identifier_names
   static const String GetStartedPage = '/onboarding';
       static const String booking      = '/booking';
+            // ignore: constant_identifier_names
+            static const String Payment      = '/Payment';
+
 
 static const String nextDestinationSearchRoute = '/nextdestinationsearch';
 static const String vehicleSelectionPage = '/vehicle_selection_page';
@@ -35,12 +39,14 @@ static const String vehicleSelectionPage = '/vehicle_selection_page';
 static const String rideDetails = '/ride-details';
 
   // ── Initial route ──────────────────────────────────────────────────────────
-  static const String initialRoute = splash;
-// static const String initialRoute = GetStartedPage; // ← Change to GetStartedPage after onboarding is done 
+ // static const String initialRoute = splash;
+ static const String initialRoute = GetStartedPage; // ← Change to GetStartedPage after onboarding is done 
 
   // ── Route map ─────────────────────────────────────────────────────────────
   static Map<String, WidgetBuilder> get routes => {
         splash:     (_) => const NextDestinationSearch(),
+      Payment:     (_) => const PaymentPage(),
+
 rideDetails: (_) => const RideDetailsPage (),
 
     booking:(_)=> const BookingSummaryPage(), 

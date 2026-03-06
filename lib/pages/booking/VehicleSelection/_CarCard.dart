@@ -1,48 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
 
-final cars = [
-  _CarOption(
-    name: 'Economy',
-    image: 'images/bmw.png',
-    seats: 3,
-    bags: 3,
-    price: '€107.57',
-    badge: 'BEST VALUE',
-    badgeColor: Colors.purple,
-  ),
-  _CarOption(
-    name: 'Economy',
-    image: 'images/bmw.png',
-    seats: 3,
-    bags: 3,
-    price: '€107.57',
-    badge: 'BEST VALUE',
-    badgeColor: Colors.purple,
-  ),
-    _CarOption(
-    name: 'Economy',
-    image: 'images/bmw.png',
-    seats: 3,
-    bags: 3,
-    price: '€107.57',
-    badge: 'BEST VALUE',
-    badgeColor: Colors.purple,
-  ),
-    _CarOption(
-    name: 'Economy',
-    image: 'images/bmw.png',
-    seats: 3,
-    bags: 3,
-    price: '€107.57',
-    badge: 'BEST VALUE',
-    badgeColor: Colors.purple,
-  ), 
-];
-
-class _CarOption {
+class CarOption {
   final String name;
   final String image;
   final int seats;
@@ -51,7 +11,7 @@ class _CarOption {
   final String badge;
   final Color badgeColor;
 
-  const _CarOption({
+  const CarOption({
     required this.name,
     required this.image,
     required this.seats,
@@ -62,98 +22,29 @@ class _CarOption {
   });
 }
 
-class CarSelectionSection extends StatefulWidget {
-  const CarSelectionSection({super.key});
-
-  @override
-  State<CarSelectionSection> createState() => _CarSelectionSectionState();
-}
-
-class _CarSelectionSectionState extends State<CarSelectionSection> {
-  int? _selectedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ...List.generate(cars.length, (i) => CarCard(
-          car: cars[i],
-          isSelected: _selectedIndex == i,
-          onTap: () => setState(() => _selectedIndex = i),
-        )),
-
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          transitionBuilder: (child, animation) => SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-            )),
-            child: FadeTransition(opacity: animation, child: child),
-          ),
-          child: _selectedIndex != null
-              ? Padding(
-                  key: const ValueKey('More Inforamtion'),
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                                        onPressed: () => AppRouter.clearAndGo(context, AppRouter.vehicleSelectionPage),
-
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryPurple,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                         shape:RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-
-            ),
-                      ).copyWith(
-                        shadowColor: WidgetStateProperty.all(
-                          AppColors.primaryPurple.withOpacity(0.25),
-                        ),
-                        elevation: WidgetStateProperty.all(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'More Inforamtion',
-                            style: AppTextStyles.bodyLarge(context).copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_rounded, size: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(key: ValueKey('empty')),
-        ),
-      ],
-    );
-  }
-}
+final List<CarOption> cars = [
+  CarOption(name: 'Economy', image: 'images/bmw.png',
+      seats: 3, bags: 3, price: '€107.57', badge: 'BEST VALUE', badgeColor: Colors.purple),
+  CarOption(name: 'Business', image: 'images/bmw.png',
+      seats: 4, bags: 4, price: '€149.00', badge: 'POPULAR', badgeColor: Colors.blue),
+  CarOption(name: 'Premium', image: 'images/bmw.png',
+      seats: 4, bags: 5, price: '€199.00', badge: 'TOP RATED', badgeColor: Colors.orange),
+  CarOption(name: 'Van', image: 'images/bmw.png',
+      seats: 7, bags: 7, price: '€220.00', badge: 'SPACIOUS', badgeColor: Colors.green),
+];
 
 class CarCard extends StatelessWidget {
-  final _CarOption car;
+  final CarOption car;
   final bool isSelected;
   final VoidCallback onTap;
+  final VoidCallback? onInfoTap; // ✅ nouveau
 
   const CarCard({
     super.key,
     required this.car,
     required this.isSelected,
     required this.onTap,
+    this.onInfoTap,
   });
 
   @override
@@ -172,22 +63,16 @@ class CarCard extends StatelessWidget {
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primaryPurple.withOpacity(0.28),
-                    blurRadius: 24,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 6),
-                  ),
-                ]
+              ? [BoxShadow(
+                  color: AppColors.primaryPurple.withOpacity(0.28),
+                  blurRadius: 24, spreadRadius: 2, offset: const Offset(0, 6))]
               : [],
         ),
         child: Row(
           children: [
             SizedBox(
-              width: 110,
-              height: 70,
-              child: Image.asset('images/bmw.png', fit: BoxFit.contain),
+              width: 110, height: 70,
+              child: Image.asset(car.image, fit: BoxFit.contain),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -218,15 +103,11 @@ class CarCard extends StatelessWidget {
                       color: car.badgeColor.withOpacity(0.18),
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Text(
-                      car.badge,
-                      style: TextStyle(
-                        color: car.badgeColor,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
+                    child: Text(car.badge,
+                        style: TextStyle(
+                          color: car.badgeColor, fontSize: 10,
+                          fontWeight: FontWeight.w800, letterSpacing: 0.8,
+                        )),
                   ),
                 ],
               ),
@@ -241,6 +122,19 @@ class CarCard extends StatelessWidget {
                     )),
                 const SizedBox(height: 2),
                 Text('Total price', style: AppTextStyles.bodySmall(context)),
+                const SizedBox(height: 6),
+                GestureDetector(
+                  onTap: onInfoTap,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryPurple.withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(Icons.chevron_right_rounded,
+                        color: AppColors.primaryPurple, size: 18),
+                  ),
+                ),
               ],
             ),
           ],
