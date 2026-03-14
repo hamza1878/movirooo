@@ -4,12 +4,6 @@ import 'onboarding_step_2.dart';
 import 'onboarding_step_3.dart';
 import '../auth/login_page.dart';
 
-/// Single AnimationController drives the car across all 3 steps:
-///   Step 1 → carT animates 0.0 → 0.0   (car sits at origin, no trail)
-///   Step 2 → carT animates 0.0 → 0.35  (car drives to midpoint)
-///   Step 3 → carT animates 0.35 → 1.0  (car completes journey to destination)
-///
-/// When the user taps Next/Get Started, we animate to the next step's target.
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 
@@ -18,49 +12,67 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final PageController _pageController = PageController();
+
   late AnimationController _carController;
   late Animation<double> _carAnim;
+  late AnimationController _wheelController;
 
   int _currentIndex = 0;
+  bool _isAnimating = false;
 
-  // Target carT values per step
-  static const _stepTargets = [0.0, 0.35, 1.0];
+  static const _stepTargets = [0.0, 0.45, 1.0];
 
   @override
   void initState() {
     super.initState();
+
     _carController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     );
-    // Start at step 1 — car at origin, no movement yet
+
+    _wheelController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..repeat();
+
+    // Start at position 0 — car sits at origin
     _carAnim = AlwaysStoppedAnimation(0.0);
   }
 
-  void _nextPage() {
+  Future<void> _nextPage() async {
+    if (_isAnimating) return;
+
     if (_currentIndex < 2) {
+      _isAnimating = true;
+
       final nextIndex = _currentIndex + 1;
       final fromT = _stepTargets[_currentIndex];
-      final toT = _stepTargets[nextIndex];
+      final toT   = _stepTargets[nextIndex];
 
-      // Re-tween from current position → next step's target
+      // Build new tween from current car position → next target
       _carAnim = Tween<double>(begin: fromT, end: toT).animate(
         CurvedAnimation(parent: _carController, curve: Curves.easeInOut),
       );
+
       _carController.duration = nextIndex == 2
           ? const Duration(milliseconds: 2200)
           : const Duration(milliseconds: 1800);
-      _carController.forward(from: 0.0);
 
+      // Slide the page
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 350),
+        duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
+
       setState(() => _currentIndex = nextIndex);
+
+      // Drive the car — only ONE forward() call
+      await _carController.forward(from: 0.0);
+      _isAnimating = false;
     } else {
-      // Step 3 "Get Started" → navigate to Login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const LoginPage()),
       );
@@ -71,24 +83,26 @@ class _OnboardingPageState extends State<OnboardingPage>
   void dispose() {
     _pageController.dispose();
     _carController.dispose();
+    _wheelController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B000F),
+      backgroundColor: const Color(0xFFF4F4F8),
       body: AnimatedBuilder(
-        animation: _carAnim,
+        animation: Listenable.merge([_carAnim, _wheelController]),
         builder: (context, _) {
-          final carT = _carAnim.value;
+          final carT       = _carAnim.value;
+          final wheelAngle = _wheelController.value * 2 * 3.14159;
           return PageView(
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              OnboardingStep1(onNext: _nextPage, carT: carT),
-              OnboardingStep2(onNext: _nextPage, carT: carT),
-              OnboardingStep3(onNext: _nextPage, carT: carT),
+              OnboardingStep1(onNext: _nextPage, carT: carT, wheelAngle: wheelAngle),
+              OnboardingStep2(onNext: _nextPage, carT: carT, wheelAngle: wheelAngle),
+              OnboardingStep3(onNext: _nextPage, carT: carT, wheelAngle: wheelAngle),
             ],
           );
         },

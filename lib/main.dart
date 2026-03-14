@@ -70,12 +70,12 @@ class _SmartWayAppState extends State<SmartWayApp> {
             supportedLocales: const [
               Locale('en'),
               Locale('fr'),
-              Locale('ar'), // Arabic (RTL)
+              Locale('ar'),   // ← Arabic added
             ],
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate, // handles RTL automatically
+              GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             localeResolutionCallback: (locale, supportedLocales) {

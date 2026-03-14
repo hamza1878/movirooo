@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
 
@@ -8,7 +9,7 @@ class HomeSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => AppRouter.push(context, AppRouter.nextDestinationSearchRoute), // ← FIXED
       child: Container(
         height: 50,
         decoration: BoxDecoration(

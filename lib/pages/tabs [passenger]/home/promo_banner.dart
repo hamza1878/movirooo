@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class PromoBanner extends StatelessWidget {
   const PromoBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context).translate;
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: Stack(
         children: [
+          // ── Background gradient ───────────────────────────────────
           Container(
             height: 140,
             decoration: const BoxDecoration(
@@ -24,6 +22,7 @@ class PromoBanner extends StatelessWidget {
               ),
             ),
           ),
+          // ── Dark overlay ──────────────────────────────────────────
           Container(
             height: 140,
             decoration: const BoxDecoration(
@@ -34,6 +33,7 @@ class PromoBanner extends StatelessWidget {
               ),
             ),
           ),
+          // ── Text ──────────────────────────────────────────────────
           Positioned(
             left: 18,
             bottom: 18,
@@ -41,7 +41,7 @@ class PromoBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  t('promo_title'),
+                  'Elite Black',
                   style: AppTextStyles.priceLarge(context).copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -49,7 +49,7 @@ class PromoBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  t('promo_discount'),
+                  '50% OFF YOUR NEXT RIDE',
                   style: AppTextStyles.priceFooter(context).copyWith(
                     color: const Color(0xFFCCCCCC),
                     fontSize: 10,
@@ -60,6 +60,7 @@ class PromoBanner extends StatelessWidget {
               ],
             ),
           ),
+          // ── Claim button ──────────────────────────────────────────
           Positioned(
             right: 16,
             bottom: 18,
@@ -70,7 +71,7 @@ class PromoBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Text(
-                t('claim_now'),
+                'Claim Now',
                 style: AppTextStyles.bodySmall(context).copyWith(
                   color: Colors.white,
                   fontSize: 13,
