@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
@@ -109,6 +108,9 @@ class _VehicleSelectionPageState extends State<VehicleSelectionPage> {
                     _ConfirmBar(
                       car: _selectedCar,
                       bottomPad: bottomPad,
+                      onConfirm: () =>
+                          Navigator.pushNamed(context, '/booking',
+                              arguments: _selectedCar),
                     ),
                   ],
                 ),
@@ -306,8 +308,9 @@ class _SheetHeader extends StatelessWidget {
 class _ConfirmBar extends StatelessWidget {
   final CarOption car;
   final double bottomPad;
+  final VoidCallback onConfirm;
 
-  const _ConfirmBar({required this.car, required this.bottomPad});
+  const _ConfirmBar({required this.car, required this.bottomPad, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +326,7 @@ class _ConfirmBar extends StatelessWidget {
         width: double.infinity,
         height: 54,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onConfirm,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primaryPurple,
             foregroundColor: Colors.white,

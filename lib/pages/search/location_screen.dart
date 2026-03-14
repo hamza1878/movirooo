@@ -25,9 +25,11 @@ class _LocationScreenState extends State<LocationScreen>
   int? _selectedRider;
   List<SuggestionItem> _suggestions = [];
 
-  // ── Shared date/time state (passed down to DateTimeRow) ──────────
-  DateTime _pickedDate = DateTime(2026, 3, 14);
-  TimeOfDay? _pickedTime; // null = user hasn't explicitly picked a time yet
+  bool _fromConfirmed = false;
+  bool _toConfirmed = false;
+
+  DateTime _pickedDate = DateTime.now();
+  TimeOfDay? _pickedTime;
 
   final List<Map<String, String>> _riders = [
     {'name': 'Me', 'subtitle': 'Book this ride for yourself'},
@@ -37,8 +39,9 @@ class _LocationScreenState extends State<LocationScreen>
   final List<RecentSearchItem> _recentSearches = [
     const RecentSearchItem(title: 'Sousse', subtitle: 'Sousse, Tunisia'),
     const RecentSearchItem(
-        title: 'The Ferry Building',
-        subtitle: '1 Ferry Building, San Francisco'),
+      title: 'The Ferry Building',
+      subtitle: '1 Ferry Building, San Francisco',
+    ),
     const RecentSearchItem(title: 'Central Park', subtitle: 'New York, NY'),
   ];
 
@@ -47,14 +50,18 @@ class _LocationScreenState extends State<LocationScreen>
     const SuggestionItem(title: 'Tunis Centre', subtitle: 'Tunis, Tunisia'),
     const SuggestionItem(title: 'Sfax', subtitle: 'Sfax, Tunisia'),
     const SuggestionItem(
-        title: 'Monastir Airport', subtitle: 'Monastir, Tunisia'),
+      title: 'Monastir Airport',
+      subtitle: 'Monastir, Tunisia',
+    ),
     const SuggestionItem(title: 'La Marsa', subtitle: 'Tunis, Tunisia'),
     const SuggestionItem(title: 'Hammamet', subtitle: 'Nabeul, Tunisia'),
     const SuggestionItem(title: 'Carthage', subtitle: 'Tunis, Tunisia'),
     const SuggestionItem(title: 'Sidi Bou Said', subtitle: 'Tunis, Tunisia'),
     const SuggestionItem(title: 'Djerba', subtitle: 'Medenine, Tunisia'),
     const SuggestionItem(
-        title: 'Tunis Carthage Airport', subtitle: 'Tunis, Tunisia'),
+      title: 'Tunis Carthage Airport',
+      subtitle: 'Tunis, Tunisia',
+    ),
   ];
 
   @override
@@ -69,12 +76,14 @@ class _LocationScreenState extends State<LocationScreen>
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _fromFocus.requestFocus();
+    });
+
     _fromController.addListener(_onQueryChanged);
     _toController.addListener(_onQueryChanged);
-    _fromFocus.addListener(_onQueryChanged);
-    _toFocus.addListener(_onQueryChanged);
-
-    _toController.addListener(_onDropOffChanged);
+    _fromFocus.addListener(_onFromFocusChanged);
+    _toFocus.addListener(_onToFocusChanged);
   }
 
   @override
@@ -82,9 +91,8 @@ class _LocationScreenState extends State<LocationScreen>
     _pulseController.dispose();
     _fromController.removeListener(_onQueryChanged);
     _toController.removeListener(_onQueryChanged);
-    _toController.removeListener(_onDropOffChanged);
-    _fromFocus.removeListener(_onQueryChanged);
-    _toFocus.removeListener(_onQueryChanged);
+    _fromFocus.removeListener(_onFromFocusChanged);
+    _toFocus.removeListener(_onToFocusChanged);
     _fromController.dispose();
     _toController.dispose();
     _fromFocus.dispose();
@@ -92,54 +100,68 @@ class _LocationScreenState extends State<LocationScreen>
     super.dispose();
   }
 
-  // ── Gate: navigate ONLY when pick-up, drop-off AND time are all set ──
-  void _onDropOffChanged() {
+  void _onFromFocusChanged() {
+    if (!_fromFocus.hasFocus && !_fromConfirmed) {
+      final text = _fromController.text.trim();
+      if (text.isNotEmpty) {
+        _fromController.clear();
+        setState(() => _suggestions = []);
+      }
+    }
+    if (!_fromFocus.hasFocus) {
+      setState(() => _suggestions = []);
+    }
+  }
+
+  void _onToFocusChanged() {
+    if (_toFocus.hasFocus) {
+      if (!_fromConfirmed && _fromController.text.trim().isNotEmpty) {
+        _fromController.clear();
+      }
+    }
+    if (!_toFocus.hasFocus) {
+      setState(() => _suggestions = []);
+    }
+  }
+
+  void _maybeNavigate() {
     final dropOff = _toController.text.trim();
     final pickUp = _fromController.text.trim();
 
-    if (dropOff.isNotEmpty && pickUp.isNotEmpty) {
-      // Time must be explicitly picked — not just the default date
-      if (_pickedTime == null) return;
-
-      Future.delayed(const Duration(milliseconds: 300), () {
+    if (dropOff.isNotEmpty && pickUp.isNotEmpty && _pickedTime != null) {
+      FocusScope.of(context).unfocus();
+      Future.delayed(const Duration(milliseconds: 200), () {
         if (!mounted) return;
-        final stillFilled = _toController.text.trim().isNotEmpty &&
-            _fromController.text.trim().isNotEmpty &&
-            _pickedTime != null;
-
-        if (stillFilled) {
-          FocusScope.of(context).unfocus();
-          Navigator.pushNamed(
-            context,
-            '/vehicle_selection_page',
-            arguments: {
-              'pickUp': pickUp,
-              'dropOff': dropOff,
-              'date': _pickedDate,
-              'time': _pickedTime,
-            },
-          );
-        }
+        Navigator.pushNamed(
+          context,
+          '/vehicle_selection_page',
+          arguments: {
+            'pickUp': pickUp,
+            'dropOff': dropOff,
+            'date': _pickedDate,
+            'time': _pickedTime,
+          },
+        );
       });
     }
   }
 
-  /// Called by DateTimeRow when the user picks a time.
   void _onTimePicked(TimeOfDay time) {
     setState(() => _pickedTime = time);
-    // Re-check navigation in case locations were already filled.
-    _onDropOffChanged();
   }
 
   void _onQueryChanged() {
+    if (!_fromFocus.hasFocus && !_toFocus.hasFocus) {
+      setState(() => _suggestions = []);
+      return;
+    }
+
     final String query;
     if (_toFocus.hasFocus) {
       query = _toController.text.trim();
-    } else if (_fromFocus.hasFocus) {
-      query = _fromController.text.trim();
     } else {
-      setState(() => _suggestions = []);
-      return;
+      _fromConfirmed = false;
+      query = _fromController.text.trim();
     }
 
     if (query.isEmpty) {
@@ -148,9 +170,12 @@ class _LocationScreenState extends State<LocationScreen>
     }
 
     final filtered = _allPlaces
-        .where((p) =>
-            p.title.toLowerCase().contains(query.toLowerCase()) ||
-            (p.subtitle?.toLowerCase().contains(query.toLowerCase()) ?? false))
+        .where(
+          (p) =>
+              p.title.toLowerCase().contains(query.toLowerCase()) ||
+              (p.subtitle?.toLowerCase().contains(query.toLowerCase()) ??
+                  false),
+        )
         .take(4)
         .toList();
 
@@ -160,14 +185,19 @@ class _LocationScreenState extends State<LocationScreen>
   void _onSuggestionTap(SuggestionItem item) {
     if (_toFocus.hasFocus) {
       _toController.text = item.title;
+      _toConfirmed = true;
+      setState(() => _suggestions = []);
+      _maybeNavigate();
     } else if (_fromFocus.hasFocus) {
       _fromController.text = item.title;
+      _fromConfirmed = true;
+      setState(() => _suggestions = []);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) _toFocus.requestFocus();
+      });
     } else {
       _fillSmartField(item.title);
     }
-
-    setState(() => _suggestions = []);
-    FocusScope.of(context).unfocus();
   }
 
   void _onRecentTap(RecentSearchItem item) {
@@ -176,24 +206,39 @@ class _LocationScreenState extends State<LocationScreen>
 
   void _fillSmartField(String locationName) {
     final fromEmpty = _fromController.text.trim().isEmpty;
+    setState(() => _suggestions = []);
+
     if (fromEmpty) {
       _fromController.text = locationName;
+      _fromConfirmed = true;
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) _toFocus.requestFocus();
+      });
     } else {
       _toController.text = locationName;
+      _toConfirmed = true;
+      _maybeNavigate();
     }
-    setState(() => _suggestions = []);
-    FocusScope.of(context).unfocus();
   }
 
   void _swapLocations() {
     final from = _fromController.text;
     _fromController.text = _toController.text;
     _toController.text = from;
+    _fromConfirmed = _fromController.text.trim().isNotEmpty;
+    _toConfirmed = _toController.text.trim().isNotEmpty;
   }
 
   void _clearRecent() => setState(() => _recentSearches.clear());
 
   Future<void> _showRiderSheet() async {
+    // Explicitly unfocus both nodes before AND after the sheet
+    // so the keyboard never reopens and no field gets re-focused.
+    _fromFocus.unfocus();
+    _toFocus.unfocus();
+    await Future.delayed(const Duration(milliseconds: 80));
+    if (!mounted) return;
+
     final selected = await RiderSheet.show(
       context,
       riders: _riders,
@@ -204,23 +249,33 @@ class _LocationScreenState extends State<LocationScreen>
           ..addAll(updated);
       }),
     );
-    if (selected != null) setState(() => _selectedRider = selected);
+
+    // Guard against focus being restored after sheet dismissal
+    _fromFocus.unfocus();
+    _toFocus.unfocus();
+
+    if (selected != null && mounted) {
+      setState(() => _selectedRider = selected);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Label: "For me" by default, rider name once selected
     final String pillLabel =
         (_selectedRider != null && _selectedRider! < _riders.length)
             ? _riders[_selectedRider!]['name']!
-            : 'For Me';
+            : 'For me';
+
+    // Text black, icon + chevron purple
+    final Color pillTextColor = AppColors.text(context);
+    const Color pillIconColor = AppColors.primaryPurple;
 
     final bool showRecent =
-        _suggestions.isEmpty && _recentSearches.isNotEmpty;
-
-    // Show a hint banner when locations are filled but time hasn't been picked
-    final bool showTimeBanner = _fromController.text.trim().isNotEmpty &&
-        _toController.text.trim().isNotEmpty &&
-        _pickedTime == null;
+        _suggestions.isEmpty &&
+        _recentSearches.isNotEmpty &&
+        !(_fromFocus.hasFocus && _fromController.text.trim().isNotEmpty) &&
+        !(_toFocus.hasFocus && _toController.text.trim().isNotEmpty);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -229,7 +284,6 @@ class _LocationScreenState extends State<LocationScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // ── Top bar ──────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
@@ -299,20 +353,26 @@ class _LocationScreenState extends State<LocationScreen>
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_outline_rounded,
-                          size: 17, color: AppColors.primaryPurple),
+                      Icon(
+                        Icons.person_outline_rounded,
+                        size: 17,
+                        color: pillIconColor,
+                      ),
                       const SizedBox(width: 7),
                       Text(
                         pillLabel,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.primaryPurple,
+                          color: pillTextColor,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.keyboard_arrow_down_rounded,
-                          size: 17, color: AppColors.primaryPurple),
+                      Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 17,
+                        color: pillIconColor,
+                      ),
                     ],
                   ),
                 ),
@@ -341,43 +401,11 @@ class _LocationScreenState extends State<LocationScreen>
                     ),
                     const SizedBox(height: 10),
 
-                    // DateTimeRow — passes callbacks up so LocationScreen
-                    // knows when the user has explicitly picked a time.
                     DateTimeRow(
                       initialDate: _pickedDate,
                       onDateChanged: (d) => setState(() => _pickedDate = d),
                       onTimeChanged: _onTimePicked,
                     ),
-
-                    // ── Hint banner: pick a time to continue ────────
-                    if (showTimeBanner) ...[
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryPurple.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: AppColors.primaryPurple.withOpacity(0.2)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.access_time_rounded,
-                                size: 16, color: AppColors.primaryPurple),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Please pick a time to continue',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.primaryPurple,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
 
                     const SizedBox(height: 14),
 
@@ -388,7 +416,6 @@ class _LocationScreenState extends State<LocationScreen>
                       onSavedPlaces: () {},
                     ),
 
-                    // ── Recent searches ───────────────────────────
                     if (showRecent) ...[
                       const SizedBox(height: 2),
                       ..._recentSearches.map(
@@ -405,9 +432,11 @@ class _LocationScreenState extends State<LocationScreen>
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.delete_outline_rounded,
-                                  size: 14,
-                                  color: AppColors.subtext(context)),
+                              Icon(
+                                Icons.delete_outline_rounded,
+                                size: 14,
+                                color: AppColors.subtext(context),
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 'Clear',
