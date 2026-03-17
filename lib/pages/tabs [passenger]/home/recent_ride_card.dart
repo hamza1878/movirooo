@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'home_models.dart';
 
 class RecentRideCard extends StatelessWidget {
@@ -9,6 +10,8 @@ class RecentRideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -33,12 +36,15 @@ class RecentRideCard extends StatelessWidget {
                 Icons.history_rounded,
                 color: AppColors.primaryPurple,
                 size: 20,
+                semanticLabel: t.translate('recent_ride_title'),
               ),
             ),
 
             const SizedBox(width: 14),
 
             // ── Name & Address ────────────────────────────────────
+            // r.name and r.address are data-driven — translate them
+            // at the API/model layer if needed.
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

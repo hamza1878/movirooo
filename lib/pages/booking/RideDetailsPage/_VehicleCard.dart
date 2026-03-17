@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class VehicleCard extends StatelessWidget {
   const VehicleCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('VEHICLE CLASS',
+        Text(t.translate('vehicle_class'),
             style: AppTextStyles.bodySmall(context).copyWith(
               color: AppColors.subtext(context),
               fontWeight: FontWeight.w700,
@@ -40,12 +43,11 @@ class VehicleCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Standard',
+                    Text(t.translate('class_standard'),
                         style: AppTextStyles.bodyLarge(context).copyWith(
                             fontWeight: FontWeight.w800, fontSize: 16)),
                     const SizedBox(height: 2),
-                    // agency line removed
-                    Text('Mercedes E Class, BMW 5 or similar',
+                    Text(t.translate('vehicle_similar'),
                         style: AppTextStyles.bodySmall(context)),
                   ],
                 ),

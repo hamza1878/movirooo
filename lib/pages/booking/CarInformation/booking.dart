@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_BookingSummaryCard.dart';
 import '_RouteSection.dart';
 import '_DiscountSection.dart';
@@ -23,6 +24,8 @@ class _BookingSummaryPageState extends State<BookingSummaryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
@@ -63,7 +66,7 @@ class _BookingSummaryPageState extends State<BookingSummaryPage> {
                   ),
                   Expanded(
                     child: Text(
-                      'Booking summary',
+                      t.translate('booking_summary'),
                       textAlign: TextAlign.center,
                       style: AppTextStyles.bodyLarge(context).copyWith(
                           fontWeight: FontWeight.w700, fontSize: 17),
@@ -126,7 +129,7 @@ class _BookingSummaryPageState extends State<BookingSummaryPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Confirm booking',
+                        t.translate('confirm_booking'),
                         style: AppTextStyles.bodyLarge(context).copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,

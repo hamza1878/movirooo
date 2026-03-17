@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../theme/app_colors.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class PassengerSheet {
   static Future<int?> show(
@@ -15,6 +16,9 @@ class PassengerSheet {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
+        // Resolve translations outside StatefulBuilder so they're stable
+        final t = AppLocalizations.of(context);
+
         return StatefulBuilder(
           builder: (ctx, setBS) {
             return SizedBox(
@@ -40,7 +44,7 @@ class PassengerSheet {
                         GestureDetector(
                           onTap: () => Navigator.pop(ctx),
                           child: Text(
-                            'Cancel',
+                            t.translate('cancel'),
                             style: TextStyle(
                               fontSize: 15,
                               color: AppColors.subtext(context),
@@ -49,7 +53,7 @@ class PassengerSheet {
                         ),
                         const Spacer(),
                         Text(
-                          'Passengers',
+                          t.translate('passengers'),
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
@@ -60,7 +64,7 @@ class PassengerSheet {
                         GestureDetector(
                           onTap: () => Navigator.pop(ctx, tempCount),
                           child: Text(
-                            'Done',
+                            t.translate('done'),
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -82,10 +86,10 @@ class PassengerSheet {
                         Center(
                           child: Container(
                             height: 48,
-                            margin: const EdgeInsets.symmetric(horizontal: 40),
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 40),
                             decoration: BoxDecoration(
-                              color:
-                                  AppColors.primaryPurple.withOpacity(0.08),
+                              color: AppColors.primaryPurple.withOpacity(0.08),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),

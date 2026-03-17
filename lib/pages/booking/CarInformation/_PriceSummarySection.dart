@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_SummaryCard.dart';
 
 class PriceSummarySection extends StatelessWidget {
@@ -8,6 +9,8 @@ class PriceSummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SummaryCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -17,22 +20,22 @@ class PriceSummarySection extends StatelessWidget {
               Icon(Icons.receipt_long_outlined,
                   color: AppColors.primaryPurple, size: 18),
               const SizedBox(width: 8),
-              Text('PRICE SUMMARY',
+              Text(t.translate('price_summary'),
                   style: AppTextStyles.bodySmall(context).copyWith(
                       fontWeight: FontWeight.w800, letterSpacing: 0.8)),
             ],
           ),
           const SizedBox(height: 14),
-          _PriceRow(label: 'Outbound transfer', value: '€ 107.57'),
+          _PriceRow(label: t.translate('outbound_transfer'), value: '€ 107.57'),
           const SizedBox(height: 8),
-          _PriceRow(label: 'Taxes & fees', value: 'Included'),
+          _PriceRow(label: t.translate('taxes_fees'), value: t.translate('included')),
           const SizedBox(height: 14),
           const Divider(height: 1),
           const SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total',
+              Text(t.translate('total'),
                   style: AppTextStyles.bodyLarge(context)
                       .copyWith(fontWeight: FontWeight.w800)),
               Text('€ 107.57',

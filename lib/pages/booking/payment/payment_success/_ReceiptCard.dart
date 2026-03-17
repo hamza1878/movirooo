@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ReceiptCard extends StatelessWidget {
   final String amount;
@@ -22,6 +23,8 @@ class ReceiptCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -38,7 +41,7 @@ class ReceiptCard extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Total Amount',
+                  t.translate('total_amount'),
                   style: AppTextStyles.bodySmall(context).copyWith(
                     color: AppColors.subtext(context),
                   ),
@@ -64,22 +67,22 @@ class ReceiptCard extends StatelessWidget {
             child: Column(
               children: [
                 _ReceiptRow(
-                  label: 'Ref Number',
+                  label: t.translate('receipt_ref_number'),
                   value: refNumber,
                 ),
                 const SizedBox(height: 14),
                 _ReceiptRow(
-                  label: 'Date',
+                  label: t.translate('receipt_date'),
                   value: date,
                 ),
                 const SizedBox(height: 14),
                 _ReceiptRow(
-                  label: 'Time',
+                  label: t.translate('receipt_time'),
                   value: time,
                 ),
                 const SizedBox(height: 14),
                 _ReceiptRow(
-                  label: 'Payment\nMethod',
+                  label: t.translate('receipt_payment_method'),
                   valueWidget: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,

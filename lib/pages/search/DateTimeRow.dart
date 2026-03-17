@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DateTimeRow extends StatefulWidget {
   final DateTime? initialDate;
@@ -45,7 +46,7 @@ class _DateTimeRowState extends State<DateTimeRow> {
     );
   }
 
-  String get _dateLabel => _formatDate(_pickedDate);
+  String _dateLabel(AppLocalizations t) => _formatDate(_pickedDate, t);
 
   String get _timeLabel {
     final h = _pickedTime.hour.toString().padLeft(2, '0');
@@ -53,11 +54,29 @@ class _DateTimeRowState extends State<DateTimeRow> {
     return '$h:$m';
   }
 
-  String _formatDate(DateTime date) {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  String _formatDate(DateTime date, AppLocalizations t) {
+    final days = [
+      t.translate('day_mon'),
+      t.translate('day_tue'),
+      t.translate('day_wed'),
+      t.translate('day_thu'),
+      t.translate('day_fri'),
+      t.translate('day_sat'),
+      t.translate('day_sun'),
+    ];
+    final months = [
+      t.translate('month_jan'),
+      t.translate('month_feb'),
+      t.translate('month_mar'),
+      t.translate('month_apr'),
+      t.translate('month_may'),
+      t.translate('month_jun'),
+      t.translate('month_jul'),
+      t.translate('month_aug'),
+      t.translate('month_sep'),
+      t.translate('month_oct'),
+      t.translate('month_nov'),
+      t.translate('month_dec'),
     ];
     return '${days[date.weekday - 1]}, ${months[date.month - 1]} ${date.day}';
   }
@@ -112,6 +131,7 @@ class _DateTimeRowState extends State<DateTimeRow> {
   }
 
   Future<void> _pickTime() async {
+    final t = AppLocalizations.of(context);
     final minuteSlots = [0, 15, 30, 45];
     int initMinuteIndex =
         minuteSlots.indexWhere((m) => m == _pickedTime.minute);
@@ -156,7 +176,7 @@ class _DateTimeRowState extends State<DateTimeRow> {
                         GestureDetector(
                           onTap: () => Navigator.pop(ctx),
                           child: Text(
-                            'Cancel',
+                            t.translate('cancel'),
                             style: TextStyle(
                               fontSize: 15,
                               color: AppColors.subtext(context),
@@ -165,7 +185,7 @@ class _DateTimeRowState extends State<DateTimeRow> {
                         ),
                         const Spacer(),
                         Text(
-                          'Time',
+                          t.translate('time'),
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
@@ -184,7 +204,7 @@ class _DateTimeRowState extends State<DateTimeRow> {
                             widget.onTimeChanged?.call(picked);
                           },
                           child: Text(
-                            'Done',
+                            t.translate('done'),
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -208,7 +228,8 @@ class _DateTimeRowState extends State<DateTimeRow> {
                             height: 48,
                             margin: const EdgeInsets.symmetric(horizontal: 40),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryPurple.withOpacity(0.08),
+                              color:
+                                  AppColors.primaryPurple.withOpacity(0.08),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
@@ -289,12 +310,14 @@ class _DateTimeRowState extends State<DateTimeRow> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Row(
       children: [
         Expanded(
           child: _PillChip(
             icon: Icons.calendar_today_rounded,
-            label: _dateLabel,
+            label: _dateLabel(t),
             showChevron: true,
             onTap: _pickDate,
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_CarCard.dart';
 import '_ClassFilterBar.dart';
 
@@ -29,6 +30,7 @@ class _VehicleSelectionPageState extends State<VehicleSelectionPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bottomPad = MediaQuery.of(context).padding.bottom;
+    final t = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.bg(context),
@@ -81,7 +83,7 @@ class _VehicleSelectionPageState extends State<VehicleSelectionPage> {
                       child: _filteredCars.isEmpty
                           ? Center(
                               child: Text(
-                                'No vehicles in this class',
+                                t.translate('no_vehicles_in_class'),
                                 style: AppTextStyles.bodyMedium(context),
                               ),
                             )
@@ -260,6 +262,8 @@ class _SheetHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -280,7 +284,7 @@ class _SheetHeader extends StatelessWidget {
         // Title
         Center(
           child: Text(
-            'Choose a ride',
+            t.translate('choose_a_ride'),
             style: AppTextStyles.pageTitle(context).copyWith(
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -312,6 +316,8 @@ class _ConfirmBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: EdgeInsets.fromLTRB(16, 12, 16, bottomPad + 12),
       decoration: BoxDecoration(
@@ -338,7 +344,7 @@ class _ConfirmBar extends StatelessWidget {
             children: [
               const SizedBox(width: 24),
               Text(
-                'Confirm ${car.name}',
+                '${t.translate('confirm_ride')} ${car.name}',
                 style: AppTextStyles.buttonPrimary,
               ),
               Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_BookingCard.dart';
 import '_VehicleCard.dart';
 import '_PassengerCard.dart';
@@ -18,20 +19,22 @@ class RideDetailsPage extends StatefulWidget {
 
 class _RideDetailsPageState extends State<RideDetailsPage> {
   void _showCancelDialog(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: AppColors.surface(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Cancel booking?',
+        title: Text(t.translate('cancel_booking_title'),
             style: AppTextStyles.bodyLarge(context)
                 .copyWith(fontWeight: FontWeight.w700)),
-        content: Text('Are you sure you want to cancel this booking?',
+        content: Text(t.translate('cancel_booking_message'),
             style: AppTextStyles.bodyMedium(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('No',
+            child: Text(t.translate('no'),
                 style: TextStyle(color: AppColors.subtext(context))),
           ),
           ElevatedButton(
@@ -42,7 +45,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Text('Yes, cancel'),
+            child: Text(t.translate('yes_cancel')),
           ),
         ],
       ),
@@ -51,6 +54,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -92,7 +96,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                   ),
                   Expanded(
                     child: Text(
-                      'Ride details',
+                      t.translate('ride_details_title'),
                       textAlign: TextAlign.center,
                       style: AppTextStyles.bodyLarge(context).copyWith(
                           fontWeight: FontWeight.w700, fontSize: 17),
@@ -132,7 +136,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         icon: Icon(Icons.credit_card_outlined,
                             size: 20, color: AppColors.primaryPurple),
                         label: Text(
-                          'Payment',
+                          t.translate('payment'),
                           style: AppTextStyles.bodyLarge(context).copyWith(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
@@ -160,7 +164,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         icon: Icon(Icons.close_rounded,
                             color: Colors.red.shade400, size: 18),
                         label: Text(
-                          'Cancel Booking',
+                          t.translate('cancel_booking'),
                           style: AppTextStyles.bodyLarge(context).copyWith(
                               color: Colors.red.shade400,
                               fontWeight: FontWeight.w700,

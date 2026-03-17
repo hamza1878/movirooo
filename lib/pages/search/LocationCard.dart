@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LocationCard extends StatelessWidget {
   final TextEditingController fromController;
@@ -27,27 +28,29 @@ class LocationCard extends StatelessWidget {
     EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
       vertical: 14,
     ),
-  }) => InputDecoration(
-    hintText: hint,
-    hintStyle: TextStyle(
-      color: AppColors.subtext(context),
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-    ),
-    border: InputBorder.none,
-    enabledBorder: InputBorder.none,
-    focusedBorder: InputBorder.none,
-    filled: false,
-    isDense: false,
-    contentPadding: contentPadding,
-  );
+  }) =>
+      InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(
+          color: AppColors.subtext(context),
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+        ),
+        border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        filled: false,
+        isDense: false,
+        contentPadding: contentPadding,
+      );
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 14, 16),
       decoration: BoxDecoration(
-        // AFTER
         color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -139,7 +142,10 @@ class LocationCard extends StatelessWidget {
                               fontWeight: FontWeight.w400,
                             ),
                             textAlignVertical: TextAlignVertical.center,
-                            decoration: _inputDec(context, hint: 'Pick-up'),
+                            decoration: _inputDec(
+                              context,
+                              hint: t.translate('pick_up'),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -147,9 +153,7 @@ class LocationCard extends StatelessWidget {
                           valueListenable: fromController,
                           builder: (_, val, __) => val.text.isNotEmpty
                               ? GestureDetector(
-                                  onTap: () {
-                                    fromController.clear();
-                                  },
+                                  onTap: () => fromController.clear(),
                                   child: Icon(
                                     Icons.close_rounded,
                                     size: 20,
@@ -171,7 +175,6 @@ class LocationCard extends StatelessWidget {
                   Divider(
                     height: 1,
                     thickness: 0.8,
-                    // AFTER
                     color: AppColors.border(context),
                   ),
                   // ── Drop-off row ──
@@ -192,7 +195,7 @@ class LocationCard extends StatelessWidget {
                             textAlignVertical: TextAlignVertical.center,
                             decoration: _inputDec(
                               context,
-                              hint: 'Drop-off',
+                              hint: t.translate('drop_off'),
                               contentPadding: const EdgeInsets.only(
                                 top: 7,
                                 bottom: 7,

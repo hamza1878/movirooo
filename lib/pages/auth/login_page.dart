@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
-import '../../../../routing/router.dart'; // adjust path as needed
+import '../../../../l10n/app_localizations.dart';
+import '../../../../routing/router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -59,6 +60,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
@@ -79,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // ── Title ─────────────────────────────────────────────
               Text(
-                'Welcome Back',
+                t.translate('welcome_back'),
                 style: AppTextStyles.pageTitle(context).copyWith(
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
@@ -89,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 40),
 
               // ── Email ─────────────────────────────────────────────
-              _label(context, 'EMAIL ADDRESS'),
+              _label(context, t.translate('label_email_address')),
               const SizedBox(height: 8),
               TextField(
                 controller: _emailController,
@@ -98,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: AppTextStyles.bodyMedium(context),
                 decoration: _fieldDecoration(
                   context,
-                  hint: 'name@example.com',
+                  hint: t.translate('hint_email'),
                   prefixIcon: Icons.email_outlined,
                 ),
               ),
@@ -106,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
 
               // ── Password ──────────────────────────────────────────
-              _label(context, 'PASSWORD'),
+              _label(context, t.translate('label_password')),
               const SizedBox(height: 8),
               TextField(
                 controller: _passwordController,
@@ -140,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    'Forgot Password?',
+                    t.translate('forgot_password'),
                     style: AppTextStyles.bodyMedium(context).copyWith(
                       fontWeight: FontWeight.w500,
                       color: AppColors.primaryPurple,
@@ -162,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     elevation: 0,
                   ),
-                  child: const Text('Sign In', style: AppTextStyles.buttonPrimary),
+                  child: Text(t.translate('sign_in'), style: AppTextStyles.buttonPrimary),
                 ),
               ),
 
@@ -175,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      'OR CONTINUE WITH',
+                      t.translate('or_continue_with'),
                       style: AppTextStyles.sectionLabel(context),
                     ),
                   ),
@@ -196,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                     Image.asset('images/google.png', width: 22, height: 22),
                     const SizedBox(width: 12),
                     Text(
-                      'Continue with Google',
+                      t.translate('continue_with_google'),
                       style: AppTextStyles.bodyLarge(context),
                     ),
                   ],
@@ -206,8 +209,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 14),
 
               // ── Apple ─────────────────────────────────────────────
-              // Apple button intentionally stays white with black text
-              // per Apple's brand guidelines regardless of theme
               _socialButton(
                 backgroundColor: Colors.white,
                 borderColor: AppColors.border(context),
@@ -218,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                     Image.asset('images/apple.png', width: 22, height: 22),
                     const SizedBox(width: 10),
                     Text(
-                      'Continue with Apple',
+                      t.translate('continue_with_apple'),
                       style: AppTextStyles.bodyLarge(context).copyWith(color: Colors.black),
                     ),
                   ],
@@ -231,11 +232,11 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't have an account? ", style: AppTextStyles.bodyMedium(context)),
+                  Text(t.translate('no_account'), style: AppTextStyles.bodyMedium(context)),
                   GestureDetector(
                     onTap: () => Navigator.pushNamed(context, '/signup'),
                     child: Text(
-                      'Sign Up',
+                      t.translate('sign_up'),
                       style: AppTextStyles.bodyMedium(context).copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.primaryPurple,

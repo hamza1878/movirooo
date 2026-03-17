@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../theme/app_colors.dart';
 import '../../../../../theme/app_text_styles.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 // ─── FORM FIELD ────────────────────────────────────────────────────────────────
 
@@ -49,17 +50,21 @@ class TicketFormField extends StatelessWidget {
 }
 
 // ─── CATEGORY DROPDOWN ─────────────────────────────────────────────────────────
+// `items`        — translation keys (e.g. 'cat_ride_issue')
+// `labelBuilder` — resolves each key to a localised display string via t.translate
 
 class TicketCategoryDropdown extends StatelessWidget {
   final String value;
   final ValueChanged<String?> onChanged;
   final List<String> items;
+  final String Function(String key) labelBuilder;
 
   const TicketCategoryDropdown({
     super.key,
     required this.value,
     required this.onChanged,
     required this.items,
+    required this.labelBuilder,
   });
 
   @override
@@ -74,15 +79,20 @@ class TicketCategoryDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          icon: Icon(Icons.keyboard_arrow_down_rounded,
-              color: AppColors.subtext(context)),
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: AppColors.subtext(context),
+          ),
           dropdownColor: AppColors.surface(context),
           style: AppTextStyles.bodyMedium(context),
           onChanged: onChanged,
           items: items
-              .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item, style: AppTextStyles.bodyMedium(context)),
+              .map((key) => DropdownMenuItem<String>(
+                    value: key,
+                    child: Text(
+                      labelBuilder(key),
+                      style: AppTextStyles.bodyMedium(context),
+                    ),
                   ))
               .toList(),
         ),
@@ -98,10 +108,10 @@ class TicketAttachFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return GestureDetector(
-      onTap: () {
-        // Handle file attachment
-      },
+      onTap: () {},
       child: Container(
         width: double.infinity,
         height: 110,
@@ -127,7 +137,7 @@ class TicketAttachFiles extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Add screenshots or receipts',
+              t.translate('attach_files_hint'),
               style: AppTextStyles.bodySmall(context),
             ),
           ],
@@ -146,6 +156,8 @@ class TicketSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SizedBox(
       width: double.infinity,
       height: 54,
@@ -159,7 +171,13 @@ class TicketSubmitButton extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         icon: const Icon(Icons.send_rounded, size: 18, color: Colors.white),
-        label: const Text('Submit Ticket', style: AppTextStyles.buttonPrimary),
+        label: Text(
+          t.translate('submit_ticket_btn'),
+          style: AppTextStyles.bodyMedium(context).copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

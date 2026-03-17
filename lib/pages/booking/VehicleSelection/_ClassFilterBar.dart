@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 const List<String> carClasses = [
   'All',
@@ -23,6 +24,8 @@ class ClassFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SizedBox(
       height: 36,
       child: ListView.separated(
@@ -53,7 +56,7 @@ class ClassFilterBar extends StatelessWidget {
                 ),
               ),
               child: Text(
-                label,
+                t.translate('class_${label.toLowerCase()}'),
                 style: AppTextStyles.bodySmall(context).copyWith(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,

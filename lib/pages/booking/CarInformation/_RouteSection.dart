@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_SummaryCard.dart';
 
 class RouteSection extends StatelessWidget {
@@ -9,6 +10,8 @@ class RouteSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SummaryCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,14 +23,14 @@ class RouteSection extends StatelessWidget {
                   color: AppColors.primaryPurple, size: 20),
               const SizedBox(width: 8),
               Text(
-                'Route details',
+                t.translate('route_details'),
                 style: AppTextStyles.bodyLarge(context)
                     .copyWith(fontWeight: FontWeight.w700),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Divider(height: 1, color: AppColors.border(context)), // ✅ fixed
+          Divider(height: 1, color: AppColors.border(context)),
           const SizedBox(height: 16),
 
           // ── Date & time ──────────────────────────────────────
@@ -70,7 +73,7 @@ class RouteSection extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          Divider(height: 1, color: AppColors.border(context)), // ✅ fixed
+          Divider(height: 1, color: AppColors.border(context)),
           const SizedBox(height: 14),
 
           // ── Stats row ────────────────────────────────────────
@@ -79,17 +82,17 @@ class RouteSection extends StatelessWidget {
             children: [
               _StatItem(
                 icon: Icons.straighten_outlined,
-                label: 'DISTANCE',
+                label: t.translate('stat_distance'),
                 value: '114 KM',
               ),
               _StatItem(
                 icon: Icons.access_time_outlined,
-                label: 'ETA',
+                label: t.translate('stat_eta'),
                 value: '14:17',
               ),
               _StatItem(
                 icon: Icons.person_outline_rounded,
-                label: 'PASSENGER',
+                label: t.translate('stat_passenger'),
                 value: '$pax',
               ),
             ],

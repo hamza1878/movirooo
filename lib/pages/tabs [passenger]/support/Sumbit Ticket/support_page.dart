@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../theme/app_colors.dart';
 import '../../../../../theme/app_text_styles.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'support_widgets.dart';
 
 class SubmitTicketPage extends StatefulWidget {
@@ -13,7 +14,15 @@ class SubmitTicketPage extends StatefulWidget {
 class _SubmitTicketPageState extends State<SubmitTicketPage> {
   final _subjectController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String _selectedCategory = 'Ride Issue';
+  String _selectedCategoryKey = 'cat_ride_issue';
+
+  static const _categoryKeys = [
+    'cat_ride_issue',
+    'cat_payment',
+    'cat_driver_complaint',
+    'cat_app_bug',
+    'cat_other',
+  ];
 
   @override
   void dispose() {
@@ -22,23 +31,22 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
     super.dispose();
   }
 
-  void _onSubmit() {
-    // Handle ticket submission
-  }
+  void _onSubmit() {}
 
   void _handleAttachFiles() {
-    // Handle file attachment
     debugPrint('Attach files tapped');
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
         child: Column(
           children: [
-            // Header with back button
+            // ── Header ───────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -62,7 +70,7 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
                   ),
                   Expanded(
                     child: Text(
-                      'Support Ticket',
+                      t.translate('support_ticket'),
                       textAlign: TextAlign.center,
                       style: AppTextStyles.pageTitle(context),
                     ),
@@ -72,7 +80,7 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
               ),
             ),
 
-            // Main content
+            // ── Main content ─────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -81,56 +89,66 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
                   children: [
                     const SizedBox(height: 4),
                     Text(
-                      'SUBMIT A TICKET',
+                      t.translate('submit_a_ticket'),
                       style: AppTextStyles.sectionLabel(context)
                           .copyWith(color: AppColors.primaryPurple),
                     ),
                     const SizedBox(height: 20),
 
                     // Subject
-                    Text('Subject', style: AppTextStyles.bodyMedium(context)),
+                    Text(
+                      t.translate('subject'),
+                      style: AppTextStyles.bodyMedium(context),
+                    ),
                     const SizedBox(height: 8),
                     TicketFormField(
                       controller: _subjectController,
-                      hintText: 'Brief summary of the issue',
+                      hintText: t.translate('subject_hint'),
                       maxLines: 1,
                     ),
                     const SizedBox(height: 20),
 
                     // Category
-                    Text('Category', style: AppTextStyles.bodyMedium(context)),
+                    Text(
+                      t.translate('category'),
+                      style: AppTextStyles.bodyMedium(context),
+                    ),
                     const SizedBox(height: 8),
                     TicketCategoryDropdown(
-                      value: _selectedCategory,
-                      onChanged: (val) =>
-                          setState(() => _selectedCategory = val ?? _selectedCategory),
-                      items: const [
-                        'Ride Issue',
-                        'Payment',
-                        'Driver Complaint',
-                        'App Bug',
-                        'Other',
-                      ],
+                      value: _selectedCategoryKey,
+                      onChanged: (val) => setState(
+                        () => _selectedCategoryKey =
+                            val ?? _selectedCategoryKey,
+                      ),
+                      items: _categoryKeys,
+                      labelBuilder: (key) => t.translate(key),
                     ),
                     const SizedBox(height: 20),
 
                     // Description
-                    Text('Description', style: AppTextStyles.bodyMedium(context)),
+                    Text(
+                      t.translate('description'),
+                      style: AppTextStyles.bodyMedium(context),
+                    ),
                     const SizedBox(height: 8),
                     TicketFormField(
                       controller: _descriptionController,
-                      hintText: 'Provide details about your request...',
+                      hintText: t.translate('description_hint'),
                       maxLines: 6,
                     ),
                     const SizedBox(height: 20),
 
-                    // Attach Files - New Design
-                    Text('Attach Files', style: AppTextStyles.bodyMedium(context)),
+                    // Attach Files
+                    Text(
+                      t.translate('attach_files'),
+                      style: AppTextStyles.bodyMedium(context),
+                    ),
                     const SizedBox(height: 8),
                     GestureDetector(
                       onTap: _handleAttachFiles,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 16),
                         decoration: BoxDecoration(
                           color: AppColors.surface(context),
                           borderRadius: BorderRadius.circular(12),
@@ -149,10 +167,10 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                'Add screenshots or receipts',
-                                style: AppTextStyles.bodyMedium(context).copyWith(
-                                  color: AppColors.subtext(context),
-                                ),
+                                t.translate('attach_files_hint'),
+                                style: AppTextStyles.bodyMedium(context)
+                                    .copyWith(
+                                        color: AppColors.subtext(context)),
                               ),
                             ),
                             Icon(
@@ -166,7 +184,7 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
                     ),
                     const SizedBox(height: 36),
 
-                    // Submit Button - No Icon
+                    // Submit Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -174,14 +192,15 @@ class _SubmitTicketPageState extends State<SubmitTicketPage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryPurple,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           elevation: 0,
                         ),
                         child: Text(
-                          'Submit Ticket',
+                          t.translate('submit_ticket_btn'),
                           style: AppTextStyles.bodyMedium(context).copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

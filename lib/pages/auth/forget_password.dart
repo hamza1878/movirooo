@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -51,7 +52,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
@@ -77,7 +80,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   Expanded(
                     child: Text(
-                      'SECURITY',
+                      t.translate('label_security'),
                       textAlign: TextAlign.center,
                       style: AppTextStyles.sectionLabel(context),
                     ),
@@ -120,7 +123,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                     // ── Title ─────────────────────────────────────
                     Text(
-                      'Forgot Password?',
+                      t.translate('forgot_password_title'),
                       style: AppTextStyles.pageTitle(context).copyWith(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
@@ -131,7 +134,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                     // ── Subtitle ──────────────────────────────────
                     Text(
-                      'No worries! Enter your registered email  to\nreceive a secure recovery link.',
+                      t.translate('forgot_password_subtitle'),
                       textAlign: TextAlign.center,
                       style: AppTextStyles.bodyMedium(context).copyWith(height: 1.6),
                     ),
@@ -141,7 +144,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     // ── Field label ───────────────────────────────
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('ACCOUNT IDENTIFIER', style: AppTextStyles.sectionLabel(context)),
+                      child: Text(t.translate('label_account_identifier'), style: AppTextStyles.sectionLabel(context)),
                     ),
 
                     const SizedBox(height: 8),
@@ -154,7 +157,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       style: AppTextStyles.bodyMedium(context),
                       decoration: _fieldDecoration(
                         context,
-                        hint: 'Email',
+                        hint: t.translate('hint_email_short'),
                         prefixIcon: Icons.alternate_email_rounded,
                       ),
                     ),
@@ -172,12 +175,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           elevation: 0,
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Send Recovery Link', style: AppTextStyles.buttonPrimary),
-                            SizedBox(width: 10),
-                            Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 20),
+                            Text(t.translate('send_recovery_link'), style: AppTextStyles.buttonPrimary),
+                            const SizedBox(width: 10),
+                            const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 20),
                           ],
                         ),
                       ),
@@ -189,11 +192,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Remembered your password? ', style: AppTextStyles.bodyMedium(context)),
+                        Text(t.translate('remembered_password'), style: AppTextStyles.bodyMedium(context)),
                         GestureDetector(
                           onTap: () => Navigator.pushReplacementNamed(context, '/login'),
                           child: Text(
-                            'Sign In',
+                            t.translate('sign_in'),
                             style: AppTextStyles.bodyMedium(context).copyWith(
                               fontWeight: FontWeight.w700,
                               color: AppColors.primaryPurple,

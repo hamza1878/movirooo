@@ -45,7 +45,6 @@ class _SuccessIconState extends State<SuccessIcon>
         return Stack(
           alignment: Alignment.center,
           children: [
-            // ── Glow extérieur ─────────────────────────────
             Container(
               width: 100,
               height: 100,
@@ -53,16 +52,13 @@ class _SuccessIconState extends State<SuccessIcon>
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.green
-                        .withOpacity(0.30 * _glowAnim.value),
+                    color: Colors.green.withOpacity(0.30 * _glowAnim.value),
                     blurRadius: 40,
                     spreadRadius: 10,
                   ),
                 ],
               ),
             ),
-
-            // ── Cercle principal ───────────────────────────
             Transform.scale(
               scale: _scaleAnim.value,
               child: Container(

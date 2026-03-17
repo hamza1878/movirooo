@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../../theme/app_colors.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class _Country {
   final String flag;
@@ -33,12 +34,14 @@ const List<_Country> _kCountries = [
   _Country(flag: '🇪🇸', code: 'ES', dialCode: '+34',  maxDigits: 9),
 ];
 
-const Map<String, String> _kCountryNames = {
-  'TN': 'Tunisia',  'DZ': 'Algeria',        'MA': 'Morocco',
-  'LY': 'Libya',    'EG': 'Egypt',           'FR': 'France',
-  'DE': 'Germany',  'GB': 'United Kingdom',  'US': 'United States',
-  'SA': 'Saudi Arabia', 'AE': 'UAE',         'TR': 'Turkey',
-  'IT': 'Italy',    'ES': 'Spain',
+// Country names are intentionally kept in en.json under country_TN, country_DZ,
+// etc. and resolved via t.translate at render time (see _CountryPickerSheet).
+const Map<String, String> _kCountryNameKeys = {
+  'TN': 'country_TN', 'DZ': 'country_DZ', 'MA': 'country_MA',
+  'LY': 'country_LY', 'EG': 'country_EG', 'FR': 'country_FR',
+  'DE': 'country_DE', 'GB': 'country_GB', 'US': 'country_US',
+  'SA': 'country_SA', 'AE': 'country_AE', 'TR': 'country_TR',
+  'IT': 'country_IT', 'ES': 'country_ES',
 };
 
 class NewPassengerModal {
@@ -142,6 +145,7 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
@@ -149,7 +153,6 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-
           // Drag handle
           Container(
             width: 36,
@@ -171,7 +174,9 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
               ),
               Expanded(
                 child: Text(
-                  _isEdit ? 'Edit passenger' : 'New passenger',
+                  _isEdit
+                      ? t.translate('edit_passenger')
+                      : t.translate('new_passenger'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 17,
@@ -201,7 +206,7 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'This name will be visible to drivers.',
+                  t.translate('passenger_name_visible'),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -210,7 +215,7 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  "Changing it here won't affect your device contacts.",
+                  t.translate('passenger_name_device_note'),
                   style: TextStyle(
                     fontSize: 12,
                     color: AppColors.primaryPurple.withOpacity(0.7),
@@ -222,16 +227,16 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
           const SizedBox(height: 20),
 
           _LabeledField(
-            label: 'First name',
-            hint: 'Ex. Ahmed',
+            label: t.translate('first_name'),
+            hint: t.translate('first_name_hint'),
             controller: _firstCtrl,
             capitalization: TextCapitalization.words,
           ),
           const SizedBox(height: 14),
 
           _LabeledField(
-            label: 'Last name',
-            hint: 'Ex. Ben Ali',
+            label: t.translate('last_name'),
+            hint: t.translate('last_name_hint'),
             controller: _lastCtrl,
             capitalization: TextCapitalization.words,
           ),
@@ -242,7 +247,7 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Phone number',
+                t.translate('phone_number'),
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -309,7 +314,7 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
                               _country.maxDigits),
                         ],
                         decoration: InputDecoration(
-                          hintText: 'XX XXX XXX',
+                          hintText: t.translate('phone_hint'),
                           hintStyle: TextStyle(
                               color: AppColors.subtext(context),
                               fontSize: 14),
@@ -332,14 +337,15 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
               style: TextStyle(
                   fontSize: 12, color: AppColors.subtext(context)),
               children: [
-                const TextSpan(text: 'By tapping '),
+                TextSpan(text: t.translate('disclaimer_by_tapping')),
                 TextSpan(
-                  text: _isEdit ? "'Save changes'" : "'Add passenger'",
+                  text: _isEdit
+                      ? t.translate('disclaimer_save_changes')
+                      : t.translate('disclaimer_add_passenger'),
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
-                const TextSpan(
-                  text: ', you confirm that this person has agreed to '
-                      'share their contact information to receive ride updates.',
+                TextSpan(
+                  text: t.translate('disclaimer_consent'),
                 ),
               ],
             ),
@@ -361,7 +367,9 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
                 elevation: 0,
               ),
               child: Text(
-                _isEdit ? 'Save changes' : 'Add passenger',
+                _isEdit
+                    ? t.translate('save_changes')
+                    : t.translate('add_passenger'),
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -387,8 +395,9 @@ class _CountryPickerSheet extends StatefulWidget {
 class _CountryPickerSheetState extends State<_CountryPickerSheet> {
   String _query = '';
 
-  List<_Country> get _filtered => _kCountries.where((c) {
-        final name = (_kCountryNames[c.code] ?? '').toLowerCase();
+  List<_Country> _filtered(AppLocalizations t) =>
+      _kCountries.where((c) {
+        final name = t.translate(_kCountryNameKeys[c.code] ?? c.code).toLowerCase();
         final q    = _query.toLowerCase();
         return name.contains(q) ||
             c.code.toLowerCase().contains(q) ||
@@ -397,6 +406,8 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return DraggableScrollableSheet(
       initialChildSize: 0.6,
       minChildSize: 0.4,
@@ -419,7 +430,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Select country',
+                  t.translate('select_country'),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -431,7 +442,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                   onChanged: (v) => setState(() => _query = v),
                   style: TextStyle(color: AppColors.text(context)),
                   decoration: InputDecoration(
-                    hintText: 'Search country or dial code…',
+                    hintText: t.translate('search_country_hint'),
                     hintStyle: TextStyle(
                         color: AppColors.subtext(context), fontSize: 14),
                     prefixIcon: Icon(Icons.search_rounded,
@@ -460,14 +471,14 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               controller: scrollCtrl,
               padding: const EdgeInsets.symmetric(
                   horizontal: 20, vertical: 8),
-              itemCount: _filtered.length,
+              itemCount: _filtered(t).length,
               separatorBuilder: (_, __) => Divider(
                 height: 1,
                 thickness: 0.5,
                 color: AppColors.border(context),
               ),
               itemBuilder: (_, i) {
-                final c          = _filtered[i];
+                final c          = _filtered(t)[i];
                 final isSelected = c.code == widget.selected.code;
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -475,7 +486,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                   leading: Text(c.flag,
                       style: const TextStyle(fontSize: 26)),
                   title: Text(
-                    _kCountryNames[c.code] ?? c.code,
+                    t.translate(_kCountryNameKeys[c.code] ?? c.code),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -511,7 +522,6 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
 
-// Renamed from _CircleBtn to _RoundedBtn — matches the rounded rectangle style
 class _RoundedBtn extends StatelessWidget {
   final IconData icon;
   final double size;

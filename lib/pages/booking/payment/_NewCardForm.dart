@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class NewCardForm extends StatefulWidget {
   final VoidCallback? onSaved;
@@ -13,14 +14,14 @@ class NewCardForm extends StatefulWidget {
 }
 
 class NewCardFormState extends State<NewCardForm> {
-  final nameController = TextEditingController();
-  final cardController = TextEditingController();
-  final expiryController = TextEditingController();
+  final nameController    = TextEditingController();
+  final cardController    = TextEditingController();
+  final expiryController  = TextEditingController();
 
-  bool _nameError = false;
-  bool _cardError = false;
+  bool _nameError   = false;
+  bool _cardError   = false;
   bool _expiryError = false;
-  bool _saveCard = false;
+  bool _saveCard    = false;
 
   @override
   void dispose() {
@@ -30,11 +31,10 @@ class NewCardFormState extends State<NewCardForm> {
     super.dispose();
   }
 
-  /// Returns true if all fields are valid. Call before payment.
   bool validate() {
     setState(() {
-      _nameError = nameController.text.trim().isEmpty;
-      _cardError = cardController.text.replaceAll(' ', '').length < 16;
+      _nameError   = nameController.text.trim().isEmpty;
+      _cardError   = cardController.text.replaceAll(' ', '').length < 16;
       _expiryError = expiryController.text.trim().length < 5;
     });
     return !_nameError && !_cardError && !_expiryError;
@@ -42,6 +42,8 @@ class NewCardFormState extends State<NewCardForm> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -59,7 +61,7 @@ class NewCardFormState extends State<NewCardForm> {
                   color: AppColors.primaryPurple, size: 18),
               const SizedBox(width: 8),
               Expanded(
-                child: Text('CARD DETAILS',
+                child: Text(t.translate('card_details'),
                     style: AppTextStyles.bodySmall(context).copyWith(
                       color: AppColors.subtext(context),
                       fontWeight: FontWeight.w700,
@@ -75,7 +77,7 @@ class NewCardFormState extends State<NewCardForm> {
                       Icon(Icons.arrow_back_ios_rounded,
                           size: 12, color: AppColors.primaryPurple),
                       const SizedBox(width: 2),
-                      Text('Saved card',
+                      Text(t.translate('saved_card'),
                           style: AppTextStyles.bodySmall(context).copyWith(
                             color: AppColors.primaryPurple,
                             fontWeight: FontWeight.w600,
@@ -89,14 +91,14 @@ class NewCardFormState extends State<NewCardForm> {
           const SizedBox(height: 16),
 
           // ── Cardholder name ────────────────────────────────
-          _FieldLabel(label: 'Cardholder name'),
+          _FieldLabel(label: t.translate('cardholder_name')),
           const SizedBox(height: 6),
           _CardField(
             controller: nameController,
             hint: 'John Doe',
             inputType: TextInputType.name,
             hasError: _nameError,
-            errorText: 'Name is required',
+            errorText: t.translate('error_name_required'),
             onChanged: (_) {
               if (_nameError) setState(() => _nameError = false);
             },
@@ -104,7 +106,7 @@ class NewCardFormState extends State<NewCardForm> {
           const SizedBox(height: 14),
 
           // ── Card number ────────────────────────────────────
-          _FieldLabel(label: 'Card number'),
+          _FieldLabel(label: t.translate('card_number')),
           const SizedBox(height: 6),
           _CardField(
             controller: cardController,
@@ -116,7 +118,7 @@ class NewCardFormState extends State<NewCardForm> {
             ],
             maxLength: 19,
             hasError: _cardError,
-            errorText: 'Enter a valid 16-digit card number',
+            errorText: t.translate('error_card_invalid'),
             onChanged: (_) {
               if (_cardError) setState(() => _cardError = false);
             },
@@ -129,7 +131,7 @@ class NewCardFormState extends State<NewCardForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _FieldLabel(label: 'Expiry date'),
+                _FieldLabel(label: t.translate('expiry_date')),
                 const SizedBox(height: 6),
                 _CardField(
                   controller: expiryController,
@@ -141,7 +143,7 @@ class NewCardFormState extends State<NewCardForm> {
                   ],
                   maxLength: 5,
                   hasError: _expiryError,
-                  errorText: 'Required',
+                  errorText: t.translate('field_required'),
                   onChanged: (_) {
                     if (_expiryError) setState(() => _expiryError = false);
                   },
@@ -184,7 +186,7 @@ class NewCardFormState extends State<NewCardForm> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    'Save this card for next time',
+                    t.translate('save_card_next_time'),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.bodySmall(context),

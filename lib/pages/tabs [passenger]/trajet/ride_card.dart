@@ -140,7 +140,7 @@ class _ActionButton extends StatelessWidget {
             const SizedBox(width: 10),
             // Chat button
             GestureDetector(
-              onTap: () {},
+              onTap: () => AppRouter.push(context, AppRouter.chat),
               child: Container(
                 width: 46,
                 height: 46,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_SummaryCard.dart';
 import '../../tabs [passenger]/profile/saved_places/saved_places_model.dart';
 
@@ -37,13 +38,14 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
   final _formKey      = GlobalKey<FormState>();
 
   bool validateAndProceed() {
+    final t = AppLocalizations.of(context);
     if (!_newSelected && _selectedId != null) return true;
     if (_newSelected) {
       final valid = _formKey.currentState?.validate() ?? false;
       if (!valid) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Please fill in all required address fields.'),
+            content: Text(t.translate('fill_required_fields')),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppColors.primaryPurple,
             duration: const Duration(seconds: 2),
@@ -68,6 +70,8 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SummaryCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +84,7 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                   color: AppColors.primaryPurple, size: 18),
               const SizedBox(width: 8),
               Text(
-                'Billing address',
+                t.translate('billing_address'),
                 style: AppTextStyles.bodyMedium(context)
                     .copyWith(fontWeight: FontWeight.w700),
               ),
@@ -128,7 +132,7 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                     _newSelected = true;
                     _selectedId  = null;
                   }),
-                  title: 'New billing address',
+                  title: t.translate('new_billing_address'),
                 ),
 
                 // ── Inline form ──────────────────────────────────
@@ -155,14 +159,14 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                         children: [
                           _Field(
                             controller: _lastNameCtrl,
-                            hint: 'Last name',
+                            hint: t.translate('field_last_name'),
                             icon: Icons.person_outline_rounded,
                             required: true,
                           ),
                           const SizedBox(height: 10),
                           _Field(
                             controller: _addressCtrl,
-                            hint: 'Address',
+                            hint: t.translate('field_address'),
                             icon: Icons.signpost_outlined,
                             required: true,
                           ),
@@ -172,7 +176,7 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                               Expanded(
                                 child: _Field(
                                   controller: _cityCtrl,
-                                  hint: 'City',
+                                  hint: t.translate('field_city'),
                                   icon: Icons.location_city_outlined,
                                   required: true,
                                 ),
@@ -181,7 +185,7 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                               Expanded(
                                 child: _Field(
                                   controller: _provinceCtrl,
-                                  hint: 'Province/State',
+                                  hint: t.translate('field_province'),
                                   icon: Icons.map_outlined,
                                 ),
                               ),
@@ -190,14 +194,14 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                           const SizedBox(height: 10),
                           _Field(
                             controller: _zipCtrl,
-                            hint: 'ZIP/Postal code',
+                            hint: t.translate('field_zip'),
                             icon: Icons.markunread_mailbox_outlined,
                             keyboardType: TextInputType.number,
                           ),
                           const SizedBox(height: 10),
                           _Field(
                             controller: _taxIdCtrl,
-                            hint: 'Tax ID (if required)',
+                            hint: t.translate('field_tax_id'),
                             icon: Icons.badge_outlined,
                           ),
                           const SizedBox(height: 14),
@@ -231,7 +235,7 @@ class BillingAddressSectionState extends State<BillingAddressSection> {
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  'Save this address to profile',
+                                  t.translate('save_address_to_profile'),
                                   style: AppTextStyles.bodyMedium(context),
                                 ),
                               ],
@@ -358,11 +362,13 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       validator: required
-          ? (v) => (v == null || v.trim().isEmpty) ? 'Required' : null
+          ? (v) => (v == null || v.trim().isEmpty) ? t.translate('field_required') : null
           : null,
       decoration: InputDecoration(
         hintText: hint,

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SavedCardSection extends StatefulWidget {
   final VoidCallback onUseNewCard;
-  /// Called with the entered CVV when the section is ready to pay.
-  /// The parent reads [cvvController] directly via the global key, or use the
-  /// [cvvValid] getter exposed via [SavedCardSectionState].
   const SavedCardSection({super.key, required this.onUseNewCard});
 
   @override
@@ -24,7 +22,6 @@ class SavedCardSectionState extends State<SavedCardSection> {
     super.dispose();
   }
 
-  /// Returns true if CVV is valid (3 digits). Call before payment.
   bool validate() {
     final valid = cvvController.text.trim().length == 3;
     setState(() => _cvvError = !valid);
@@ -33,6 +30,8 @@ class SavedCardSectionState extends State<SavedCardSection> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -43,7 +42,7 @@ class SavedCardSectionState extends State<SavedCardSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('SAVED CARD',
+          Text(t.translate('saved_card_title'),
               style: AppTextStyles.bodySmall(context).copyWith(
                 color: AppColors.subtext(context),
                 fontWeight: FontWeight.w700,
@@ -98,7 +97,7 @@ class SavedCardSectionState extends State<SavedCardSection> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('CVV',
+                  Text(t.translate('cvv'),
                       style: AppTextStyles.bodySmall(context)
                           .copyWith(color: AppColors.subtext(context))),
                   const SizedBox(height: 6),
@@ -121,8 +120,7 @@ class SavedCardSectionState extends State<SavedCardSection> {
                         hintText: '123',
                         counterText: '',
                         hintStyle: AppTextStyles.bodyMedium(context)
-                            .copyWith(
-                                color: AppColors.subtext(context)),
+                            .copyWith(color: AppColors.subtext(context)),
                         filled: true,
                         fillColor: AppColors.bg(context),
                         contentPadding: const EdgeInsets.symmetric(
@@ -154,7 +152,7 @@ class SavedCardSectionState extends State<SavedCardSection> {
                   ),
                   if (_cvvError) ...[
                     const SizedBox(height: 4),
-                    Text('CVV is required',
+                    Text(t.translate('error_cvv_required'),
                         style: AppTextStyles.bodySmall(context)
                             .copyWith(color: Colors.red, fontSize: 11)),
                   ],
@@ -169,7 +167,7 @@ class SavedCardSectionState extends State<SavedCardSection> {
           GestureDetector(
             onTap: widget.onUseNewCard,
             child: Text(
-              'Use a different card',
+              t.translate('use_different_card'),
               style: AppTextStyles.bodySmall(context).copyWith(
                 color: AppColors.primaryPurple,
                 fontWeight: FontWeight.w600,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../theme/app_colors.dart';
+import '../../../../theme/app_text_styles.dart';
+import '_VoiceMessageBubble.dart';
 
 class ChatMessage {
   final String id;
@@ -7,14 +10,16 @@ class ChatMessage {
   final bool isMe;
   final String time;
   final bool isArabic;
+  final bool isVoice;
 
   const ChatMessage({
     required this.id,
     required this.text,
-    required this.translatedText,
+    this.translatedText,
     required this.isMe,
     required this.time,
-    required this.isArabic,
+    this.isArabic = false,
+    this.isVoice = false,
   });
 }
 
@@ -25,130 +30,86 @@ class ChatBubble extends StatelessWidget {
   const ChatBubble({
     super.key,
     required this.message,
-    required this.showTranslation,
+    this.showTranslation = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // ── Voice message ──────────────────────────────────────
+    if (message.isVoice) {
+      return VoiceMessageBubble(
+        isMe: message.isMe,
+        time: message.time,
+      );
+    }
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment:
-            message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
+    // ── Text message ───────────────────────────────────────
+    final isMe = message.isMe;
+    final bubbleColor = isMe
+        ? AppColors.primaryPurple
+        : AppColors.surface(context);
+    final textColor = isMe ? Colors.white : AppColors.text(context);
 
-          // ── Bubble principale ──────────────────────────────
-          Row(
-            mainAxisAlignment: message.isMe
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // Avatar (seulement pour les autres)
-              if (!message.isMe) ...[
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: const Color(0xFF7C3AED).withOpacity(0.15),
-                  child: const Icon(Icons.person_rounded,
-                      color: Color(0xFF7C3AED), size: 18),
-                ),
-                const SizedBox(width: 8),
-              ],
-
-              Flexible(
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.72,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: message.isMe
-                        ? const Color(0xFF7C3AED)
-                        : isDark
-                            ? const Color(0xFF1E1E2E)
-                            : const Color(0xFFF1F0F5),
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(18),
-                      topRight: const Radius.circular(18),
-                      bottomLeft: Radius.circular(message.isMe ? 18 : 4),
-                      bottomRight: Radius.circular(message.isMe ? 4 : 18),
-                    ),
-                  ),
-                  child: Text(
-                    message.text,
-                    textAlign: message.isArabic
-                        ? TextAlign.right
-                        : TextAlign.left,
-                    textDirection: message.isArabic
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    style: TextStyle(
-                      color: message.isMe
-                          ? Colors.white
-                          : isDark
-                              ? Colors.white
-                              : Colors.black87,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      height: 1.4,
-                    ),
-                  ),
+    return Align(
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.72,
+        ),
+        decoration: BoxDecoration(
+          color: bubbleColor,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(18),
+            topRight: const Radius.circular(18),
+            bottomLeft: Radius.circular(isMe ? 18 : 4),
+            bottomRight: Radius.circular(isMe ? 4 : 18),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              message.text,
+              style: AppTextStyles.bodyMedium(context).copyWith(
+                color: textColor,
+                fontSize: 14,
+              ),
+            ),
+            if (showTranslation && message.translatedText != null) ...[
+              const SizedBox(height: 6),
+              Divider(color: textColor.withOpacity(0.2), height: 1),
+              const SizedBox(height: 6),
+              Text(
+                message.translatedText!,
+                style: AppTextStyles.bodySmall(context).copyWith(
+                  color: textColor.withOpacity(0.75),
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic,
                 ),
               ),
             ],
-          ),
-
-          // ── Traduction AI ──────────────────────────────────
-          if (!message.isMe &&
-              showTranslation &&
-              message.translatedText != null) ...[
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'TRANSLATED BY AI',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    message.translatedText!,
-                    style: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 13,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                message.time,
+                style: AppTextStyles.bodySmall(context).copyWith(
+                  fontSize: 10,
+                  color: textColor.withOpacity(0.5),
+                ),
               ),
             ),
           ],
-
-          // ── Heure ──────────────────────────────────────────
-          const SizedBox(height: 4),
-          Padding(
-            padding: EdgeInsets.only(
-              left: message.isMe ? 0 : 40,
-            ),
-            child: Text(
-              message.time,
-              style: TextStyle(
-                color: Colors.grey.shade500,
-                fontSize: 10,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

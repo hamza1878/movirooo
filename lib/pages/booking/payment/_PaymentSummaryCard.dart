@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class PaymentSummaryCard extends StatelessWidget {
   const PaymentSummaryCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -18,7 +21,7 @@ class PaymentSummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('SUMMARY',
+          Text(t.translate('payment_summary'),
               style: AppTextStyles.bodySmall(context).copyWith(
                 color: AppColors.subtext(context),
                 fontWeight: FontWeight.w700,
@@ -26,16 +29,16 @@ class PaymentSummaryCard extends StatelessWidget {
                 fontSize: 11,
               )),
           const SizedBox(height: 14),
-          _PriceRow(label: 'Standard Transfer', value: '75.00 TND'),
+          _PriceRow(label: t.translate('standard_transfer'), value: '75.00 TND'),
           const SizedBox(height: 8),
-          _PriceRow(label: 'Service fee', value: '10.00 TND'),
+          _PriceRow(label: t.translate('service_fee'), value: '10.00 TND'),
           const SizedBox(height: 14),
           const Divider(height: 1),
           const SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total',
+              Text(t.translate('total'),
                   style: AppTextStyles.bodyLarge(context)
                       .copyWith(fontWeight: FontWeight.w800)),
               Text('85.00 TND',

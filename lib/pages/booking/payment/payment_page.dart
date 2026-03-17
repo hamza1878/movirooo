@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_PaymentSummaryCard.dart';
 import '_SavedCardSection.dart';
 import '_NewCardForm.dart';
@@ -15,10 +16,10 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   bool _hasSavedCard = true;
-  bool _useNewCard = false;
+  bool _useNewCard   = false;
 
   final _savedCardKey = GlobalKey<SavedCardSectionState>();
-  final _newCardKey = GlobalKey<NewCardFormState>();
+  final _newCardKey   = GlobalKey<NewCardFormState>();
 
   void _goBack() {
     if (Navigator.canPop(context)) {
@@ -30,20 +31,19 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void _onPay() {
     bool valid = false;
-
     if (_hasSavedCard && !_useNewCard) {
       valid = _savedCardKey.currentState?.validate() ?? false;
     } else {
       valid = _newCardKey.currentState?.validate() ?? false;
     }
-
     if (!valid) return;
-
     AppRouter.push(context, AppRouter.paymentSuccess);
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
@@ -80,12 +80,12 @@ class _PaymentPageState extends State<PaymentPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Payment',
+                        t.translate('payment'),
                         style: AppTextStyles.bodyLarge(context).copyWith(
                             fontWeight: FontWeight.w800, fontSize: 18),
                       ),
                       Text(
-                        'Booking #78438620',
+                        t.translate('booking_ref'),
                         style: AppTextStyles.bodySmall(context).copyWith(
                             color: AppColors.subtext(context)),
                       ),
@@ -118,7 +118,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             : null,
                         onSaved: () => setState(() {
                           _hasSavedCard = true;
-                          _useNewCard = false;
+                          _useNewCard   = false;
                         }),
                       ),
                     ],
@@ -132,7 +132,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             size: 14, color: AppColors.subtext(context)),
                         const SizedBox(width: 6),
                         Text(
-                          'Secured with 256-bit encryption',
+                          t.translate('secured_encryption'),
                           style: AppTextStyles.bodySmall(context).copyWith(
                               color: AppColors.subtext(context)),
                         ),
@@ -152,9 +152,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 child: ElevatedButton.icon(
                   onPressed: _onPay,
                   icon: const Icon(Icons.credit_card_outlined, size: 20),
-                  label: const Text(
-                    'Pay 85.00 TND',
-                    style: TextStyle(
+                  label: Text(
+                    t.translate('pay_amount'),
+                    style: const TextStyle(
                         fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   style: ElevatedButton.styleFrom(

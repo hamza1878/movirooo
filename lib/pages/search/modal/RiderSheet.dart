@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../theme/app_colors.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'NewPassengerModal.dart';
 
 class RiderSheet {
@@ -69,6 +70,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
   }
 
   void _deleteRider(int index) async {
+    final t = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -76,7 +78,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
-          'Remove contact',
+          t.translate('remove_contact'),
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -84,14 +86,15 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
           ),
         ),
         content: Text(
-          'Remove "${_riders[index]['name']}" from your contacts?',
+          t.translate('remove_contact_confirm').replaceFirst(
+              '{name}', _riders[index]['name'] ?? ''),
           style: TextStyle(color: AppColors.text(context)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Cancel',
+              t.translate('cancel'),
               style: TextStyle(color: AppColors.subtext(context)),
             ),
           ),
@@ -102,8 +105,10 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
             ),
-            child: const Text('Remove',
-                style: TextStyle(color: Colors.white)),
+            child: Text(
+              t.translate('remove'),
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -121,6 +126,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
   }
 
   void _showMenu(BuildContext btnCtx, int index) async {
+    final t = AppLocalizations.of(context);
     final RenderBox button = btnCtx.findRenderObject() as RenderBox;
     final RenderBox overlay = Navigator.of(btnCtx)
         .overlay!
@@ -148,7 +154,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
                 size: 16, color: AppColors.primaryPurple),
             const SizedBox(width: 10),
             Text(
-              'Edit',
+              t.translate('edit'),
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -164,7 +170,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
                 size: 16, color: Colors.red.shade400),
             const SizedBox(width: 10),
             Text(
-              'Delete',
+              t.translate('delete'),
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -182,6 +188,8 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Padding(
       padding: EdgeInsets.fromLTRB(
           20, 16, 20, MediaQuery.of(context).viewInsets.bottom + 24),
@@ -200,7 +208,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
           const SizedBox(height: 16),
 
           Text(
-            "Who's riding?",
+            t.translate('whos_riding'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 17,
@@ -247,9 +255,9 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
               child: const Icon(Icons.person_add_alt_1_outlined,
                   size: 18, color: AppColors.primaryPurple),
             ),
-            title: const Text(
-              'Add New Contact',
-              style: TextStyle(
+            title: Text(
+              t.translate('add_new_contact'),
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColors.primaryPurple,
@@ -275,7 +283,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
                 elevation: 0,
               ),
               child: Text(
-                'Confirm',
+                t.translate('confirm'),
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,

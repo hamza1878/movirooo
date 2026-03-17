@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_SummaryCard.dart';
 
 class BookingSummaryCard extends StatelessWidget {
@@ -19,6 +20,8 @@ class BookingSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SummaryCard(
       child: Row(
         children: [
@@ -49,18 +52,17 @@ class BookingSummaryCard extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: 8),
-                // Wrap prevents overflow regardless of chip count or font scale
                 Wrap(
                   spacing: 8,
                   runSpacing: 6,
                   children: [
                     _InfoChip(
                       icon: Icons.person_outline_rounded,
-                      label: '$pax pax',
+                      label: '$pax ${t.translate('chip_pax')}',
                     ),
                     _InfoChip(
                       icon: Icons.luggage_outlined,
-                      label: '$bags lug',
+                      label: '$bags ${t.translate('chip_lug')}',
                     ),
                   ],
                 ),

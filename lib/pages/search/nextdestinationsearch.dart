@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SuggestionItem {
   final String title;
@@ -24,6 +25,8 @@ class NextDestinationSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       children: [
         // ── Suggestions (max 4, visible only while typing) ──
@@ -50,8 +53,8 @@ class NextDestinationSearch extends StatelessWidget {
         // ── Static action tiles ──
         _ActionTile(
           icon: Icons.map_outlined,
-          title: 'Select on map',
-          subtitle: 'Choose a location on the map',
+          title: t.translate('select_on_map'),
+          subtitle: t.translate('select_on_map_sub'),
           onTap: onSelectOnMap ?? () {},
         ),
         Divider(
@@ -62,8 +65,8 @@ class NextDestinationSearch extends StatelessWidget {
         ),
         _ActionTile(
           icon: Icons.star_outline_rounded,
-          title: 'Saved places',
-          subtitle: 'Home, work, and favorites',
+          title: t.translate('saved_places'),
+          subtitle: t.translate('saved_places_sub'),
           onTap: onSavedPlaces ?? () {},
         ),
       ],

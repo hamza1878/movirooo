@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_SummaryCard.dart';
 
 class DiscountSection extends StatelessWidget {
@@ -8,6 +9,8 @@ class DiscountSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return SummaryCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -17,7 +20,7 @@ class DiscountSection extends StatelessWidget {
               Icon(Icons.confirmation_number_outlined,
                   color: AppColors.primaryPurple, size: 18),
               const SizedBox(width: 8),
-              Text('Discount code',
+              Text(t.translate('discount_code'),
                   style: AppTextStyles.bodyMedium(context)
                       .copyWith(fontWeight: FontWeight.w700)),
             ],
@@ -29,18 +32,15 @@ class DiscountSection extends StatelessWidget {
                 child: TextField(
                   style: AppTextStyles.bodyMedium(context),
                   decoration: InputDecoration(
-                    hintText: 'Enter code',
+                    hintText: t.translate('enter_code'),
                     hintStyle: AppTextStyles.bodyMedium(context)
                         .copyWith(color: AppColors.subtext(context)),
-                   border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            focusedErrorBorder: InputBorder.none,
-                 
-                 
-                  
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
                   ),
                 ),
               ),
@@ -56,7 +56,7 @@ class DiscountSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 10),
                 ),
-                child: Text('APPLY',
+                child: Text(t.translate('apply'),
                     style: AppTextStyles.bodySmall(context)
                         .copyWith(fontWeight: FontWeight.w800)),
               ),

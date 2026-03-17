@@ -8,6 +8,7 @@ import 'home_search_bar.dart';
 import 'suggestion_card.dart';
 import 'promo_banner.dart';
 import 'recent_ride_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,11 +22,18 @@ class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   bool _showStickySearch = false;
 
-  static const _suggestionsData = [
-    (icon: Icons.flight_rounded, label: 'Airport Rides'),
-    (icon: Icons.route_rounded, label: 'City to City'),
-    (icon: Icons.directions_car_rounded, label: 'Daily Rides'),
-    (icon: Icons.business_center_rounded, label: 'Business'),
+  static const _suggestionIcons = [
+    Icons.flight_rounded,
+    Icons.route_rounded,
+    Icons.directions_car_rounded,
+    Icons.business_center_rounded,
+  ];
+
+  static const _suggestionKeys = [
+    'suggestion_airport_label',
+    'suggestion_city_label',
+    'suggestion_daily_label',
+    'suggestion_business_label',
   ];
 
   static const _recent = [
@@ -64,18 +72,26 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  String _greeting(AppLocalizations t) {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return t.translate('good_morning');
+    if (hour < 18) return t.translate('good_afternoon');
+    return t.translate('good_evening');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final suggestions = _suggestionsData
-        .map(
-          (d) => SuggestionModel(
-            icon: d.icon,
-            label: d.label,
-            color: AppColors.iconBg(context),
-            iconColor: AppColors.primaryPurple,
-          ),
-        )
-        .toList();
+    final t = AppLocalizations.of(context);
+
+    final suggestions = List.generate(
+      _suggestionKeys.length,
+      (i) => SuggestionModel(
+        icon: _suggestionIcons[i],
+        label: t.translate(_suggestionKeys[i]),
+        color: AppColors.iconBg(context),
+        iconColor: AppColors.primaryPurple,
+      ),
+    );
 
     return Scaffold(
       backgroundColor: AppColors.bg(context),
@@ -93,16 +109,15 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     const SizedBox(height: 20),
 
-                    // Greeting
                     Text(
-                      'GOOD EVENING',
+                      _greeting(t),
                       style: AppTextStyles.sectionLabel(
                         context,
                       ).copyWith(color: AppColors.primaryPurple),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Where to, Alex?',
+                      t.translate('where_to_alex'),
                       style: AppTextStyles.pageTitle(
                         context,
                       ).copyWith(fontSize: 24, fontWeight: FontWeight.w800),
@@ -119,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 30),
 
                     Text(
-                      'SUGGESTIONS',
+                      t.translate('suggestions'),
                       style: AppTextStyles.sectionLabel(context),
                     ),
                     const SizedBox(height: 14),
@@ -140,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 30),
 
                     Text(
-                      'RECENT RIDES',
+                      t.translate('recent_rides'),
                       style: AppTextStyles.sectionLabel(context),
                     ),
                     const SizedBox(height: 14),

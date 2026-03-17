@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 import '_SuccessIcon.dart';
 import '_ReceiptCard.dart';
 
@@ -10,6 +11,8 @@ class PaymentSuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
@@ -19,13 +22,13 @@ class PaymentSuccessPage extends StatelessWidget {
             children: [
               const Spacer(flex: 2),
 
-              // ── Icône succès ───────────────────────────────
+              // ── Success icon ───────────────────────────────
               const SuccessIcon(),
               const SizedBox(height: 24),
 
-              // ── Titre ──────────────────────────────────────
+              // ── Title ──────────────────────────────────────
               Text(
-                'Payment Successful!',
+                t.translate('payment_successful'),
                 style: AppTextStyles.bodyLarge(context).copyWith(
                   fontWeight: FontWeight.w800,
                   fontSize: 22,
@@ -36,7 +39,7 @@ class PaymentSuccessPage extends StatelessWidget {
 
               // ── Subtitle ───────────────────────────────────
               Text(
-                'Your booking has been confirmed. A\nreceipt has been sent to your email.',
+                t.translate('payment_successful_subtitle'),
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMedium(context).copyWith(
                   color: AppColors.subtext(context),
@@ -58,14 +61,12 @@ class PaymentSuccessPage extends StatelessWidget {
 
               const Spacer(flex: 3),
 
-              // ── Bouton Back to Home ────────────────────────
+              // ── Back to Home button ────────────────────────
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    AppRouter.push(context, AppRouter.home);
-                  },
+                  onPressed: () => AppRouter.push(context, AppRouter.home),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryPurple,
                     foregroundColor: Colors.white,
@@ -76,7 +77,7 @@ class PaymentSuccessPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Back to Home',
+                    t.translate('back_to_home'),
                     style: AppTextStyles.bodyLarge(context).copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -88,7 +89,7 @@ class PaymentSuccessPage extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              // ── Bouton Download Receipt ────────────────────
+              // ── Download Receipt button ────────────────────
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -102,7 +103,7 @@ class PaymentSuccessPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Download Receipt',
+                    t.translate('download_receipt'),
                     style: AppTextStyles.bodyLarge(context).copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,

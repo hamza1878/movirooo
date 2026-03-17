@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class RideDetailsCard extends StatelessWidget {
   const RideDetailsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('RIDE DETAILS',
+        Text(t.translate('ride_details'),
             style: AppTextStyles.bodySmall(context).copyWith(
               color: AppColors.subtext(context),
               fontWeight: FontWeight.w700,
@@ -30,19 +33,19 @@ class RideDetailsCard extends StatelessWidget {
             children: [
               _DetailRow(
                 icon: Icons.straighten_outlined,
-                label: 'Distance',
+                label: t.translate('distance'),
                 value: '142 km',
               ),
               Divider(height: 24, color: AppColors.border(context)),
               _DetailRow(
                 icon: Icons.schedule_outlined,
-                label: 'Duration',
+                label: t.translate('duration'),
                 value: '~1h 30min',
               ),
               Divider(height: 24, color: AppColors.border(context)),
               _DetailRow(
                 icon: Icons.person_outline_rounded,
-                label: 'Passengers',
+                label: t.translate('passengers'),
                 value: '4',
               ),
             ],

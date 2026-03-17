@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -63,6 +64,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(
@@ -83,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               // ── Title ─────────────────────────────────────────────
               Text(
-                'Create Account',
+                t.translate('create_account'),
                 style: AppTextStyles.pageTitle(context).copyWith(
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
@@ -92,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 8),
 
-              Text('Sign up to get started', style: AppTextStyles.bodyMedium(context)),
+              Text(t.translate('sign_up_subtitle'), style: AppTextStyles.bodyMedium(context)),
 
               const SizedBox(height: 36),
 
@@ -103,7 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _label(context, 'FIRST NAME'),
+                        _label(context, t.translate('label_first_name')),
                         const SizedBox(height: 8),
                         TextField(
                           controller: _firstNameController,
@@ -120,7 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _label(context, 'LAST NAME'),
+                        _label(context, t.translate('label_last_name')),
                         const SizedBox(height: 8),
                         TextField(
                           controller: _lastNameController,
@@ -138,33 +141,33 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 20),
 
               // ── Email ─────────────────────────────────────────────
-              _label(context, 'EMAIL ADDRESS'),
+              _label(context, t.translate('label_email_address')),
               const SizedBox(height: 8),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 cursorColor: AppColors.subtext(context),
                 style: AppTextStyles.bodyMedium(context),
-                decoration: _fieldDecoration(context, hint: 'name@email.com', prefixIcon: Icons.email_outlined),
+                decoration: _fieldDecoration(context, hint: t.translate('hint_email'), prefixIcon: Icons.email_outlined),
               ),
 
               const SizedBox(height: 20),
 
               // ── Phone ─────────────────────────────────────────────
-              _label(context, 'PHONE NUMBER'),
+              _label(context, t.translate('label_phone_number')),
               const SizedBox(height: 8),
               TextField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 cursorColor: AppColors.subtext(context),
                 style: AppTextStyles.bodyMedium(context),
-                decoration: _fieldDecoration(context, hint: '+1 (555) 000-0000', prefixIcon: Icons.phone_outlined),
+                decoration: _fieldDecoration(context, hint: t.translate('hint_phone'), prefixIcon: Icons.phone_outlined),
               ),
 
               const SizedBox(height: 20),
 
               // ── Password ──────────────────────────────────────────
-              _label(context, 'PASSWORD'),
+              _label(context, t.translate('label_password')),
               const SizedBox(height: 8),
               TextField(
                 controller: _passwordController,
@@ -199,7 +202,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     elevation: 0,
                   ),
-                  child: const Text('Sign Up', style: AppTextStyles.buttonPrimary),
+                  child: Text(t.translate('sign_up'), style: AppTextStyles.buttonPrimary),
                 ),
               ),
 
@@ -209,11 +212,11 @@ class _SignUpPageState extends State<SignUpPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Already have an account? ', style: AppTextStyles.bodyMedium(context)),
+                  Text(t.translate('have_account'), style: AppTextStyles.bodyMedium(context)),
                   GestureDetector(
                     onTap: () => Navigator.pushReplacementNamed(context, '/login'),
                     child: Text(
-                      'Sign In',
+                      t.translate('sign_in'),
                       style: AppTextStyles.bodyMedium(context).copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.primaryPurple,

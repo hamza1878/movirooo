@@ -50,10 +50,21 @@ class _ChatPageState extends State<ChatPage> {
       time: '2:45 PM',
       isArabic: true,
     ),
+    // Sample voice message to preview the bubble
+    ChatMessage(
+      id: '5',
+      text: '🎤 Voice message',
+      translatedText: null,
+      isMe: false,
+      time: '2:46 PM',
+      isArabic: false,
+      isVoice: true,
+    ),
   ];
 
   void _sendMessage(String text) {
     if (text.trim().isEmpty) return;
+    final isVoice = text == '🎤 Voice message';
     setState(() {
       _messages.add(ChatMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -62,6 +73,7 @@ class _ChatPageState extends State<ChatPage> {
         isMe: true,
         time: _formatTime(DateTime.now()),
         isArabic: false,
+        isVoice: isVoice,
       ));
     });
     _input.clear();

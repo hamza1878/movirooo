@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'LocationCard.dart';
 import 'nextdestinationsearch.dart';
 import 'RecentSearchItem.dart';
@@ -249,10 +250,12 @@ class _LocationScreenState extends State<LocationScreen>
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     final pillLabel =
         (_selectedRider != null && _selectedRider! < _riders.length)
-        ? _riders[_selectedRider!]['name']!
-        : 'For me';
+            ? _riders[_selectedRider!]['name']!
+            : t.translate('for_me');
 
     final showRecent =
         _suggestions.isEmpty &&
@@ -273,7 +276,7 @@ class _LocationScreenState extends State<LocationScreen>
                 alignment: Alignment.center,
                 children: [
                   Text(
-                    'Plan your ride',
+                    t.translate('plan_your_ride'),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -287,7 +290,6 @@ class _LocationScreenState extends State<LocationScreen>
                       child: Container(
                         width: 42,
                         height: 42,
-                        // AFTER
                         decoration: BoxDecoration(
                           color: AppColors.surface(context),
                           borderRadius: BorderRadius.circular(12),
@@ -329,7 +331,7 @@ class _LocationScreenState extends State<LocationScreen>
                   Expanded(
                     child: _Pill(
                       icon: Icons.people_outline_rounded,
-                      label: '$_passengerCount',
+                      label: '$_passengerCount ${t.translate('passengers')}',
                       onTap: _showPassengerPicker,
                     ),
                   ),
@@ -382,7 +384,8 @@ class _LocationScreenState extends State<LocationScreen>
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
-                          onTap: () => setState(() => _recentSearches.clear()),
+                          onTap: () =>
+                              setState(() => _recentSearches.clear()),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -393,7 +396,7 @@ class _LocationScreenState extends State<LocationScreen>
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                'Clear',
+                                t.translate('clear'),
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
@@ -417,7 +420,6 @@ class _LocationScreenState extends State<LocationScreen>
   }
 }
 
-// Extracted pill widget to reduce duplication
 class _Pill extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -433,8 +435,7 @@ class _Pill extends StatelessWidget {
         height: 40,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          // AFTER
-color: AppColors.surface(context),
+          color: AppColors.surface(context),
           borderRadius: BorderRadius.circular(30),
           border: Border.all(color: AppColors.border(context)),
           boxShadow: [

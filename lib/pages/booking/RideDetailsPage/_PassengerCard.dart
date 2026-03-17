@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class PassengerCard extends StatelessWidget {
   const PassengerCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('PASSENGER',
+        Text(t.translate('passenger'),
             style: AppTextStyles.bodySmall(context).copyWith(
               color: AppColors.subtext(context),
               fontWeight: FontWeight.w700,
@@ -28,7 +31,7 @@ class PassengerCard extends StatelessWidget {
             children: [
               PassengerRow(
                 icon: Icons.person_outline_rounded,
-                label: 'Main passenger',
+                label: t.translate('main_passenger'),
                 value: 'Aymen Ben Nacer',
                 editable: false,
                 isFirst: true,
@@ -36,14 +39,14 @@ class PassengerCard extends StatelessWidget {
               Divider(height: 1, color: AppColors.border(context)),
               PassengerRow(
                 icon: Icons.email_outlined,
-                label: 'Email',
+                label: t.translate('email'),
                 value: 'aymenpower99@gmail.com',
                 editable: false,
               ),
               Divider(height: 1, color: AppColors.border(context)),
               PassengerRow(
                 icon: Icons.phone_outlined,
-                label: 'Phone number',
+                label: t.translate('phone_number'),
                 value: '+21694338510',
                 editable: false,
               ),

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class BookingCard extends StatelessWidget {
   const BookingCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,7 +22,7 @@ class BookingCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Booking',
+                Text(t.translate('booking'),
                     style: AppTextStyles.bodySmall(context)
                         .copyWith(color: AppColors.subtext(context))),
                 const SizedBox(height: 2),
@@ -34,9 +37,9 @@ class BookingCard extends StatelessWidget {
                         Clipboard.setData(
                             const ClipboardData(text: '78438620'));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Booking ID copied'),
-                            duration: Duration(seconds: 1),
+                          SnackBar(
+                            content: Text(t.translate('booking_id_copied')),
+                            duration: const Duration(seconds: 1),
                           ),
                         );
                       },
@@ -60,7 +63,7 @@ class BookingCard extends StatelessWidget {
                   Icon(Icons.access_time_rounded,
                       color: Colors.amber.shade600, size: 13),
                   const SizedBox(width: 5),
-                  Text('Payment pending',
+                  Text(t.translate('payment_pending'),
                       style: TextStyle(
                         color: Colors.amber.shade600,
                         fontWeight: FontWeight.w700,
