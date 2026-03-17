@@ -82,6 +82,7 @@ class ReceiptCard extends StatelessWidget {
                   label: 'Payment\nMethod',
                   valueWidget: Row(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       // Mastercard icon
                       Container(
@@ -117,10 +118,13 @@ class ReceiptCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        '$cardBrand **** $cardLast4',
-                        style: AppTextStyles.bodyMedium(context).copyWith(
-                          fontWeight: FontWeight.w700,
+                      Flexible(
+                        child: Text(
+                          '$cardBrand **** $cardLast4',
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.bodyMedium(context).copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ],
@@ -149,7 +153,7 @@ class _ReceiptRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           flex: 2,

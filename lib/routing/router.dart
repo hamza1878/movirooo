@@ -12,7 +12,7 @@ import '../pages/onboarding/onboarding_page.dart';
 import '../pages/auth/login_page.dart';
 import '../pages/auth/sign_up_page.dart';
 import '../pages/auth/forget_password.dart';
-import '../pages/tabs [passenger]/home/home_page.dart';
+import '../pages/tabs [passenger]/home/home_page.dart' as home_tab;
 import '../pages/tabs [passenger]/support/support_page.dart';
 import '../pages/tabs [passenger]/profile/settings_page.dart';
 import '../pages/tabs [passenger]/trajet/trajet_page.dart';
@@ -56,14 +56,14 @@ class AppRouter {
         login:                      (_) => const LoginPage(),
         signup:                     (_) => const SignUpPage(),
         forgotPass:                 (_) => const ForgotPasswordPage(),
-        home:                       (_) => const HomePage(),
+        home:                       (_) => const home_tab.HomePage(),
         support:                    (_) => const SupportPage(),
         profile:                    (_) => const SettingsPage(),
         nextDestinationSearchRoute: (_) => const LocationScreen(),
         mapEtaPage:                 (_) => const MapEtaPage(),
         trajet:                     (_) => const TrajetPage(),
         membre:                     (_) => const MembrePassScreen(),
-        trackRide:                  (_) => const TrackRidePage(),  // ← NEW
+        trackRide:                  (_) => const TrackRidePage(),
       };
 
   static Future<T?> push<T>(BuildContext context, String routeName,

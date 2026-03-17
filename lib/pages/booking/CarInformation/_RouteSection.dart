@@ -27,7 +27,7 @@ class RouteSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const Divider(height: 1),
+          Divider(height: 1, color: AppColors.border(context)), // ✅ fixed
           const SizedBox(height: 16),
 
           // ── Date & time ──────────────────────────────────────
@@ -70,7 +70,7 @@ class RouteSection extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          const Divider(height: 1),
+          Divider(height: 1, color: AppColors.border(context)), // ✅ fixed
           const SizedBox(height: 14),
 
           // ── Stats row ────────────────────────────────────────

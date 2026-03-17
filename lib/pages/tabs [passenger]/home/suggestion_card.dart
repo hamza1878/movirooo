@@ -38,13 +38,6 @@ class SuggestionCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 2),
-            Text(
-              s.sub,
-              style: AppTextStyles.bodySmall(context).copyWith(fontSize: 10),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
           ],
         ),
       ),
