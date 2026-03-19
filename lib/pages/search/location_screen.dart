@@ -32,8 +32,9 @@ class _LocationScreenState extends State<LocationScreen>
   DateTime _pickedDate = DateTime.now();
   TimeOfDay? _pickedTime;
 
-  final _riders = [
-    {'name': 'Me', 'subtitle': 'Book this ride for yourself'},
+  // ← typed as String? so null subtitle is valid
+  final _riders = <Map<String, String?>>[
+    {'name': 'Me', 'subtitle': null},
     {'name': 'Youssef', 'subtitle': '+216 22 333 444'},
   ];
 
@@ -251,6 +252,9 @@ class _LocationScreenState extends State<LocationScreen>
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+
+    // ← translate 'Me' name at build time so it respects current locale
+    _riders[0]['name'] = t.translate('me');
 
     final pillLabel =
         (_selectedRider != null && _selectedRider! < _riders.length)

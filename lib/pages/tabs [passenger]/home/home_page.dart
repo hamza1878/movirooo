@@ -26,14 +26,14 @@ class _HomePageState extends State<HomePage> {
     Icons.flight_rounded,
     Icons.route_rounded,
     Icons.directions_car_rounded,
-    Icons.business_center_rounded,
+    Icons.group_rounded,
   ];
 
   static const _suggestionKeys = [
     'suggestion_airport_label',
     'suggestion_city_label',
     'suggestion_daily_label',
-    'suggestion_business_label',
+    'suggestion_together_label',
   ];
 
   static const _recent = [
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                     Visibility(
                       visible: !_showStickySearch,
                       maintainState: false,
-                      child: const HomeSearchBar(),
+                      child: const HomeSearchBar(), // full 50px
                     ),
 
                     const SizedBox(height: 30),

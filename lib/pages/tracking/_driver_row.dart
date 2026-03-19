@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 
 class DriverRow extends StatelessWidget {
-  const DriverRow({super.key});
+  final String driverName;
+  final String vehicleName;
+  final VoidCallback? onPhoneTap;
+  final VoidCallback? onChatTap;
+
+  const DriverRow({
+    super.key,
+    required this.driverName,
+    required this.vehicleName,
+    this.onPhoneTap,
+    this.onChatTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,27 +26,29 @@ class DriverRow extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-                color: AppColors.primaryPurple.withOpacity(0.5), width: 2),
+              color: AppColors.primaryPurple.withValues(alpha: 0.5),
+              width: 2,
+            ),
             color: const Color(0xFF2A1A4E),
           ),
           child: ClipOval(
             child: Icon(
               Icons.person_rounded,
-              color: AppColors.primaryPurple.withOpacity(0.7),
+              color: AppColors.primaryPurple.withValues(alpha: 0.7),
               size: 30,
             ),
           ),
         ),
         const SizedBox(width: 14),
 
-        // Name + car
+        // Name + vehicle
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Alexander Wright',
-                style: TextStyle(
+              Text(
+                driverName,
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -44,69 +57,64 @@ class DriverRow extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Tesla Model S',
+                vehicleName,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 12,
-                  color: Colors.white.withOpacity(0.45),
+                  color: Colors.white.withValues(alpha: 0.45),
                 ),
               ),
             ],
           ),
         ),
 
-        // Action buttons — grouped outside Expanded
+        // Action buttons
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Phone button
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.darkBorder,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: AppColors.primaryPurple.withOpacity(0.3)),
-                ),
-                child: Center(
-                  child: ImageIcon(
-                    const AssetImage('images/icons/phone-call.png'),
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            _ActionButton(
+              asset: 'images/icons/phone-call.png',
+              onTap: onPhoneTap ?? () {},
             ),
-
             const SizedBox(width: 10),
-
-            // Chat button
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.darkBorder,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: AppColors.primaryPurple.withOpacity(0.3)),
-                ),
-                child: Center(
-                  child: ImageIcon(
-                    const AssetImage('images/icons/chat.png'),
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            _ActionButton(
+              asset: 'images/icons/chat.png',
+              onTap: onChatTap ?? () {},
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  final String asset;
+  final VoidCallback onTap;
+  const _ActionButton({required this.asset, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: AppColors.darkBorder,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.primaryPurple.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Center(
+          child: ImageIcon(
+            AssetImage(asset),
+            size: 20,
+            color: AppColors.primaryPurple,
+          ),
+        ),
+      ),
     );
   }
 }

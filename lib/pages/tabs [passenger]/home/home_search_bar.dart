@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:moviroo/routing/router.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HomeSearchBar extends StatelessWidget {
-  const HomeSearchBar({super.key});
+  final double height;
+  const HomeSearchBar({super.key, this.height = 50});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return GestureDetector(
-      onTap: () => AppRouter.push(context, AppRouter.nextDestinationSearchRoute), // ← FIXED
-      child: Container(
-        height: 50,
+      onTap: () => AppRouter.push(context, AppRouter.nextDestinationSearchRoute),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        height: height,
         decoration: BoxDecoration(
           color: AppColors.surface(context),
           borderRadius: BorderRadius.circular(14),
@@ -24,7 +30,7 @@ class HomeSearchBar extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Where to?',
+                t.translate('where_to'),
                 style: AppTextStyles.bodyMedium(context).copyWith(
                   color: AppColors.subtext(context),
                 ),

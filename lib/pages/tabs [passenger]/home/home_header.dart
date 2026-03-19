@@ -60,7 +60,7 @@ class HomeHeader extends StatelessWidget {
           if (showSearch)
             const Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-              child: HomeSearchBar(),
+              child: HomeSearchBar(height: 40),
             ),
         ],
       ),

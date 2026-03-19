@@ -16,8 +16,8 @@ class _AddCardPageState extends State<AddCardPage> {
   final _holderController = TextEditingController();
   final _numberController = TextEditingController();
   final _expiryController = TextEditingController();
-  final _cvvController    = TextEditingController();
-  bool _saveCard  = true;
+  final _cvvController = TextEditingController();
+  bool _saveCard = true;
   bool _isLoading = false;
 
   @override
@@ -46,7 +46,9 @@ class _AddCardPageState extends State<AddCardPage> {
 
     final card = PaymentCard(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      holder: _holderController.text.isEmpty ? 'Card Holder' : _holderController.text,
+      holder: _holderController.text.isEmpty
+          ? 'Card Holder'
+          : _holderController.text,
       last4: number.substring(number.length - 4),
       expiry: _expiryController.text.isEmpty ? '--/--' : _expiryController.text,
       type: _detectType(number),
@@ -149,7 +151,9 @@ class _AddCardPageState extends State<AddCardPage> {
                             width: 20,
                             height: 20,
                             decoration: BoxDecoration(
-                              gradient: _saveCard ? AppColors.purpleGradient : null,
+                              gradient: _saveCard
+                                  ? AppColors.purpleGradient
+                                  : null,
                               color: _saveCard ? null : Colors.transparent,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
@@ -159,8 +163,11 @@ class _AddCardPageState extends State<AddCardPage> {
                               ),
                             ),
                             child: _saveCard
-                                ? const Icon(Icons.check,
-                                    size: 13, color: Colors.white)
+                                ? const Icon(
+                                    Icons.check,
+                                    size: 13,
+                                    color: Colors.white,
+                                  )
                                 : null,
                           ),
                           const SizedBox(width: 10),
@@ -194,8 +201,10 @@ class _AddCardPageState extends State<AddCardPage> {
                                   color: Colors.white,
                                 ),
                               )
-                            : Text(t('add_card'),
-                                style: AppTextStyles.buttonPrimary),
+                            : Text(
+                                t('add_card'),
+                                style: AppTextStyles.buttonPrimary,
+                              ),
                       ),
                     ),
 
@@ -253,8 +262,10 @@ class _CardField extends StatelessWidget {
             hintStyle: AppTextStyles.bodySmall(context),
             filled: true,
             fillColor: AppColors.surface(context),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: AppColors.border(context)),
@@ -279,7 +290,9 @@ class _CardField extends StatelessWidget {
 class _CardNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final digits = newValue.text.replaceAll(' ', '');
     final buffer = StringBuffer();
     for (int i = 0; i < digits.length; i++) {
@@ -297,7 +310,9 @@ class _CardNumberFormatter extends TextInputFormatter {
 class _ExpiryFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final digits = newValue.text.replaceAll('/', '');
     String result = digits;
     if (digits.length >= 3) {
@@ -332,14 +347,19 @@ class _SubPageTopBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColors.border(context)),
               ),
-              child: Icon(Icons.arrow_back_ios_new_rounded,
-                  size: 16, color: AppColors.subtext(context)),
+              child: Icon(
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
+              ),
             ),
           ),
           Expanded(
-            child: Text(title,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.pageTitle(context)),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.pageTitle(context),
+            ),
           ),
           const SizedBox(width: 36),
         ],

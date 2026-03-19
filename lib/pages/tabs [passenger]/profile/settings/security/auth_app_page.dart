@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../../../theme/app_text_styles.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../../../theme/app_colors.dart';
+import '2_step_ver_modal/auth_app_confirm_modal.dart'; // ← import the extracted modal
 
 class AuthAppPage extends StatefulWidget {
   const AuthAppPage({super.key});
@@ -12,66 +13,39 @@ class AuthAppPage extends StatefulWidget {
 }
 
 class _AuthAppPageState extends State<AuthAppPage> {
-  // Simulated state — replace with real data from your backend
   bool _isLinked = false;
   bool _isLoading = false;
 
-  // The secret/QR code shown during setup
   static const String _setupSecret = 'JBSWY3DPEHPK3PXP';
   static const String _qrPlaceholder =
       'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=otpauth://totp/MyApp:user@example.com?secret=$_setupSecret';
 
   Future<void> _handleLink() async {
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 2)); 
-    if (mounted) setState(() { _isLoading = false; _isLinked = true; });
+    await Future.delayed(const Duration(seconds: 2)); // TODO: real API call
+    if (mounted)
+      setState(() {
+        _isLoading = false;
+        _isLinked = true;
+      });
   }
 
   Future<void> _handleUnlink() async {
-    final confirmed = await _showConfirmDialog();
-    if (!confirmed || !mounted) return;
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 2));
-    if (mounted) setState(() { _isLoading = false; _isLinked = false; });
-  }
-
-  Future<bool> _showConfirmDialog() async {
-    final t = AppLocalizations.of(context).translate;
-    return await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
           context: context,
-          builder: (ctx) => AlertDialog(
-            backgroundColor: AppColors.surface(context),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: Text(
-              t('Remove Authentication App?'),
-              style: AppTextStyles.bodyLarge(context),
-            ),
-            content: Text(
-              t(
-                'This will remove your authentication app. You may lose access to 2-step verification.',
-              ),
-              style: AppTextStyles.bodySmall(context),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: Text(
-                  t('Cancel'),
-                  style: TextStyle(color: AppColors.subtext(context)),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text(
-                  'Remove',
-                  style: TextStyle(color: AppColors.error),
-                ),
-              ),
-            ],
-          ),
+          builder: (_) => const AuthAppConfirmModal(),
         ) ??
         false;
+
+    if (!confirmed || !mounted) return;
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(seconds: 2)); // TODO: real API call
+    if (mounted)
+      setState(() {
+        _isLoading = false;
+        _isLinked = false;
+      });
   }
 
   @override
@@ -107,7 +81,7 @@ class _AuthAppPageState extends State<AuthAppPage> {
   }
 }
 
-// ── Setup view (not yet linked) ───────────────────────────────────────────────
+// ── Setup view ────────────────────────────────────────────────────────────────
 
 class _SetupView extends StatefulWidget {
   final String secret;
@@ -133,10 +107,9 @@ class _SetupViewState extends State<_SetupView> {
   void _copySecret() {
     Clipboard.setData(ClipboardData(text: widget.secret));
     setState(() => _copied = true);
-    Future.delayed(
-      const Duration(seconds: 2),
-      () { if (mounted) setState(() => _copied = false); },
-    );
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _copied = false);
+    });
   }
 
   @override
@@ -154,7 +127,6 @@ class _SetupViewState extends State<_SetupView> {
       children: [
         const SizedBox(height: 8),
 
-        // ── Step 1 ──
         _StepLabel(number: '1', label: t('Scan the QR Code')),
         const SizedBox(height: 12),
 
@@ -190,8 +162,6 @@ class _SetupViewState extends State<_SetupView> {
         ),
 
         const SizedBox(height: 16),
-
-        // ── Or enter manually ──
         Text(
           t('Or enter the setup key manually:'),
           style: AppTextStyles.bodySmall(context),
@@ -201,8 +171,7 @@ class _SetupViewState extends State<_SetupView> {
         GestureDetector(
           onTap: _copySecret,
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.surface(context),
               borderRadius: BorderRadius.circular(12),
@@ -213,10 +182,9 @@ class _SetupViewState extends State<_SetupView> {
               children: [
                 Text(
                   widget.secret,
-                  style: AppTextStyles.settingsItem(context).copyWith(
-                    letterSpacing: 2,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyles.settingsItem(
+                    context,
+                  ).copyWith(letterSpacing: 2, fontWeight: FontWeight.w600),
                 ),
                 Icon(
                   _copied
@@ -236,10 +204,8 @@ class _SetupViewState extends State<_SetupView> {
         Divider(color: AppColors.border(context)),
         const SizedBox(height: 24),
 
-        // ── Step 2 ──
         _StepLabel(number: '2', label: t('Enter the 6-digit code')),
         const SizedBox(height: 12),
-
         Text(
           t('Open your authenticator app and enter the code shown.'),
           style: AppTextStyles.bodySmall(context),
@@ -278,10 +244,8 @@ class _LinkedView extends StatelessWidget {
       children: [
         const SizedBox(height: 32),
 
-        // ── Status badge ──
         Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
             color: AppColors.success.withOpacity(0.1),
             borderRadius: BorderRadius.circular(50),
@@ -308,7 +272,6 @@ class _LinkedView extends StatelessWidget {
 
         const SizedBox(height: 24),
 
-        // ── Info tile ──
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -354,7 +317,6 @@ class _LinkedView extends StatelessWidget {
 
         const SizedBox(height: 32),
 
-        // ── Unlink button ──
         GestureDetector(
           onTap: isLoading ? null : onUnlink,
           child: Container(
@@ -366,7 +328,7 @@ class _LinkedView extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: isLoading
-                ? SizedBox(
+                ? const SizedBox(
                     width: 22,
                     height: 22,
                     child: CircularProgressIndicator(
@@ -389,7 +351,7 @@ class _LinkedView extends StatelessWidget {
   }
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 class _StepLabel extends StatelessWidget {
   final String number;
@@ -440,14 +402,15 @@ class _OtpCodeField extends StatelessWidget {
       decoration: InputDecoration(
         counterText: '',
         hintText: '000000',
-        hintStyle: AppTextStyles.bodyLarge(context).copyWith(
-          letterSpacing: 8,
-          color: AppColors.subtext(context),
-        ),
+        hintStyle: AppTextStyles.bodyLarge(
+          context,
+        ).copyWith(letterSpacing: 8, color: AppColors.subtext(context)),
         filled: true,
         fillColor: AppColors.surface(context),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: AppColors.border(context)),
@@ -506,7 +469,7 @@ class _PrimaryButton extends StatelessWidget {
   }
 }
 
-// ─── Top bar (shared) ─────────────────────────────────────────────────────────
+// ── Top Bar — matches SecurityPage exactly ────────────────────────────────────
 
 class _SubPageTopBar extends StatelessWidget {
   final String title;
@@ -524,14 +487,15 @@ class _SubPageTopBar extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
+                // ✅ Same tokens as SecurityPage — looks identical in dark mode
                 color: AppColors.surface(context),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColors.border(context)),
               ),
               child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                color: AppColors.subtext(context),
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
               ),
             ),
           ),

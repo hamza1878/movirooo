@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moviroo/routing/router.dart'; // ← added
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
 import 'home_models.dart';
@@ -10,7 +11,7 @@ class SuggestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => AppRouter.push(context, AppRouter.nextDestinationSearchRoute), // ← added
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(

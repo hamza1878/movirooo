@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Top Bar
@@ -14,6 +15,8 @@ class PersonalDataTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
+
     return Row(
       children: [
         GestureDetector(
@@ -31,7 +34,7 @@ class PersonalDataTopBar extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            'Personal Data',
+            t('personal_data_title'),
             textAlign: TextAlign.center,
             style: AppTextStyles.pageTitle(context),
           ),
@@ -51,6 +54,8 @@ class AvatarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
+
     return Column(
       children: [
         Stack(
@@ -101,9 +106,9 @@ class AvatarSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 14),
-        Text('Profile Photo', style: AppTextStyles.profileName(context)),
+        Text(t('profile_photo'), style: AppTextStyles.profileName(context)),
         const SizedBox(height: 4),
-        Text('Tap to change your photo', style: AppTextStyles.bodySmall(context)),
+        Text(t('tap_to_change_photo'), style: AppTextStyles.bodySmall(context)),
       ],
     );
   }
@@ -185,6 +190,8 @@ class _FieldTileState extends State<FieldTile> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
@@ -225,7 +232,7 @@ class _FieldTileState extends State<FieldTile> {
                     focusedBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
                     focusedErrorBorder: InputBorder.none,
-                    hintText: 'Add ${widget.label.toLowerCase()}',
+                    hintText: '${t('add_prefix')} ${widget.label.toLowerCase()}',
                     hintStyle: AppTextStyles.settingsItem(context).copyWith(
                       color: AppColors.subtext(context).withValues(alpha: 0.4),
                       fontWeight: FontWeight.w400,

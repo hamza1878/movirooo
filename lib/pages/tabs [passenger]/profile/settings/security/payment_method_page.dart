@@ -24,13 +24,13 @@ class PaymentCard {
   });
 
   PaymentCard copyWith({bool? isDefault}) => PaymentCard(
-        id: id,
-        holder: holder,
-        last4: last4,
-        expiry: expiry,
-        type: type,
-        isDefault: isDefault ?? this.isDefault,
-      );
+    id: id,
+    holder: holder,
+    last4: last4,
+    expiry: expiry,
+    type: type,
+    isDefault: isDefault ?? this.isDefault,
+  );
 }
 
 enum CardType { visa, mastercard, amex, other }
@@ -135,7 +135,10 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(t('remove_card_title'), style: AppTextStyles.bodyLarge(context)),
+        title: Text(
+          t('remove_card_title'),
+          style: AppTextStyles.bodyLarge(context),
+        ),
         content: Text(
           '${t('remove_card_ending')} ${card.last4}?',
           style: AppTextStyles.bodySmall(context),
@@ -143,12 +146,17 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(t('cancel'),
-                style: TextStyle(color: AppColors.subtext(context))),
+            child: Text(
+              t('cancel'),
+              style: TextStyle(color: AppColors.subtext(context)),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(t('remove'), style: const TextStyle(color: AppColors.error)),
+            child: Text(
+              t('remove'),
+              style: const TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -179,7 +187,9 @@ class _CardTile extends StatelessWidget {
         color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: card.isDefault ? AppColors.primaryPurple : AppColors.border(context),
+          color: card.isDefault
+              ? AppColors.primaryPurple
+              : AppColors.border(context),
           width: card.isDefault ? 1.5 : 1,
         ),
       ),
@@ -204,8 +214,10 @@ class _CardTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('•••• •••• •••• ${card.last4}',
-                          style: AppTextStyles.bodyLarge(context)),
+                      Text(
+                        '•••• •••• •••• ${card.last4}',
+                        style: AppTextStyles.bodyLarge(context),
+                      ),
                       const SizedBox(height: 2),
                       Text(
                         '${card.holder}  •  ${t('expires')} ${card.expiry}',
@@ -216,7 +228,10 @@ class _CardTile extends StatelessWidget {
                 ),
                 if (card.isDefault)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primaryPurple.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(20),
@@ -288,11 +303,12 @@ class _TileAction extends StatelessWidget {
           children: [
             Icon(icon, size: 16, color: color),
             const SizedBox(width: 6),
-            Text(label,
-                style: AppTextStyles.bodySmall(context).copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                )),
+            Text(
+              label,
+              style: AppTextStyles.bodySmall(
+                context,
+              ).copyWith(color: color, fontWeight: FontWeight.w600),
+            ),
           ],
         ),
       ),
@@ -310,13 +326,15 @@ class _CardBrandIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.visa:
-        return Text('VISA',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primaryPurple,
-              letterSpacing: 1,
-            ));
+        return Text(
+          'VISA',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryPurple,
+            letterSpacing: 1,
+          ),
+        );
       case CardType.mastercard:
         return Stack(
           alignment: Alignment.center,
@@ -324,33 +342,43 @@ class _CardBrandIcon extends StatelessWidget {
             Positioned(
               left: 6,
               child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: const BoxDecoration(
-                      color: AppColors.error, shape: BoxShape.circle)),
+                width: 18,
+                height: 18,
+                decoration: const BoxDecoration(
+                  color: AppColors.error,
+                  shape: BoxShape.circle,
+                ),
+              ),
             ),
             Positioned(
               right: 6,
               child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                      color: AppColors.warning.withOpacity(0.9),
-                      shape: BoxShape.circle)),
+                width: 18,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: AppColors.warning.withOpacity(0.9),
+                  shape: BoxShape.circle,
+                ),
+              ),
             ),
           ],
         );
       case CardType.amex:
-        return Text('AMEX',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: AppColors.success,
-              letterSpacing: 0.5,
-            ));
+        return Text(
+          'AMEX',
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            color: AppColors.success,
+            letterSpacing: 0.5,
+          ),
+        );
       case CardType.other:
-        return Icon(Icons.credit_card_rounded,
-            color: AppColors.subtext(context), size: 20);
+        return Icon(
+          Icons.credit_card_rounded,
+          color: AppColors.subtext(context),
+          size: 20,
+        );
     }
   }
 }
@@ -382,13 +410,18 @@ class _AddCardButton extends StatelessWidget {
               width: 22,
               height: 22,
               decoration: const BoxDecoration(
-                  gradient: AppColors.purpleGradient, shape: BoxShape.circle),
+                gradient: AppColors.purpleGradient,
+                shape: BoxShape.circle,
+              ),
               child: const Icon(Icons.add, color: Colors.white, size: 14),
             ),
             const SizedBox(width: 10),
-            Text(t('add_new_card'),
-                style: AppTextStyles.bodyLarge(context)
-                    .copyWith(fontWeight: FontWeight.w600)),
+            Text(
+              t('add_new_card'),
+              style: AppTextStyles.bodyLarge(
+                context,
+              ).copyWith(fontWeight: FontWeight.w600),
+            ),
           ],
         ),
       ),
@@ -412,9 +445,14 @@ class _EmptyState extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-                color: AppColors.iconBg(context), shape: BoxShape.circle),
-            child: const Icon(Icons.credit_card_off_rounded,
-                color: AppColors.primaryPurple, size: 30),
+              color: AppColors.iconBg(context),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.credit_card_off_rounded,
+              color: AppColors.primaryPurple,
+              size: 30,
+            ),
           ),
           const SizedBox(height: 14),
           Text(t('no_cards_saved'), style: AppTextStyles.bodyLarge(context)),
@@ -443,13 +481,19 @@ class _InfoNote extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.lock_outline_rounded,
-              size: 16, color: AppColors.primaryPurple),
+          const Icon(
+            Icons.lock_outline_rounded,
+            size: 16,
+            color: AppColors.primaryPurple,
+          ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(text,
-                style: AppTextStyles.bodySmall(context)
-                    .copyWith(color: AppColors.primaryPurple)),
+            child: Text(
+              text,
+              style: AppTextStyles.bodySmall(
+                context,
+              ).copyWith(color: AppColors.primaryPurple),
+            ),
           ),
         ],
       ),
@@ -479,14 +523,19 @@ class _SubPageTopBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColors.border(context)),
               ),
-              child: Icon(Icons.arrow_back_ios_new_rounded,
-                  size: 16, color: AppColors.subtext(context)),
+              child: Icon(
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
+              ),
             ),
           ),
           Expanded(
-            child: Text(title,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.pageTitle(context)),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.pageTitle(context),
+            ),
           ),
           const SizedBox(width: 36),
         ],

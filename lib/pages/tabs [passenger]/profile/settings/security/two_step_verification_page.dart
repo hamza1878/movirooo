@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../theme/app_colors.dart';
 import '../../../../../theme/app_text_styles.dart';
 import '../../../../../l10n/app_localizations.dart';
+import '../security/2_step_ver_modal/email_send_modal.dart'; // ← Step 1 modal
 
 class TwoStepVerificationPage extends StatefulWidget {
   const TwoStepVerificationPage({super.key});
@@ -13,13 +14,23 @@ class TwoStepVerificationPage extends StatefulWidget {
 
 class _TwoStepVerificationPageState extends State<TwoStepVerificationPage> {
   bool _emailEnabled = false;
-  bool _appEnabled = false;
   bool _isLoading = false;
 
   Future<void> _handleSave() async {
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 2)); // TODO: real API call
     if (mounted) setState(() => _isLoading = false);
+  }
+
+  /// Opens Step 1 (EmailSendModal) → which internally chains to Step 2 (EmailVerifyModal).
+  /// Toggle is only enabled after the full flow completes.
+  Future<void> _showEmailFlow() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const EmailSendModal(),
+    );
+    if (mounted) setState(() => _emailEnabled = true);
   }
 
   @override
@@ -39,50 +50,38 @@ class _TwoStepVerificationPageState extends State<TwoStepVerificationPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-
-                    // ── Info banner ──
                     _InfoBanner(
                       text: t(
                         '2-step verification adds an extra layer of security to your account by requiring a second form of verification when you sign in.',
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // ── Section label ──
                     Text(
                       t('VERIFICATION METHODS').toUpperCase(),
                       style: AppTextStyles.sectionLabel(context),
                     ),
                     const SizedBox(height: 12),
-
-                    // ── Email ──
                     _VerificationMethodTile(
                       icon: Icons.mail_outline_rounded,
                       title: t('Email'),
-                      subtitle: t('Receive a code to your registered email address'),
+                      subtitle: t(
+                        'Receive a code to your registered email address',
+                      ),
                       enabled: _emailEnabled,
-                      onToggle: (val) => setState(() => _emailEnabled = val),
+                      onToggle: (val) async {
+                        if (val) {
+                          await _showEmailFlow();
+                        } else {
+                          setState(() => _emailEnabled = false);
+                        }
+                      },
                     ),
-                    const SizedBox(height: 10),
-
-                    // ── Auth App ──
-                    _VerificationMethodTile(
-                      icon: Icons.phonelink_lock_rounded,
-                      title: t('Authentication App'),
-                      subtitle: t('Use an authenticator app to generate codes'),
-                      enabled: _appEnabled,
-                      onToggle: (val) => setState(() => _appEnabled = val),
-                    ),
-
                     const SizedBox(height: 32),
-
-                    // ── Save button ──
                     _PrimaryButton(
                       label: t('Save Changes'),
                       isLoading: _isLoading,
                       onTap: _handleSave,
                     ),
-
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -112,14 +111,18 @@ class _InfoBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.shield_outlined,
-              size: 18, color: AppColors.primaryPurple),
+          const Icon(
+            Icons.shield_outlined,
+            size: 18,
+            color: AppColors.primaryPurple,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.bodySmall(context)
-                  .copyWith(color: AppColors.primaryPurple),
+              style: AppTextStyles.bodySmall(
+                context,
+              ).copyWith(color: AppColors.primaryPurple),
             ),
           ),
         ],
@@ -218,7 +221,9 @@ class _PurpleSwitch extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: const BoxDecoration(
-                  color: Colors.white, shape: BoxShape.circle),
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
             ),
           ),
         ),
@@ -257,7 +262,9 @@ class _PrimaryButton extends StatelessWidget {
                 width: 22,
                 height: 22,
                 child: CircularProgressIndicator(
-                    strokeWidth: 2.5, color: Colors.white),
+                  strokeWidth: 2.5,
+                  color: Colors.white,
+                ),
               )
             : Text(label, style: AppTextStyles.buttonPrimary),
       ),
@@ -287,14 +294,19 @@ class _SubPageTopBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColors.border(context)),
               ),
-              child: Icon(Icons.arrow_back_ios_new_rounded,
-                  size: 16, color: AppColors.subtext(context)),
+              child: Icon(
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
+              ),
             ),
           ),
           Expanded(
-            child: Text(title,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.pageTitle(context)),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.pageTitle(context),
+            ),
           ),
           const SizedBox(width: 36),
         ],

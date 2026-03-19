@@ -6,9 +6,9 @@ import 'NewPassengerModal.dart';
 class RiderSheet {
   static Future<int?> show(
     BuildContext context, {
-    required List<Map<String, String>> riders,
+    required List<Map<String, String?>> riders,
     int? initialSelected,
-    required ValueChanged<List<Map<String, String>>> onRidersChanged,
+    required ValueChanged<List<Map<String, String?>>> onRidersChanged,
   }) {
     return showModalBottomSheet<int>(
       context: context,
@@ -28,8 +28,8 @@ class RiderSheet {
 
 class _RiderSheetBody extends StatefulWidget {
   final int? initialSelected;
-  final List<Map<String, String>> riders;
-  final ValueChanged<List<Map<String, String>>> onRidersChanged;
+  final List<Map<String, String?>> riders;
+  final ValueChanged<List<Map<String, String?>>> onRidersChanged;
 
   const _RiderSheetBody({
     this.initialSelected,
@@ -43,13 +43,13 @@ class _RiderSheetBody extends StatefulWidget {
 
 class _RiderSheetBodyState extends State<_RiderSheetBody> {
   int? _selected;
-  late List<Map<String, String>> _riders;
+  late List<Map<String, String?>> _riders;
 
   @override
   void initState() {
     super.initState();
     _selected = widget.initialSelected;
-    _riders = widget.riders.map((r) => Map<String, String>.from(r)).toList();
+    _riders = widget.riders.map((r) => Map<String, String?>.from(r)).toList();
   }
 
   void _openPassengerForm({int? editIndex}) async {
@@ -222,7 +222,7 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
                 children: [
                   _RiderTile(
                     name: e.value['name']!,
-                    subtitle: e.value['subtitle']!,
+                    subtitle: e.value['subtitle'],
                     selected: _selected == e.key,
                     onTap: () => setState(() => _selected = e.key),
                     onMenuTap: (ctx) => _showMenu(ctx, e.key),
@@ -302,14 +302,14 @@ class _RiderSheetBodyState extends State<_RiderSheetBody> {
 
 class _RiderTile extends StatelessWidget {
   final String name;
-  final String subtitle;
+  final String? subtitle; // ← nullable
   final bool selected;
   final VoidCallback onTap;
   final void Function(BuildContext menuContext) onMenuTap;
 
   const _RiderTile({
     required this.name,
-    required this.subtitle,
+    this.subtitle,            // ← optional
     required this.selected,
     required this.onTap,
     required this.onMenuTap,
@@ -338,10 +338,14 @@ class _RiderTile extends StatelessWidget {
           color: AppColors.text(context),
         ),
       ),
-      subtitle: Text(
-        subtitle,
-        style: TextStyle(fontSize: 12, color: AppColors.subtext(context)),
-      ),
+      // ← only renders subtitle row if non-null and non-empty
+      subtitle: (subtitle != null && subtitle!.isNotEmpty)
+          ? Text(
+              subtitle!,
+              style:
+                  TextStyle(fontSize: 12, color: AppColors.subtext(context)),
+            )
+          : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

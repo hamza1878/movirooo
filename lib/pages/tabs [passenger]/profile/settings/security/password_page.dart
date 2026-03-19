@@ -13,21 +13,28 @@ class PasswordPage extends StatefulWidget {
 class _PasswordPageState extends State<PasswordPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final _newPasswordController     = TextEditingController();
+  final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _newObscure     = true;
+  bool _newObscure = true;
   bool _confirmObscure = true;
-  bool _isLoading      = false;
+  bool _isLoading = false;
 
   bool get _hasMinLength => _newPasswordController.text.length >= 8;
-  bool get _hasUppercase => _newPasswordController.text.contains(RegExp(r'[A-Z]'));
-  bool get _hasLowercase => _newPasswordController.text.contains(RegExp(r'[a-z]'));
-  bool get _hasNumber    => _newPasswordController.text.contains(RegExp(r'[0-9]'));
-  bool get _hasSpecial   => _newPasswordController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+  bool get _hasUppercase =>
+      _newPasswordController.text.contains(RegExp(r'[A-Z]'));
+  bool get _hasLowercase =>
+      _newPasswordController.text.contains(RegExp(r'[a-z]'));
+  bool get _hasNumber => _newPasswordController.text.contains(RegExp(r'[0-9]'));
+  bool get _hasSpecial =>
+      _newPasswordController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 
   bool get _allRulesMet =>
-      _hasMinLength && _hasUppercase && _hasLowercase && _hasNumber && _hasSpecial;
+      _hasMinLength &&
+      _hasUppercase &&
+      _hasLowercase &&
+      _hasNumber &&
+      _hasSpecial;
 
   bool get _passwordsMatch =>
       _newPasswordController.text == _confirmPasswordController.text &&
@@ -85,7 +92,8 @@ class _PasswordPageState extends State<PasswordPage> {
                       controller: _newPasswordController,
                       label: t('new_password'),
                       obscure: _newObscure,
-                      onToggle: () => setState(() => _newObscure = !_newObscure),
+                      onToggle: () =>
+                          setState(() => _newObscure = !_newObscure),
                       hasError: newHasText && !_allRulesMet,
                     ),
 
@@ -93,8 +101,9 @@ class _PasswordPageState extends State<PasswordPage> {
                       const SizedBox(height: 6),
                       Text(
                         t('password_rules_error'),
-                        style: AppTextStyles.bodySmall(context)
-                            .copyWith(color: AppColors.error),
+                        style: AppTextStyles.bodySmall(
+                          context,
+                        ).copyWith(color: AppColors.error),
                       ),
                     ],
 
@@ -118,7 +127,8 @@ class _PasswordPageState extends State<PasswordPage> {
                       obscure: _confirmObscure,
                       onToggle: () =>
                           setState(() => _confirmObscure = !_confirmObscure),
-                      hasError: _confirmPasswordController.text.isNotEmpty &&
+                      hasError:
+                          _confirmPasswordController.text.isNotEmpty &&
                           !_passwordsMatch,
                     ),
 
@@ -127,8 +137,9 @@ class _PasswordPageState extends State<PasswordPage> {
                       const SizedBox(height: 6),
                       Text(
                         t('passwords_no_match'),
-                        style: AppTextStyles.bodySmall(context)
-                            .copyWith(color: AppColors.error),
+                        style: AppTextStyles.bodySmall(
+                          context,
+                        ).copyWith(color: AppColors.error),
                       ),
                     ],
 
@@ -190,9 +201,9 @@ class _PasswordRules extends StatelessWidget {
           const SizedBox(height: 6),
           _RuleRow(met: hasLowercase, label: t('rule_lowercase')),
           const SizedBox(height: 6),
-          _RuleRow(met: hasSpecial,   label: t('rule_special')),
+          _RuleRow(met: hasSpecial, label: t('rule_special')),
           const SizedBox(height: 6),
-          _RuleRow(met: hasNumber,    label: t('rule_number')),
+          _RuleRow(met: hasNumber, label: t('rule_number')),
         ],
       ),
     );
@@ -261,8 +272,10 @@ class _PasswordField extends StatelessWidget {
           decoration: InputDecoration(
             filled: true,
             fillColor: AppColors.surface(context),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: AppColors.border(context)),
@@ -282,11 +295,9 @@ class _PasswordField extends StatelessWidget {
             suffixIcon: GestureDetector(
               onTap: onToggle,
               child: Icon(
-                obscure
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-                color: AppColors.subtext(context),
-                size: 20,
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
               ),
             ),
           ),
@@ -368,9 +379,9 @@ class _SubPageTopBar extends StatelessWidget {
                 border: Border.all(color: AppColors.border(context)),
               ),
               child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                color: AppColors.subtext(context),
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
               ),
             ),
           ),

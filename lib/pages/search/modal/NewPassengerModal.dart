@@ -34,8 +34,6 @@ const List<_Country> _kCountries = [
   _Country(flag: '🇪🇸', code: 'ES', dialCode: '+34',  maxDigits: 9),
 ];
 
-// Country names are intentionally kept in en.json under country_TN, country_DZ,
-// etc. and resolved via t.translate at render time (see _CountryPickerSheet).
 const Map<String, String> _kCountryNameKeys = {
   'TN': 'country_TN', 'DZ': 'country_DZ', 'MA': 'country_MA',
   'LY': 'country_LY', 'EG': 'country_EG', 'FR': 'country_FR',
@@ -45,11 +43,11 @@ const Map<String, String> _kCountryNameKeys = {
 };
 
 class NewPassengerModal {
-  static Future<Map<String, String>?> show(
+  static Future<Map<String, String?>?> show(
     BuildContext context, {
-    Map<String, String>? initial,
+    Map<String, String?>? initial,
   }) {
-    return showModalBottomSheet<Map<String, String>>(
+    return showModalBottomSheet<Map<String, String?>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.surface(context),
@@ -62,7 +60,7 @@ class NewPassengerModal {
 }
 
 class _NewPassengerForm extends StatefulWidget {
-  final Map<String, String>? initial;
+  final Map<String, String?>? initial;
   const _NewPassengerForm({this.initial});
 
   @override
@@ -137,7 +135,7 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
     final last     = _lastCtrl.text.trim();
     final phone    = _phoneCtrl.text.trim();
     final fullName = last.isEmpty ? first : '$first $last';
-    Navigator.pop<Map<String, String>>(context, {
+    Navigator.pop<Map<String, String?>>(context, {
       'name':     fullName,
       'subtitle': '${_country.dialCode} $phone',
     });
@@ -146,239 +144,244 @@ class _NewPassengerFormState extends State<_NewPassengerForm> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    // ← use viewInsets so sheet shrinks when keyboard appears
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, 16, 20, bottom + 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Drag handle
-          Container(
-            width: 36,
-            height: 4,
-            decoration: BoxDecoration(
-              color: AppColors.border(context),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Header
-          Row(
-            children: [
-              _RoundedBtn(
-                icon: Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                onTap: () => Navigator.pop(context),
+      padding: EdgeInsets.only(bottom: bottom),
+      // ← SingleChildScrollView fixes the overflow
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Drag handle
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.border(context),
+                borderRadius: BorderRadius.circular(2),
               ),
-              Expanded(
-                child: Text(
-                  _isEdit
-                      ? t.translate('edit_passenger')
-                      : t.translate('new_passenger'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.text(context),
+            ),
+            const SizedBox(height: 16),
+
+            // Header
+            Row(
+              children: [
+                _RoundedBtn(
+                  icon: Icons.arrow_back_ios_new_rounded,
+                  size: 16,
+                  onTap: () => Navigator.pop(context),
+                ),
+                Expanded(
+                  child: Text(
+                    _isEdit
+                        ? t.translate('edit_passenger')
+                        : t.translate('new_passenger'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.text(context),
+                    ),
                   ),
                 ),
-              ),
-              _RoundedBtn(
-                icon: Icons.close_rounded,
-                size: 18,
-                onTap: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          // Info banner
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppColors.primaryPurple.withOpacity(0.07),
-              borderRadius: BorderRadius.circular(12),
+                _RoundedBtn(
+                  icon: Icons.close_rounded,
+                  size: 18,
+                  onTap: () => Navigator.pop(context),
+                ),
+              ],
             ),
-            child: Column(
+            const SizedBox(height: 16),
+
+            // Info banner
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppColors.primaryPurple.withOpacity(0.07),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.translate('passenger_name_visible'),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryPurple,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    t.translate('passenger_name_device_note'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.primaryPurple.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            _LabeledField(
+              label: t.translate('first_name'),
+              hint: t.translate('first_name_hint'),
+              controller: _firstCtrl,
+              capitalization: TextCapitalization.words,
+            ),
+            const SizedBox(height: 14),
+
+            _LabeledField(
+              label: t.translate('last_name'),
+              hint: t.translate('last_name_hint'),
+              controller: _lastCtrl,
+              capitalization: TextCapitalization.words,
+            ),
+            const SizedBox(height: 14),
+
+            // Phone field
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  t.translate('passenger_name_visible'),
+                  t.translate('phone_number'),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.primaryPurple,
+                    color: AppColors.text(context),
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  t.translate('passenger_name_device_note'),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.primaryPurple.withOpacity(0.7),
+                const SizedBox(height: 6),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.border(context)),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          _LabeledField(
-            label: t.translate('first_name'),
-            hint: t.translate('first_name_hint'),
-            controller: _firstCtrl,
-            capitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: 14),
-
-          _LabeledField(
-            label: t.translate('last_name'),
-            hint: t.translate('last_name_hint'),
-            controller: _lastCtrl,
-            capitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: 14),
-
-          // Phone field
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                t.translate('phone_number'),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.text(context),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.border(context)),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    // Country selector
-                    GestureDetector(
-                      onTap: _pickCountry,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 14),
-                        decoration: BoxDecoration(
-                          color: AppColors.bg(context),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(11),
-                            bottomLeft: Radius.circular(11),
+                  child: Row(
+                    children: [
+                      // Country selector
+                      GestureDetector(
+                        onTap: _pickCountry,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: AppColors.bg(context),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(11),
+                              bottomLeft: Radius.circular(11),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                _country.flag,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                _country.dialCode,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.text(context),
+                                ),
+                              ),
+                              const SizedBox(width: 3),
+                              Icon(Icons.keyboard_arrow_down_rounded,
+                                  size: 16,
+                                  color: AppColors.subtext(context)),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              _country.flag,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              _country.dialCode,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.text(context),
-                              ),
-                            ),
-                            const SizedBox(width: 3),
-                            Icon(Icons.keyboard_arrow_down_rounded,
-                                size: 16,
-                                color: AppColors.subtext(context)),
+                      ),
+                      Container(
+                          width: 1,
+                          height: 46,
+                          color: AppColors.border(context)),
+                      Expanded(
+                        child: TextField(
+                          controller: _phoneCtrl,
+                          keyboardType: TextInputType.phone,
+                          style: TextStyle(color: AppColors.text(context)),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(
+                                _country.maxDigits),
                           ],
+                          decoration: InputDecoration(
+                            hintText: t.translate('phone_hint'),
+                            hintStyle: TextStyle(
+                                color: AppColors.subtext(context),
+                                fontSize: 14),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 14),
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                        width: 1,
-                        height: 46,
-                        color: AppColors.border(context)),
-                    Expanded(
-                      child: TextField(
-                        controller: _phoneCtrl,
-                        keyboardType: TextInputType.phone,
-                        style: TextStyle(color: AppColors.text(context)),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(
-                              _country.maxDigits),
-                        ],
-                        decoration: InputDecoration(
-                          hintText: t.translate('phone_hint'),
-                          hintStyle: TextStyle(
-                              color: AppColors.subtext(context),
-                              fontSize: 14),
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Disclaimer
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                  fontSize: 12, color: AppColors.subtext(context)),
-              children: [
-                TextSpan(text: t.translate('disclaimer_by_tapping')),
-                TextSpan(
-                  text: _isEdit
-                      ? t.translate('disclaimer_save_changes')
-                      : t.translate('disclaimer_add_passenger'),
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-                TextSpan(
-                  text: t.translate('disclaimer_consent'),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-          // CTA
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: _canSave ? _submit : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryPurple,
-                disabledBackgroundColor:
-                    AppColors.primaryPurple.withOpacity(0.4),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                elevation: 0,
+            // Disclaimer
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                    fontSize: 12, color: AppColors.subtext(context)),
+                children: [
+                  TextSpan(text: t.translate('disclaimer_by_tapping')),
+                  TextSpan(
+                    text: _isEdit
+                        ? t.translate('disclaimer_save_changes')
+                        : t.translate('disclaimer_add_passenger'),
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  TextSpan(
+                    text: t.translate('disclaimer_consent'),
+                  ),
+                ],
               ),
-              child: Text(
-                _isEdit
-                    ? t.translate('save_changes')
-                    : t.translate('add_passenger'),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+            ),
+            const SizedBox(height: 16),
+
+            // CTA
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _canSave ? _submit : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryPurple,
+                  disabledBackgroundColor:
+                      AppColors.primaryPurple.withOpacity(0.4),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 0,
+                ),
+                child: Text(
+                  _isEdit
+                      ? t.translate('save_changes')
+                      : t.translate('add_passenger'),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -419,7 +422,6 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
             padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
             child: Column(
               children: [
-                // Drag handle
                 Container(
                   width: 36,
                   height: 4,
@@ -465,7 +467,6 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               ],
             ),
           ),
-
           Expanded(
             child: ListView.separated(
               controller: scrollCtrl,

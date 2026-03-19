@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../theme/app_colors.dart';
+import '_driver_row.dart';
 
 class TrackRidePage extends StatefulWidget {
   const TrackRidePage({super.key});
@@ -24,8 +26,13 @@ class _TrackRidePageState extends State<TrackRidePage> {
         body: Stack(
           fit: StackFit.expand,
           children: [
+            // Map placeholder
             Container(color: const Color(0xFF0E0E18)),
+
+            // Bottom sheet
             const _BottomPanel(),
+
+            // Back button
             Positioned(
               top: 0,
               left: 0,
@@ -46,7 +53,7 @@ class _TrackRidePageState extends State<TrackRidePage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1C1C28).withOpacity(0.85),
+                          color: const Color(0xFF1C1C28).withValues(alpha: 0.85),
                           shape: BoxShape.circle,
                           border: Border.all(color: AppColors.darkBorder),
                         ),
@@ -84,8 +91,8 @@ class _BottomPanelState extends State<_BottomPanel> {
   void initState() {
     super.initState();
     _sheet.addListener(() {
-      final c = _sheet.size < 0.30;
-      if (c != _collapsed) setState(() => _collapsed = c);
+      final collapsed = _sheet.size < 0.30;
+      if (collapsed != _collapsed) setState(() => _collapsed = collapsed);
     });
   }
 
@@ -97,7 +104,9 @@ class _BottomPanelState extends State<_BottomPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final bot = MediaQuery.of(context).padding.bottom;
+    final l10n = AppLocalizations.of(context);
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return DraggableScrollableSheet(
       controller: _sheet,
       initialChildSize: 0.42,
@@ -105,25 +114,25 @@ class _BottomPanelState extends State<_BottomPanel> {
       maxChildSize: 0.42,
       snap: true,
       snapSizes: const [0.18, 0.42],
-      builder: (context, sc) => Container(
+      builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
           color: AppColors.darkSurface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           border: Border(top: BorderSide(color: AppColors.darkBorder)),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primaryPurple.withOpacity(0.08),
+              color: AppColors.primaryPurple.withValues(alpha: 0.08),
               blurRadius: 32,
               offset: const Offset(0, -8),
             ),
           ],
         ),
         child: CustomScrollView(
-          controller: sc,
+          controller: scrollController,
           physics: const ClampingScrollPhysics(),
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(20, 12, 20, bot + 16),
+              padding: EdgeInsets.fromLTRB(20, 12, 20, bottomPadding + 16),
               sliver: SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,18 +144,19 @@ class _BottomPanelState extends State<_BottomPanel> {
                         height: 5,
                         margin: const EdgeInsets.only(bottom: 14),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.35),
+                          color: Colors.white.withValues(alpha: 0.35),
                           borderRadius: BorderRadius.circular(3),
                         ),
                       ),
                     ),
 
-                    // ETA + PREMIUM
+                    // ETA + PREMIUM badge
                     Row(
                       children: [
-                        const Text(
-                          '7 mins away',
-                          style: TextStyle(
+                        Text(
+                          l10n.translate('eta_mins_away')
+                              .replaceAll('{mins}', '7'),
+                          style: const TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
@@ -161,14 +171,14 @@ class _BottomPanelState extends State<_BottomPanel> {
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryPurple.withOpacity(0.18),
+                            color: AppColors.primaryPurple.withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppColors.primaryPurple.withOpacity(0.4),
+                              color: AppColors.primaryPurple.withValues(alpha: 0.4),
                             ),
                           ),
                           child: Text(
-                            'PREMIUM',
+                            l10n.translate('vehicle_class_premium'),
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 11,
@@ -183,7 +193,7 @@ class _BottomPanelState extends State<_BottomPanel> {
 
                     const SizedBox(height: 14),
 
-                    // Progress bar — always visible
+                    // Progress bar
                     Container(
                       height: 4,
                       decoration: BoxDecoration(
@@ -204,7 +214,7 @@ class _BottomPanelState extends State<_BottomPanel> {
                             borderRadius: BorderRadius.circular(2),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primaryPurple.withOpacity(0.6),
+                                color: AppColors.primaryPurple.withValues(alpha: 0.6),
                                 blurRadius: 6,
                               ),
                             ],
@@ -213,7 +223,7 @@ class _BottomPanelState extends State<_BottomPanel> {
                       ),
                     ),
 
-                    // Subtitle + driver + button — hidden when collapsed
+                    // Collapsible section: subtitle + driver + button
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 200),
                       sizeCurve: Curves.easeOut,
@@ -225,120 +235,19 @@ class _BottomPanelState extends State<_BottomPanel> {
                         children: [
                           const SizedBox(height: 4),
                           Text(
-                            'Arriving at 14:17  •  1.2 mi left',
+                            l10n.translate('arriving_at')
+                                .replaceAll('{time}', '14:17')
+                                .replaceAll('{distance}', '1.2 mi'),
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 13,
-                              color: Colors.white.withOpacity(0.5),
+                              color: Colors.white.withValues(alpha: 0.5),
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.primaryPurple.withOpacity(
-                                      0.5,
-                                    ),
-                                    width: 2,
-                                  ),
-                                  color: const Color(0xFF2A1A4E),
-                                ),
-                                child: ClipOval(
-                                  child: Icon(
-                                    Icons.person_rounded,
-                                    color: AppColors.primaryPurple.withOpacity(
-                                      0.7,
-                                    ),
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Alexander Wright',
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      'Tesla Model S',
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontSize: 12,
-                                        color: Colors.white.withOpacity(0.45),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Phone button
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Container(
-                                      width: 44,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.darkBorder,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: AppColors.primaryPurple
-                                              .withOpacity(0.3),
-                                        ),
-                                      ),
-                                      child: const Center(
-                                        child: ImageIcon(
-                                          AssetImage(
-                                            'images/icons/phone-call.png',
-                                          ),
-                                          size: 20,
-                                          color: AppColors.primaryPurple,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  // Chat button
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Container(
-                                      width: 44,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.darkBorder,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: AppColors.primaryPurple
-                                              .withOpacity(0.3),
-                                        ),
-                                      ),
-                                      child: const Center(
-                                        child: ImageIcon(
-                                          AssetImage('images/icons/chat.png'),
-                                          size: 20,
-                                          color: AppColors.primaryPurple,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          const DriverRow(
+                            driverName: 'Alexander Wright',
+                            vehicleName: 'Tesla Model S',
                           ),
                           const SizedBox(height: 20),
                           SizedBox(
@@ -346,8 +255,9 @@ class _BottomPanelState extends State<_BottomPanel> {
                             height: 56,
                             child: ElevatedButton(
                               onPressed: () {
-                                if (Navigator.canPop(context))
+                                if (Navigator.canPop(context)) {
                                   Navigator.pop(context);
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryPurple,
@@ -357,20 +267,20 @@ class _BottomPanelState extends State<_BottomPanel> {
                                   borderRadius: BorderRadius.circular(18),
                                 ),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Continue',
-                                    style: TextStyle(
+                                    l10n.translate('continue'),
+                                    style: const TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                     ),
                                   ),
-                                  SizedBox(width: 8),
-                                  Icon(
+                                  const SizedBox(width: 8),
+                                  const Icon(
                                     Icons.arrow_forward_rounded,
                                     color: Colors.white,
                                     size: 18,

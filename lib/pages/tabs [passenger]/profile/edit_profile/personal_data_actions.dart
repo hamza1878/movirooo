@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_text_styles.dart';
 import '../../../../theme/app_colors.dart';
-
-
+import '../../../../l10n/app_localizations.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Save Button
@@ -22,6 +21,8 @@ class SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
+
     return AnimatedOpacity(
       opacity: hasChanges ? 1.0 : 0.4,
       duration: const Duration(milliseconds: 200),
@@ -42,7 +43,7 @@ class SaveButton extends StatelessWidget {
                   height: 20,
                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5),
                 )
-              : Text('Save Changes', style: AppTextStyles.buttonPrimary),
+              : Text(t('save_changes'), style: AppTextStyles.buttonPrimary),
         ),
       ),
     );
@@ -57,30 +58,32 @@ class DangerSection extends StatelessWidget {
   const DangerSection({super.key});
 
   void _showDeleteDialog(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
+
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: AppColors.surface(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
-          'Delete Account',
+          t('delete_account_title'),
           style: AppTextStyles.bodyLarge(context).copyWith(fontWeight: FontWeight.w700),
         ),
         content: Text(
-          'This action is permanent and cannot be undone. All your data will be erased.',
+          t('delete_account_message'),
           style: AppTextStyles.bodySmall(context),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              t('cancel'),
               style: AppTextStyles.bodyMedium(context).copyWith(color: AppColors.subtext(context)),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Delete', style: AppTextStyles.buttonSecondary),
+            child: Text(t('delete'), style: AppTextStyles.buttonSecondary),
           ),
         ],
       ),
@@ -89,6 +92,7 @@ class DangerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
@@ -120,12 +124,12 @@ class DangerSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Delete Account',
+                    t('delete_account'),
                     style: AppTextStyles.settingsItem(context).copyWith(color: AppColors.error),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Permanently remove your account',
+                    t('delete_account_subtitle'),
                     style: AppTextStyles.bodySmall(context).copyWith(
                       color: isDark ? const Color(0xFF8B4444) : const Color(0xFFB07070),
                     ),

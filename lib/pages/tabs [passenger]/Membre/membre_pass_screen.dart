@@ -7,12 +7,25 @@ import 'membership_tier.dart';
 import 'pass_header_card.dart';
 import 'tier_card.dart';
 
-class MembrePassScreen extends StatelessWidget {
+class MembrePassScreen extends StatefulWidget {
   const MembrePassScreen({super.key});
 
+  @override
+  State<MembrePassScreen> createState() => _MembrePassScreenState();
+}
+
+class _MembrePassScreenState extends State<MembrePassScreen> {
   static const int _userPoints   = 2450;
   static const int _nextLevel    = 3000;
   static const int _pointsToNext = 550;
+
+  int? _expandedIndex; // null = all collapsed
+
+  void _onTierTap(int index) {
+    setState(() {
+      _expandedIndex = (_expandedIndex == index) ? null : index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +52,7 @@ class MembrePassScreen extends StatelessWidget {
               ),
             ),
 
-            // ── Body ─────────────────────────────────────────────
+            // ── Body ──────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
@@ -65,7 +78,11 @@ class MembrePassScreen extends StatelessWidget {
                       final isLast = i == kMembershipTiers.length - 1;
                       return Padding(
                         padding: EdgeInsets.only(bottom: isLast ? 0 : 10),
-                        child: TierCard(tier: kMembershipTiers[i]),
+                        child: TierCard(
+                          tier: kMembershipTiers[i],
+                          isExpanded: _expandedIndex == i,
+                          onTap: () => _onTierTap(i),
+                        ),
                       );
                     }),
                   ],

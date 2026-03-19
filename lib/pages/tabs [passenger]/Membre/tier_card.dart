@@ -4,16 +4,20 @@ import '../../../../theme/app_text_styles.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'membership_tier.dart';
 
-/// User's current points — replace with your state management value.
 const int kUserPoints = 2450;
-
-/// Fixed collapsed height — uniform across all tiers.
 const double kTierCardHeight = 72.0;
 
 class TierCard extends StatefulWidget {
   final MembershipTier tier;
+  final bool isExpanded;
+  final VoidCallback onTap;
 
-  const TierCard({super.key, required this.tier});
+  const TierCard({
+    super.key,
+    required this.tier,
+    required this.isExpanded,
+    required this.onTap,
+  });
 
   @override
   State<TierCard> createState() => _TierCardState();
@@ -21,7 +25,6 @@ class TierCard extends StatefulWidget {
 
 class _TierCardState extends State<TierCard>
     with SingleTickerProviderStateMixin {
-  bool _expanded = false;
 
   late final AnimationController _ctrl;
   late final Animation<double> _expandAnim;
@@ -39,14 +42,17 @@ class _TierCardState extends State<TierCard>
   }
 
   @override
+  void didUpdateWidget(TierCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isExpanded != oldWidget.isExpanded) {
+      widget.isExpanded ? _ctrl.forward() : _ctrl.reverse();
+    }
+  }
+
+  @override
   void dispose() {
     _ctrl.dispose();
     super.dispose();
-  }
-
-  void _toggle() {
-    setState(() => _expanded = !_expanded);
-    _expanded ? _ctrl.forward() : _ctrl.reverse();
   }
 
   @override
@@ -55,15 +61,15 @@ class _TierCardState extends State<TierCard>
     final tier     = widget.tier;
     final isLocked = tier.status == TierStatus.locked;
 
-    final borderColor = _expanded
+    final borderColor = widget.isExpanded
         ? tier.accentColor.withValues(alpha: 0.6)
         : AppColors.border(context);
 
-    final bgColor = _expanded
+    final bgColor = widget.isExpanded
         ? tier.accentColor.withValues(alpha: isDark ? 0.07 : 0.04)
         : AppColors.surface(context);
 
-    final shadows = _expanded && isDark
+    final shadows = widget.isExpanded && isDark
         ? [
             BoxShadow(
               color: tier.accentColor.withValues(alpha: 0.14),
@@ -74,7 +80,7 @@ class _TierCardState extends State<TierCard>
         : null;
 
     return GestureDetector(
-      onTap: _toggle,
+      onTap: widget.onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutCubic,
@@ -83,21 +89,20 @@ class _TierCardState extends State<TierCard>
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: borderColor,
-            width: _expanded ? 1.5 : 1,
+            width: widget.isExpanded ? 1.5 : 1,
           ),
           boxShadow: shadows,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── Collapsed row — fixed height ─────────────────────
+            // ── Collapsed row ────────────────────────────────────
             SizedBox(
               height: kTierCardHeight,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Row(
                   children: [
-                    // Icon circle
                     Container(
                       width: 40,
                       height: 40,
@@ -116,10 +121,7 @@ class _TierCardState extends State<TierCard>
                         ),
                       ),
                     ),
-
                     const SizedBox(width: 12),
-
-                    // Name + pts
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -139,17 +141,14 @@ class _TierCardState extends State<TierCard>
                         ],
                       ),
                     ),
-
                     const SizedBox(width: 8),
-
-                    // Chevron
                     AnimatedRotation(
-                      turns: _expanded ? 0.5 : 0,
+                      turns: widget.isExpanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 260),
                       curve: Curves.easeOutCubic,
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        color: _expanded
+                        color: widget.isExpanded
                             ? tier.accentColor
                             : AppColors.subtext(context),
                         size: 20,
@@ -213,8 +212,7 @@ class _ExpandedPanel extends StatelessWidget {
 
           // Discount pill
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: isLocked
                   ? AppColors.border(context).withValues(alpha: 0.5)

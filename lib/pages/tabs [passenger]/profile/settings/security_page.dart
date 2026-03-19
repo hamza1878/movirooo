@@ -32,18 +32,14 @@ class SecurityPage extends StatelessWidget {
                       title: t('Password'),
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const PasswordPage(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const PasswordPage()),
                       ),
                     ),
                     _SecurityNavTile(
                       title: t('Authentication App'),
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const AuthAppPage(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const AuthAppPage()),
                       ),
                     ),
                     _SecurityNavTile(
@@ -83,10 +79,7 @@ class _SecurityNavTile extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const _SecurityNavTile({
-    required this.title,
-    required this.onTap,
-  });
+  const _SecurityNavTile({required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +132,9 @@ class _SubPageTopBar extends StatelessWidget {
                 border: Border.all(color: AppColors.border(context)),
               ),
               child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                color: AppColors.subtext(context),
+                Icons.chevron_left_rounded,
+                size: 22,
+                color: AppColors.text(context),
               ),
             ),
           ),
