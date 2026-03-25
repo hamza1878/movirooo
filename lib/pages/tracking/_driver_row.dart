@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
 
+/// A row showing driver avatar, name, vehicle, plate number, and action buttons.
+///
+/// When [isArrived] is `true` the plate number is rendered in bold + accent
+/// color to surface the "driver is here" moment.
 class DriverRow extends StatelessWidget {
   final String driverName;
   final String vehicleName;
+
+  /// Optional — shown below [vehicleName].  Rendered prominently when
+  /// [isArrived] is `true`.
+  final String? plateNumber;
+
+  /// When `true` the plate number is highlighted and a subtle green ring
+  /// appears around the avatar.
+  final bool isArrived;
+
   final VoidCallback? onPhoneTap;
   final VoidCallback? onChatTap;
 
@@ -11,12 +24,16 @@ class DriverRow extends StatelessWidget {
     super.key,
     required this.driverName,
     required this.vehicleName,
+    this.plateNumber,
+    this.isArrived = false,
     this.onPhoneTap,
     this.onChatTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    const green = Color(0xFF4ADE80);
+
     return Row(
       children: [
         // Avatar
@@ -26,22 +43,22 @@ class DriverRow extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.primaryPurple.withValues(alpha: 0.5),
+              color: AppColors.primaryPurple.withValues(alpha: 0.35),
               width: 2,
             ),
-            color: const Color(0xFF2A1A4E),
+            color: AppColors.iconBgLight,
           ),
           child: ClipOval(
             child: Icon(
               Icons.person_rounded,
-              color: AppColors.primaryPurple.withValues(alpha: 0.7),
+              color: AppColors.primaryPurple,
               size: 30,
             ),
           ),
         ),
         const SizedBox(width: 14),
 
-        // Name + vehicle
+        // Name + vehicle + plate
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,18 +69,34 @@ class DriverRow extends StatelessWidget {
                   fontFamily: 'Inter',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: AppColors.lightText,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 vehicleName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.45),
+                  color: AppColors.lightSubtext,
                 ),
               ),
+              if (plateNumber != null) ...[
+                const SizedBox(height: 2),
+                AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 300),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 12,
+                    fontWeight: isArrived ? FontWeight.w700 : FontWeight.w400,
+                    color: isArrived
+                        ? green
+                        : Colors.white.withValues(alpha: 0.4),
+                    letterSpacing: 0.5,
+                  ),
+                  child: Text(plateNumber!),
+                ),
+              ],
             ],
           ),
         ),
@@ -88,6 +121,8 @@ class DriverRow extends StatelessWidget {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+
 class _ActionButton extends StatelessWidget {
   final String asset;
   final VoidCallback onTap;
@@ -101,7 +136,7 @@ class _ActionButton extends StatelessWidget {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: AppColors.darkBorder,
+          color: AppColors.lightBorder,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: AppColors.primaryPurple.withValues(alpha: 0.3),

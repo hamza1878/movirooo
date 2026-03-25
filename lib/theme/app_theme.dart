@@ -6,7 +6,7 @@ class AppTheme {
 
   // ─── Dark ───────────────────────────────────────────────────────
   static const Color darkBg      = Color(0xFF0B0B0F);
-  static const Color darkSurface = Color(0xFF151519);
+  static const Color darkSurface = Color(0xFF1A1A22); // midnight card
 
   // ─── Light (Figma) ──────────────────────────────────────────────
   static const Color lightBg      = Color(0xFFF4F4F8);

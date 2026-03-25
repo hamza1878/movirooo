@@ -421,5 +421,15 @@
   "continue": "Continue",
   "notifications_description": "Manage how you receive updates, messages, and offers",
   "sms_messages": "SMS Messages",
-  "email_notifications": "Email Notifications"
+  "email_notifications": "Email Notifications",
+  "driver_arrived": "Driver has arrived",
+  "meet_at_pickup": "Meet at your pickup point",
+  "right_in_front": "Right in front of you",
+  "verify_plate_before_entering": "Verify plate number before entering",
+  "cant_find_driver": "Can't find driver?",
+  "ride_in_progress": "Ride in progress",
+  "trip_completed": "Trip completed",
+  "im_here": "I'm Here",
+  "pickup": "PICK UP",
+  "dropoff": "DROP OFF"
 }

@@ -421,5 +421,15 @@
   "continue": "继续",
   "notifications_description": "管理您接收更新、消息和优惠的方式",
   "sms_messages": "短信",
-  "email_notifications": "电子邮件通知"
+  "email_notifications": "电子邮件通知",
+  "driver_arrived": "司机已到达",
+  "meet_at_pickup": "前往上车点",
+  "right_in_front": "就在您面前",
+  "verify_plate_before_entering": "上车前请核对车牌号",
+  "cant_find_driver": "找不到司机？",
+  "ride_in_progress": "行程进行中",
+  "trip_completed": "行程已完成",
+  "im_here": "我到了",
+  "pickup": "出发地",
+  "dropoff": "目的地"
 }

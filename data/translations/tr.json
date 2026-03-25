@@ -421,5 +421,15 @@
   "continue": "Devam et",
   "notifications_description": "Güncellemeleri, mesajları ve teklifleri nasıl alacağınızı yönetin",
   "sms_messages": "SMS mesajları",
-  "email_notifications": "E-posta bildirimleri"
+  "email_notifications": "E-posta bildirimleri",
+  "driver_arrived": "Sürücü geldi",
+  "meet_at_pickup": "Alış noktasında buluşun",
+  "right_in_front": "Tam önünüzde",
+  "verify_plate_before_entering": "Binmeden önce plakayı kontrol edin",
+  "cant_find_driver": "Sürücüyü bulamıyor musunuz?",
+  "ride_in_progress": "Yolculuk devam ediyor",
+  "trip_completed": "Yolculuk tamamlandı",
+  "im_here": "Buradayım",
+  "pickup": "KALKIS",
+  "dropoff": "VARIS"
 }

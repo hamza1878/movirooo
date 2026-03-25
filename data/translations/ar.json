@@ -418,5 +418,15 @@
   "eta_mins_away": "على بُعد {mins} دقيقة",
   "arriving_at": "الوصول في {time}  •  {distance} متبقية",
   "vehicle_class_premium": "مميز",
-  "continue": "متابعة"
+  "continue": "متابعة",
+  "driver_arrived": "وصل السائق",
+  "meet_at_pickup": "توجّه إلى نقطة الالتقاء",
+  "right_in_front": "أمامك مباشرةً",
+  "verify_plate_before_entering": "تحقّق من رقم اللوحة قبل الركوب",
+  "cant_find_driver": "لا تجد السائق؟",
+  "ride_in_progress": "الرحلة جارية",
+  "trip_completed": "اكتملت الرحلة",
+  "im_here": "أنا هنا",
+  "pickup": "نقطة الركوب",
+  "dropoff": "نقطة النزول"
 }

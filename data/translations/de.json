@@ -421,5 +421,15 @@
   "continue": "Weiter",
   "notifications_description": "Verwalten Sie, wie Sie Updates, Nachrichten und Angebote erhalten",
   "sms_messages": "SMS-Nachrichten",
-  "email_notifications": "E-Mail-Benachrichtigungen"
+  "email_notifications": "E-Mail-Benachrichtigungen",
+  "driver_arrived": "Fahrer ist angekommen",
+  "meet_at_pickup": "Gehen Sie zum Abholpunkt",
+  "right_in_front": "Direkt vor Ihnen",
+  "verify_plate_before_entering": "Kennzeichen vor dem Einsteigen prüfen",
+  "cant_find_driver": "Fahrer nicht gefunden?",
+  "ride_in_progress": "Fahrt läuft",
+  "trip_completed": "Fahrt abgeschlossen",
+  "im_here": "Ich bin da",
+  "pickup": "ABHOLUNG",
+  "dropoff": "ABSETZPUNKT"
 }

@@ -421,5 +421,15 @@
   "continue": "続ける",
   "notifications_description": "更新、メッセージ、オファーの受け取り方を管理",
   "sms_messages": "SMSメッセージ",
-  "email_notifications": "メール通知"
+  "email_notifications": "メール通知",
+  "driver_arrived": "ドライバーが到着しました",
+  "meet_at_pickup": "乗車場所でお待ちください",
+  "right_in_front": "すぐ目の前です",
+  "verify_plate_before_entering": "乗車前にナンバープレートを確認してください",
+  "cant_find_driver": "ドライバーが見つかりませんか？",
+  "ride_in_progress": "乗車中",
+  "trip_completed": "旅程が完了しました",
+  "im_here": "ここにいます",
+  "pickup": "乗車地点",
+  "dropoff": "降車地点"
 }

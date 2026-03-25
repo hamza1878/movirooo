@@ -421,5 +421,15 @@
   "continue": "Продолжить",
   "notifications_description": "Управляйте тем, как вы получаете обновления, сообщения и предложения",
   "sms_messages": "SMS-сообщения",
-  "email_notifications": "Email-уведомления"
+  "email_notifications": "Email-уведомления",
+  "driver_arrived": "Водитель прибыл",
+  "meet_at_pickup": "Идите к месту посадки",
+  "right_in_front": "Прямо перед вами",
+  "verify_plate_before_entering": "Проверьте номер перед посадкой",
+  "cant_find_driver": "Не можете найти водителя?",
+  "ride_in_progress": "Поездка в процессе",
+  "trip_completed": "Поездка завершена",
+  "im_here": "Я здесь",
+  "pickup": "ОТПРАВЛЕНИЕ",
+  "dropoff": "НАЗНАЧЕНИЕ"
 }

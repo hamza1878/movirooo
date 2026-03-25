@@ -11,60 +11,12 @@ class AppearancePage extends StatefulWidget {
   State<AppearancePage> createState() => _AppearancePageState();
 }
 
-class _AppearancePageState extends State<AppearancePage>
-    with SingleTickerProviderStateMixin {
+class _AppearancePageState extends State<AppearancePage> {
   ThemeMode get _selected => themeProvider.mode;
 
-  late final AnimationController _controller;
-  late final Animation<double> _fadeAnim;
-  late final Animation<Offset> _slideAnim;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 420),
-    );
-
-    _fadeAnim = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-
-    // Subtle slide: starts slightly above, settles into place (top-down feel)
-    _slideAnim = Tween<Offset>(
-      begin: const Offset(0, -0.04),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-    ));
-
-    // Start fully visible
-    _controller.value = 1.0;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _select(ThemeMode mode) async {
-    if (_selected == mode) return;
-
-    // 1. Fade + drift upward (out)
-    await _controller.reverse();
-
-    // 2. Apply the new theme
-    await themeProvider.setMode(mode);
-    if (!mounted) return;
+  void _select(ThemeMode mode) {
+    themeProvider.setMode(mode);
     setState(() {});
-
-    // 3. Fade + drift down from top (in)
-    await _controller.forward();
   }
 
   @override
@@ -73,87 +25,81 @@ class _AppearancePageState extends State<AppearancePage>
 
     return Scaffold(
       backgroundColor: AppColors.bg(context),
-      body: FadeTransition(
-        opacity: _fadeAnim,
-        child: SlideTransition(
-          position: _slideAnim,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+
+              // ── Top bar ──────────────────────────────────────────
+              Row(
                 children: [
-                  const SizedBox(height: 16),
-
-                  // ── Top bar ──────────────────────────────────────────
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: AppColors.surface(context),
-                            borderRadius: BorderRadius.circular(10),
-                            border:
-                                Border.all(color: AppColors.border(context)),
-                          ),
-                          child: Icon(
-                            Icons.chevron_left_rounded,
-                            color: AppColors.text(context),
-                            size: 22,
-                          ),
-                        ),
+                  GestureDetector(
+                    onTap: () => Navigator.maybePop(context),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface(context),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.border(context)),
                       ),
-                      Expanded(
-                        child: Text(
-                          t('appearance'),
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.pageTitle(context),
-                        ),
+                      child: Icon(
+                        Icons.chevron_left_rounded,
+                        color: AppColors.text(context),
+                        size: 22,
                       ),
-                      const SizedBox(width: 36),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 32),
-
-                  // ── Section label ────────────────────────────────────
-                  Text(t('theme'),
-                      style: AppTextStyles.sectionLabel(context)),
-                  const SizedBox(height: 12),
-
-                  // ── Option tiles ─────────────────────────────────────
-                  _ThemeTile(
-                    icon: Icons.dark_mode_rounded,
-                    label: t('dark'),
-                    subtitle: t('dark_subtitle'),
-                    mode: ThemeMode.dark,
-                    selected: _selected,
-                    onTap: () => _select(ThemeMode.dark),
+                  Expanded(
+                    child: Text(
+                      t('appearance'),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.pageTitle(context),
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  _ThemeTile(
-                    icon: Icons.light_mode_rounded,
-                    label: t('light'),
-                    subtitle: t('light_subtitle'),
-                    mode: ThemeMode.light,
-                    selected: _selected,
-                    onTap: () => _select(ThemeMode.light),
-                  ),
-                  const SizedBox(height: 10),
-                  _ThemeTile(
-                    icon: Icons.settings_suggest_rounded,
-                    label: t('system'),
-                    subtitle: t('system_subtitle'),
-                    mode: ThemeMode.system,
-                    selected: _selected,
-                    onTap: () => _select(ThemeMode.system),
-                    isSystemDark: true,
-                  ),
+                  const SizedBox(width: 36),
                 ],
               ),
-            ),
+              const SizedBox(height: 32),
+
+              // ── Section label ────────────────────────────────────
+              Text(t('theme'), style: AppTextStyles.sectionLabel(context)),
+              const SizedBox(height: 12),
+
+              // ── Option tiles (each in its own card) ──────────────
+              _ThemeTile(
+                icon: Icons.dark_mode_rounded,
+                label: t('dark'),
+                subtitle: t('dark_subtitle'),
+                mode: ThemeMode.dark,
+                selected: _selected,
+                onTap: () => _select(ThemeMode.dark),
+              ),
+              const SizedBox(height: 10),
+              _ThemeTile(
+                icon: Icons.light_mode_rounded,
+                label: t('light'),
+                subtitle: t('light_subtitle'),
+                mode: ThemeMode.light,
+                selected: _selected,
+                onTap: () => _select(ThemeMode.light),
+              ),
+              const SizedBox(height: 10),
+              // System defaults to light mode behaviour
+              _ThemeTile(
+                icon: Icons.settings_suggest_rounded,
+                label: t('system'),
+                subtitle: t('system_subtitle'),
+                mode: ThemeMode.system,
+                selected: _selected,
+                onTap: () => _select(ThemeMode.system),
+                // Pass flag so the tile can show "Light" as the default hint
+                isSystemLight: true,
+              ),
+            ],
           ),
         ),
       ),
@@ -170,7 +116,8 @@ class _ThemeTile extends StatelessWidget {
   final ThemeMode mode;
   final ThemeMode selected;
   final VoidCallback onTap;
-  final bool isSystemDark;
+  /// When true the system tile shows a light-mode preview chip
+  final bool isSystemLight;
 
   const _ThemeTile({
     required this.icon,
@@ -179,7 +126,7 @@ class _ThemeTile extends StatelessWidget {
     required this.mode,
     required this.selected,
     required this.onTap,
-    this.isSystemDark = false,
+    this.isSystemLight = false,
   });
 
   bool get _isSelected => selected == mode;
@@ -194,15 +141,14 @@ class _ThemeTile extends StatelessWidget {
         ? AppColors.primaryPurple
         : AppColors.primaryPurple.withValues(alpha: 0.4);
 
-    final radioBorderColor =
-        _isSelected ? AppColors.primaryPurple : AppColors.subtext(context);
+    final radioBorderColor = _isSelected
+        ? AppColors.primaryPurple
+        : AppColors.subtext(context);
 
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+      child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface(context),
           borderRadius: BorderRadius.circular(14),
@@ -218,9 +164,7 @@ class _ThemeTile extends StatelessWidget {
           child: Row(
             children: [
               // Icon box
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
+              Container(
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
@@ -238,9 +182,9 @@ class _ThemeTile extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(label,
-                            style: AppTextStyles.settingsItem(context)),
-                        if (isSystemDark) ...[
+                        Text(label, style: AppTextStyles.settingsItem(context)),
+                        // Show "Light" badge on the system tile
+                        if (isSystemLight) ...[
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -250,7 +194,7 @@ class _ThemeTile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
-                              'Dark',
+                              'Light',
                               style: AppTextStyles.bodySmall(context).copyWith(
                                 color: AppColors.primaryPurple,
                                 fontSize: 10,
@@ -268,9 +212,7 @@ class _ThemeTile extends StatelessWidget {
               ),
 
               // Radio circle
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
+              Container(
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
@@ -281,8 +223,11 @@ class _ThemeTile extends StatelessWidget {
                       : Colors.transparent,
                 ),
                 child: _isSelected
-                    ? const Icon(Icons.check_rounded,
-                        color: Colors.white, size: 13)
+                    ? const Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 13,
+                      )
                     : null,
               ),
             ],
