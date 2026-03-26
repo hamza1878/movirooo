@@ -430,6 +430,12 @@
   "ride_in_progress": "Viaje en curso",
   "trip_completed": "Viaje completado",
   "im_here": "Estoy aquí",
-  "pickup": "RECOGIDA",
-  "dropoff": "DESTINO"
+  "trip_completed_subtitle": "Ha llegado a su destino",
+  "rate_your_driver": "Califica a tu conductor",
+  "points_earned": "Puntos ganados",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "{pct}% para Moviroo Max",
+  "submit_rating": "Enviar valoración",
+  "report_a_problem": "Reportar un problema",
+  "arrived_at_label": "Llegó a las"
 }

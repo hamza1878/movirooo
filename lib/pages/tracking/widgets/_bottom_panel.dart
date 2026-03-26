@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_colors.dart';
+import '../../../../../theme/app_colors.dart';
 import '_driver_row.dart';
 import '_eta_row.dart';
 import '_im_here_button.dart';
-import '_pickup_drop_row.dart';
-import '_trip_summary_card.dart';
-import 'animated_progress_bar.dart';
-import 'ride_state.dart';
+import '../_pickup_drop_row.dart';
+import '../_trip_summary_card.dart';
+import '../animated_progress_bar.dart';
+import '../ride_state.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BottomPanel
@@ -99,9 +99,9 @@ class _BottomPanelState extends State<BottomPanel> {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.lightSurface,
+            color: AppColors.surface(context),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-            border: Border(top: BorderSide(color: AppColors.lightBorder)),
+            border: Border(top: BorderSide(color: AppColors.border(context))),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.07),
@@ -125,7 +125,7 @@ class _BottomPanelState extends State<BottomPanel> {
                     height: 4,
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: AppColors.lightBorder,
+                      color: AppColors.border(context),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),

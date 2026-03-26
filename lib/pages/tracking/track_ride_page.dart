@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
-import '_bottom_panel.dart';
+import 'widgets/_bottom_panel.dart';
 import '_trip_completed_overlay.dart';
 import 'ride_state.dart';
 
@@ -40,7 +40,6 @@ class _TrackRidePageState extends State<TrackRidePage>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     // Ticks progress from 0 → 0.95 over 30 s while on-the-way or in-progress.
     // Replace with real location data in production.
@@ -119,9 +118,11 @@ class _TrackRidePageState extends State<TrackRidePage>
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
+      value: Theme.of(context).brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       child: Scaffold(
-        backgroundColor: AppColors.lightBg,
+        backgroundColor: AppColors.bg(context),
         body: Stack(
           fit: StackFit.expand,
           children: [
@@ -160,14 +161,16 @@ class _TrackRidePageState extends State<TrackRidePage>
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.92),
+                          color: AppColors.surface(
+                            context,
+                          ).withValues(alpha: 0.92),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.lightBorder),
+                          border: Border.all(color: AppColors.border(context)),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: AppColors.lightText,
+                            color: AppColors.text(context),
                             size: 18,
                           ),
                         ),
@@ -188,13 +191,34 @@ class _TrackRidePageState extends State<TrackRidePage>
             // ─────────────────────────────────────────────────────────────
 
             // Full-page overlay when the trip is complete
-            if (_state.phase == RidePhase.rideEnded)
-              TripCompletedOverlay(
-                rideState: _state,
-                onContinue: () {
-                  if (Navigator.canPop(context)) Navigator.pop(context);
-                },
-              ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 480),
+              transitionBuilder: (child, animation) {
+                final curved = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOutQuart,
+                );
+                return FadeTransition(
+                  opacity: curved,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 0.06),
+                      end: Offset.zero,
+                    ).animate(curved),
+                    child: child,
+                  ),
+                );
+              },
+              child: _state.phase == RidePhase.rideEnded
+                  ? TripCompletedOverlay(
+                      key: const ValueKey('trip_completed'),
+                      rideState: _state,
+                      onContinue: () {
+                        if (Navigator.canPop(context)) Navigator.pop(context);
+                      },
+                    )
+                  : const SizedBox.shrink(key: ValueKey('empty')),
+            ),
           ],
         ),
       ),

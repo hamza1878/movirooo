@@ -209,6 +209,7 @@ class _AnimatedRideProgressBarState extends State<AnimatedRideProgressBar>
 
   @override
   Widget build(BuildContext context) {
+    final trackColor = AppColors.border(context);
     return AnimatedBuilder(
       animation: Listenable.merge([
         _shimmerAnim,
@@ -234,6 +235,7 @@ class _AnimatedRideProgressBarState extends State<AnimatedRideProgressBar>
                 glowOpacity: _showGlow ? _pulseAnim.value : 0,
                 flashOpacity: _flashAnim.value,
                 phase: widget.phase,
+                trackColor: trackColor,
               ),
               size: const Size(double.infinity, 6),
             ),
@@ -254,6 +256,7 @@ class _ProgressPainter extends CustomPainter {
   final double glowOpacity;
   final double flashOpacity;
   final RidePhase phase;
+  final Color trackColor;
 
   _ProgressPainter({
     required this.fillFraction,
@@ -261,6 +264,7 @@ class _ProgressPainter extends CustomPainter {
     required this.glowOpacity,
     required this.flashOpacity,
     required this.phase,
+    required this.trackColor,
   });
 
   static const _radius = Radius.circular(3);
@@ -277,7 +281,7 @@ class _ProgressPainter extends CustomPainter {
     final trackRRect = RRect.fromRectAndRadius(trackRect, _radius);
 
     // Track background
-    canvas.drawRRect(trackRRect, Paint()..color = AppColors.lightBorder);
+    canvas.drawRRect(trackRRect, Paint()..color = trackColor);
 
     if (fillFraction <= 0) return;
 
@@ -351,5 +355,6 @@ class _ProgressPainter extends CustomPainter {
       old.shimmerPosition != shimmerPosition ||
       old.glowOpacity != glowOpacity ||
       old.flashOpacity != flashOpacity ||
-      old.phase != phase;
+      old.phase != phase ||
+      old.trackColor != trackColor;
 }

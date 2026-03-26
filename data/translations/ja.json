@@ -430,6 +430,12 @@
   "ride_in_progress": "乗車中",
   "trip_completed": "旅程が完了しました",
   "im_here": "ここにいます",
-  "pickup": "乗車地点",
-  "dropoff": "降車地点"
+  "trip_completed_subtitle": "目的地に到着しました",
+  "rate_your_driver": "ドライバーを評価する",
+  "points_earned": "獲得ポイント",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "Moviroo Maxまで{pct}%",
+  "submit_rating": "評価を送信",
+  "report_a_problem": "問題を報告",
+  "arrived_at_label": "到着時刻"
 }

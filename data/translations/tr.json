@@ -430,6 +430,12 @@
   "ride_in_progress": "Yolculuk devam ediyor",
   "trip_completed": "Yolculuk tamamlandı",
   "im_here": "Buradayım",
-  "pickup": "KALKIS",
-  "dropoff": "VARIS"
+  "trip_completed_subtitle": "Hedefinize ulaştınız",
+  "rate_your_driver": "Sürücünüzü değerlendirin",
+  "points_earned": "Kazanılan puanlar",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "Moviroo Max'a {pct}%",
+  "submit_rating": "Değerlendirmeyi gönder",
+  "report_a_problem": "Sorun bildir",
+  "arrived_at_label": "Varış saati"
 }

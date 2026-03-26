@@ -430,6 +430,12 @@
   "ride_in_progress": "行程进行中",
   "trip_completed": "行程已完成",
   "im_here": "我到了",
-  "pickup": "出发地",
-  "dropoff": "目的地"
+  "trip_completed_subtitle": "您已到达目的地",
+  "rate_your_driver": "评价您的司机",
+  "points_earned": "获得积分",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "{pct}% 至 Moviroo Max",
+  "submit_rating": "提交评价",
+  "report_a_problem": "报告问题",
+  "arrived_at_label": "到达时间"
 }

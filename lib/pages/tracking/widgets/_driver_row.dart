@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_colors.dart';
+import '../../../../../theme/app_colors.dart';
 
 /// A row showing driver avatar, name, vehicle, plate number, and action buttons.
 ///
@@ -46,7 +46,7 @@ class DriverRow extends StatelessWidget {
               color: AppColors.primaryPurple.withValues(alpha: 0.35),
               width: 2,
             ),
-            color: AppColors.iconBgLight,
+            color: AppColors.iconBg(context),
           ),
           child: ClipOval(
             child: Icon(
@@ -65,20 +65,20 @@ class DriverRow extends StatelessWidget {
             children: [
               Text(
                 driverName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.lightText,
+                  color: AppColors.text(context),
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 vehicleName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 12,
-                  color: AppColors.lightSubtext,
+                  color: AppColors.subtext(context),
                 ),
               ),
               if (plateNumber != null) ...[
@@ -136,7 +136,7 @@ class _ActionButton extends StatelessWidget {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: AppColors.lightBorder,
+          color: AppColors.border(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: AppColors.primaryPurple.withValues(alpha: 0.3),

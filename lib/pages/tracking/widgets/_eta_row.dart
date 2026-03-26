@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../theme/app_colors.dart';
-import 'ride_state.dart';
+import '../../../../../l10n/app_localizations.dart';
+import '../../../../../theme/app_colors.dart';
+import '../ride_state.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ETA / headline row
@@ -24,13 +24,13 @@ class EtaRow extends StatelessWidget {
     }
   }
 
-  Color _headlineColor(RidePhase phase) {
+  Color _headlineColor(RidePhase phase, BuildContext context) {
     switch (phase) {
       case RidePhase.driverArrived:
       case RidePhase.rideEnded:
         return const Color(0xFF4ADE80);
       default:
-        return AppColors.lightText;
+        return AppColors.text(context);
     }
   }
 
@@ -65,7 +65,7 @@ class EtaRow extends StatelessWidget {
                     fontFamily: 'Inter',
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
-                    color: _headlineColor(phase),
+                    color: _headlineColor(phase, context),
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -88,10 +88,10 @@ class EtaRow extends StatelessWidget {
                             .replaceAll('{time}', rideState.arrivalTime)
                             .replaceAll('{distance}', rideState.distanceLeft)
                       : '',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 13,
-                    color: AppColors.lightSubtext,
+                    color: AppColors.subtext(context),
                   ),
                 ),
               ),

@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../theme/app_colors.dart';
 import 'ride_state.dart';
 
-// -----------------------------------------------------------------------------
-// Full-page trip-completed overlay � light mode, no scroll
-// -----------------------------------------------------------------------------
-
-class TripCompletedOverlay extends StatefulWidget {
+class TripCompletedOverlay extends StatelessWidget {
   final RideState rideState;
   final VoidCallback onContinue;
 
@@ -17,311 +13,35 @@ class TripCompletedOverlay extends StatefulWidget {
     required this.onContinue,
   });
 
-  @override
-  State<TripCompletedOverlay> createState() => _TripCompletedOverlayState();
-}
-
-class _TripCompletedOverlayState extends State<TripCompletedOverlay> {
-  int _rating = 0;
+  static const _purple = AppColors.primaryPurple;
+  static const _green = Color(0xFF16A34A);
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    const green  = Color(0xFF16A34A);
-    const amber  = Color(0xFFD97706);
-    const purple = AppColors.primaryPurple;
-
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 420),
-      curve: Curves.easeOutCubic,
-      builder: (_, t, child) => Opacity(
-        opacity: t,
-        child: Transform.translate(
-          offset: Offset(0, 32 * (1 - t)),
-          child: child,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.lightBg,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(flex: 2),
-
-                // -- Animated check icon -----------------------------------
-                Center(
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 700),
-                    curve: Curves.elasticOut,
-                    builder: (_, v, child) =>
-                        Transform.scale(scale: v, child: child),
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFDCFCE7),
-                        border: Border.all(
-                          color: green.withValues(alpha: 0.4),
-                          width: 2,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.check_rounded,
-                        color: green,
-                        size: 44,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                // -- Title -------------------------------------------------
-                Text(
-                  l10n.translate('trip_completed'),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.lightText,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'You have arrived at your destination',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 13,
-                    color: AppColors.lightSubtext,
-                  ),
-                ),
-
-                const Spacer(flex: 2),
-
-                // -- Stats row ---------------------------------------------
-                Row(
-                  children: [
-                    Expanded(
-                      child: _StatChip(
-                        icon: Icons.route_rounded,
-                        label: 'Distance',
-                        value: widget.rideState.distanceLeft,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _StatChip(
-                        icon: Icons.schedule_rounded,
-                        label: 'Arrived at',
-                        value: widget.rideState.arrivalTime,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 10),
-
-                // -- Driver card -------------------------------------------
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppColors.lightSurface,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppColors.lightBorder),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.iconBgLight,
-                          border: Border.all(
-                            color: purple.withValues(alpha: 0.35),
-                            width: 2,
-                          ),
-                        ),
-                        child: ClipOval(
-                          child: Icon(
-                            Icons.person_rounded,
-                            color: purple,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.rideState.driverName,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.lightText,
-                              ),
-                            ),
-                            Text(
-                              widget.rideState.vehicleName,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 11,
-                                color: AppColors.lightSubtext,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(5, (i) {
-                          return GestureDetector(
-                            onTap: () => setState(() => _rating = i + 1),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 3),
-                              child: Icon(
-                                i < _rating
-                                    ? Icons.star_rounded
-                                    : Icons.star_outline_rounded,
-                                color: i < _rating
-                                    ? amber
-                                    : const Color(0xFFD1D5DB),
-                                size: 24,
-                              ),
-                            ),
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                // -- Route card --------------------------------------------
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.lightSurface,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppColors.lightBorder),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: purple,
-                            ),
-                          ),
-                          Container(
-                            width: 1.5,
-                            height: 26,
-                            color: AppColors.lightBorder,
-                          ),
-                          Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: amber, width: 2),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _AddressLine(
-                              label: 'PICKUP',
-                              address: widget.rideState.pickupAddress.isNotEmpty
-                                  ? widget.rideState.pickupAddress
-                                  : 'Pickup location',
-                              labelColor: purple,
-                            ),
-                            const SizedBox(height: 8),
-                            _AddressLine(
-                              label: 'DROP-OFF',
-                              address: widget.rideState.dropoffAddress.isNotEmpty
-                                  ? widget.rideState.dropoffAddress
-                                  : 'Drop-off location',
-                              labelColor: amber,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const Spacer(flex: 2),
-
-                // -- Continue button ---------------------------------------
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: widget.onContinue,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: purple,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: Text(
-                      l10n.translate('continue'),
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const Spacer(flex: 1),
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: AppColors.bg(context),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Header(green: _green),
+              const SizedBox(height: 10),
+              _TripRouteCard(rideState: rideState),
+              const SizedBox(height: 8),
+              _TripDetailsRow(rideState: rideState),
+              const SizedBox(height: 8),
+              _DriverRatingCard(
+                driverName: rideState.driverName,
+                vehicleName: rideState.vehicleName,
+              ),
+              const SizedBox(height: 8),
+              _RewardsCard(purple: _purple),
+              const SizedBox(height: 16),
+              _ActionsSection(purple: _purple, onContinue: onContinue),
+              const SizedBox(height: 8),
+            ],
           ),
         ),
       ),
@@ -329,17 +49,556 @@ class _TripCompletedOverlayState extends State<TripCompletedOverlay> {
   }
 }
 
-// -----------------------------------------------------------------------------
+// ─── Header ───────────────────────────────────────────────────────────────────
 
-class _StatChip extends StatelessWidget {
+class _Header extends StatelessWidget {
+  final Color green;
+  const _Header({required this.green});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 68,
+          height: 68,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFFDCFCE7),
+            border: Border.all(color: green.withValues(alpha: 0.4), width: 2),
+          ),
+          child: Icon(Icons.check_rounded, color: green, size: 36),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          l10n.translate('trip_completed'),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: AppColors.text(context),
+            letterSpacing: -0.4,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          l10n.translate('trip_completed_subtitle'),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 12,
+            color: AppColors.subtext(context),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Trip route (pickup → drop-off) ──────────────────────────────────────────
+
+class _TripRouteCard extends StatelessWidget {
+  final RideState rideState;
+  const _TripRouteCard({required this.rideState});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    const purple = AppColors.primaryPurple;
+    final pickup = rideState.pickupAddress.isNotEmpty
+        ? rideState.pickupAddress
+        : 'Pickup location';
+    final dropoff = rideState.dropoffAddress.isNotEmpty
+        ? rideState.dropoffAddress
+        : 'Drop-off location';
+    final arrivalTime = rideState.arrivalTime.isNotEmpty
+        ? rideState.arrivalTime
+        : '—';
+
+    return _Card(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Timeline indicator
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 12,
+                height: 12,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: purple,
+                ),
+              ),
+              Container(width: 2, height: 34, color: AppColors.border(context)),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: purple, width: 2),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _RouteStop(label: l10n.translate('pickup'), address: pickup),
+                const SizedBox(height: 14),
+                _RouteStop(label: l10n.translate('dropoff'), address: dropoff),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Trip details chips (duration + distance) ─────────────────────────────────
+
+class _TripDetailsRow extends StatelessWidget {
+  final RideState rideState;
+  const _TripDetailsRow({required this.rideState});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    const purple = AppColors.primaryPurple;
+    final distance = rideState.distanceLeft.isNotEmpty
+        ? rideState.distanceLeft
+        : '—';
+    return Row(
+      children: [
+        Expanded(
+          child: _Chip(
+            icon: Icons.timer_outlined,
+            label: l10n.translate('duration'),
+            value: '27 min',
+            color: purple,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: _Chip(
+            icon: Icons.route_rounded,
+            label: l10n.translate('distance'),
+            value: distance,
+            color: purple,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Driver + Rating card (combined) ─────────────────────────────────────────
+
+class _DriverRatingCard extends StatefulWidget {
+  final String driverName;
+  final String vehicleName;
+  const _DriverRatingCard({
+    required this.driverName,
+    required this.vehicleName,
+  });
+
+  @override
+  State<_DriverRatingCard> createState() => _DriverRatingCardState();
+}
+
+class _DriverRatingCardState extends State<_DriverRatingCard> {
+  int _rating = 0;
+  static const _purple = AppColors.primaryPurple;
+  static const _gold = Color(0xFFFFB800);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return _Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Driver info row
+          Row(
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.iconBg(context),
+                  border: Border.all(
+                    color: _purple.withValues(alpha: 0.35),
+                    width: 2,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.person_rounded,
+                  color: _purple,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.driverName.isNotEmpty
+                                ? widget.driverName
+                                : 'Driver',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.text(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        const Icon(Icons.star_rounded, color: _gold, size: 14),
+                        const SizedBox(width: 3),
+                        Text(
+                          '4.9',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.text(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.vehicleName.isNotEmpty
+                          ? widget.vehicleName
+                          : 'Vehicle',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        color: AppColors.subtext(context),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Divider(height: 1, color: AppColors.border(context)),
+          const SizedBox(height: 12),
+          // Rating label + stars
+          Center(
+            child: Text(
+              l10n.translate('rate_your_driver'),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.text(context),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (i) {
+              return GestureDetector(
+                onTap: () => setState(() => _rating = i + 1),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 150),
+                    transitionBuilder: (child, anim) =>
+                        ScaleTransition(scale: anim, child: child),
+                    child: Icon(
+                      key: ValueKey(i < _rating),
+                      i < _rating
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
+                      color: i < _rating ? _gold : const Color(0xFFD1D5DB),
+                      size: 34,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Rewards card ─────────────────────────────────────────────────────────────
+
+class _RewardsCard extends StatelessWidget {
+  final Color purple;
+  const _RewardsCard({required this.purple});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    const double progress = 0.40;
+    return _Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: purple.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.emoji_events_rounded,
+                  color: purple,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.translate('points_earned'),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      color: AppColors.subtext(context),
+                    ),
+                  ),
+                  Text(
+                    '+50 points',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: purple,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                l10n.translate('moviroo_tier_go'),
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.text(context),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.0, end: progress),
+              duration: const Duration(milliseconds: 900),
+              curve: Curves.easeOutCubic,
+              builder: (_, value, __) => LinearProgressIndicator(
+                value: value,
+                minHeight: 7,
+                backgroundColor: AppColors.border(context),
+                valueColor: AlwaysStoppedAnimation<Color>(purple),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              l10n
+                  .translate('pct_to_moviroo_max')
+                  .replaceAll('{pct}', '${(progress * 100).toInt()}'),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 10,
+                color: AppColors.subtext(context),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
+
+class _ActionsSection extends StatelessWidget {
+  final Color purple;
+  final VoidCallback onContinue;
+  const _ActionsSection({required this.purple, required this.onContinue});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton(
+            onPressed: onContinue,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: purple,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: Text(
+              l10n.translate('submit_rating'),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          height: 46,
+          child: OutlinedButton(
+            onPressed: () {},
+            style: OutlinedButton.styleFrom(
+              foregroundColor: purple,
+              side: BorderSide(color: purple),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ImageIcon(
+                  const AssetImage('images/icons/warning.png'),
+                  size: 18,
+                  color: purple,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  l10n.translate('report_a_problem'),
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Shared card ──────────────────────────────────────────────────────────────
+
+class _Card extends StatelessWidget {
+  final Widget child;
+  const _Card({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface(context),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border(context)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+}
+
+// ─── Route stop row ───────────────────────────────────────────────────────────
+
+// --- Route stop row ---
+
+class _RouteStop extends StatelessWidget {
+  final String label;
+  final String address;
+  const _RouteStop({required this.label, required this.address});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            color: AppColors.primaryPurple,
+            letterSpacing: 0.8,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          address,
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.text(context),
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Detail chip ──────────────────────────────────────────────────────────────
+
+class _Chip extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
-  const _StatChip({
-    super.key,
+  final Color color;
+  const _Chip({
     required this.icon,
     required this.label,
     required this.value,
+    required this.color,
   });
 
   @override
@@ -347,9 +606,9 @@ class _StatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.border(context)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -364,30 +623,30 @@ class _StatChip extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: AppColors.iconBgLight,
-              borderRadius: BorderRadius.circular(9),
+              color: color.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppColors.primaryPurple, size: 17),
+            child: Icon(icon, color: color, size: 18),
           ),
-          const SizedBox(width: 9),
+          const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.lightText,
+                  color: AppColors.text(context),
                 ),
               ),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 10,
-                  color: AppColors.lightSubtext,
+                  color: AppColors.subtext(context),
                 ),
               ),
             ],
@@ -396,68 +655,4 @@ class _StatChip extends StatelessWidget {
       ),
     );
   }
-}
-
-// -----------------------------------------------------------------------------
-
-class _AddressLine extends StatelessWidget {
-  final String label;
-  final String address;
-  final Color labelColor;
-  const _AddressLine({
-    super.key,
-    required this.label,
-    required this.address,
-    required this.labelColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 9,
-            fontWeight: FontWeight.w700,
-            color: labelColor,
-            letterSpacing: 0.8,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          address,
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.lightText,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
-  }
-}
-
-// Aliases for any external callers
-class OverlayStatChip extends _StatChip {
-  const OverlayStatChip({
-    super.key,
-    required super.icon,
-    required super.label,
-    required super.value,
-  });
-}
-
-class LocationLine extends _AddressLine {
-  const LocationLine({
-    super.key,
-    required super.label,
-    required super.address,
-    required super.labelColor,
-  });
 }

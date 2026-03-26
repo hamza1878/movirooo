@@ -430,6 +430,12 @@
   "ride_in_progress": "Поездка в процессе",
   "trip_completed": "Поездка завершена",
   "im_here": "Я здесь",
-  "pickup": "ОТПРАВЛЕНИЕ",
-  "dropoff": "НАЗНАЧЕНИЕ"
+  "trip_completed_subtitle": "Вы прибыли к месту назначения",
+  "rate_your_driver": "Оцените водителя",
+  "points_earned": "Заработанные очки",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "{pct}% до Moviroo Max",
+  "submit_rating": "Отправить оценку",
+  "report_a_problem": "Сообщить о проблеме",
+  "arrived_at_label": "Прибыл в"
 }

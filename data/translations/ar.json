@@ -427,6 +427,12 @@
   "ride_in_progress": "الرحلة جارية",
   "trip_completed": "اكتملت الرحلة",
   "im_here": "أنا هنا",
-  "pickup": "نقطة الركوب",
-  "dropoff": "نقطة النزول"
+  "trip_completed_subtitle": "لقد وصلت إلى وجهتك",
+  "rate_your_driver": "قيّم سائقك",
+  "points_earned": "النقاط المكتسبة",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "{pct}% نحو Moviroo Max",
+  "submit_rating": "إرسال التقييم",
+  "report_a_problem": "الإبلاغ عن مشكلة",
+  "arrived_at_label": "وصل في"
 }

@@ -430,6 +430,12 @@
   "ride_in_progress": "Ride in progress",
   "trip_completed": "Trip completed",
   "im_here": "I'm Here",
-  "pickup": "PICK UP",
-  "dropoff": "DROP OFF"
+  "trip_completed_subtitle": "You've arrived at your destination",
+  "rate_your_driver": "Rate your driver",
+  "points_earned": "Points Earned",
+  "moviroo_tier_go": "Moviroo GO",
+  "pct_to_moviroo_max": "{pct}% to Moviroo Max",
+  "submit_rating": "Submit Rating",
+  "report_a_problem": "Report a Problem",
+  "arrived_at_label": "Arrived at"
 }

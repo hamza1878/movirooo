@@ -25,9 +25,9 @@ class PickupDropRow extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.border(context)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,9 @@ class PickupDropRow extends StatelessWidget {
                   width: 2,
                   height: 40,
                   child: CustomPaint(
-                    painter: DashedLinePainter(color: AppColors.lightBorder),
+                    painter: DashedLinePainter(
+                      color: AppColors.border(context),
+                    ),
                   ),
                 ),
                 Container(
@@ -85,11 +87,11 @@ class PickupDropRow extends StatelessWidget {
                 const SizedBox(height: 1),
                 Text(
                   pickupLabel,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.lightText,
+                    color: AppColors.text(context),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -108,11 +110,11 @@ class PickupDropRow extends StatelessWidget {
                 const SizedBox(height: 1),
                 Text(
                   dropLabel,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.lightText,
+                    color: AppColors.text(context),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

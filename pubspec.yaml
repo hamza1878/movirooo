@@ -95,6 +95,7 @@ flutter:
     - images/flags/russia.png
     - images/icons/chat.png
     - images/icons/phone-call.png
+    - images/icons/warning.png
     - data/privacy/privacy_patch_en.json
     - data/privacy/privacy_patch_fr.json
     - data/privacy/privacy_patch_ar.json

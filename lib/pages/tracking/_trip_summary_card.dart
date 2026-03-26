@@ -65,7 +65,7 @@ class _TripSummaryCardState extends State<TripSummaryCard> {
               child: TripStatChip(
                 icon: Icons.straighten_rounded,
                 value: widget.rideState.distanceLeft,
-                label: 'Distance',
+                label: l10n.translate('distance'),
               ),
             ),
             const SizedBox(width: 12),
@@ -73,14 +73,14 @@ class _TripSummaryCardState extends State<TripSummaryCard> {
               child: TripStatChip(
                 icon: Icons.access_time_rounded,
                 value: widget.rideState.arrivalTime,
-                label: 'Arrived at',
+                label: l10n.translate('arrived_at_label'),
               ),
             ),
           ],
         ),
 
         const SizedBox(height: 20),
-        Divider(color: AppColors.lightBorder),
+        Divider(color: AppColors.border(context)),
         const SizedBox(height: 16),
 
         // Driver + rating
@@ -96,7 +96,7 @@ class _TripSummaryCardState extends State<TripSummaryCard> {
                   color: AppColors.primaryPurple.withValues(alpha: 0.35),
                   width: 2,
                 ),
-                color: AppColors.iconBgLight,
+                color: AppColors.iconBg(context),
               ),
               child: ClipOval(
                 child: Icon(
@@ -113,20 +113,20 @@ class _TripSummaryCardState extends State<TripSummaryCard> {
                 children: [
                   Text(
                     widget.rideState.driverName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.lightText,
+                      color: AppColors.text(context),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Rate your driver',
-                    style: const TextStyle(
+                    l10n.translate('rate_your_driver'),
+                    style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
-                      color: AppColors.lightSubtext,
+                      color: AppColors.subtext(context),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -156,7 +156,7 @@ class _TripSummaryCardState extends State<TripSummaryCard> {
         ),
 
         const SizedBox(height: 16),
-        Divider(color: AppColors.lightBorder),
+        Divider(color: AppColors.border(context)),
         const SizedBox(height: 16),
 
         PickupDropRow(
@@ -216,9 +216,9 @@ class TripStatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.border(context)),
       ),
       child: Row(
         children: [
@@ -229,11 +229,11 @@ class TripStatChip extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: AppColors.text(context),
                 ),
               ),
               Text(
@@ -241,7 +241,7 @@ class TripStatChip extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
-                  color: AppColors.lightSubtext,
+                  color: AppColors.subtext(context),
                 ),
               ),
             ],
