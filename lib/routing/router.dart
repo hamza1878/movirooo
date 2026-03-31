@@ -60,7 +60,7 @@ class AppRouter {
         support:                    (_) => const SupportPage(),
         profile:                    (_) => const SettingsPage(),
         nextDestinationSearchRoute: (_) => const LocationScreen(),
-        mapEtaPage:                 (_) => const MapEtaPage(),
+        mapEtaPage:                 (_) => const MapPreviewWidget(),
         trajet:                     (_) => const TrajetPage(),
         membre:                     (_) => const MembrePassScreen(),
         trackRide:                  (_) => const TrackRidePage(),

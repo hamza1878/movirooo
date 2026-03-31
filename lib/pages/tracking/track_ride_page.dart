@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moviroo/pages/tracking/MapPreview.dart';
 import '../../../../theme/app_colors.dart';
 import 'widgets/_bottom_panel.dart';
 import '_trip_completed_overlay.dart';
@@ -127,8 +128,7 @@ class _TrackRidePageState extends State<TrackRidePage>
           fit: StackFit.expand,
           children: [
             // Map placeholder — replace with your map widget
-            Container(color: const Color(0xFFE8EEF5)),
-
+            MapPreviewWidget(),
             // Bottom sheet
             BottomPanel(
               rideState: _state,
