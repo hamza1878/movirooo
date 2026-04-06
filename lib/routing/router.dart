@@ -6,6 +6,7 @@ import 'package:moviroo/pages/chat/chat_page.dart';
 import 'package:moviroo/pages/map_eta/map_eta_page.dart';
 import 'package:moviroo/pages/booking/payment/payment_success/payment_success_page.dart';
 import 'package:moviroo/pages/search/location_screen.dart';
+import 'package:moviroo/pages/tabs%20%5Bpassenger%5D/home/ai_assistant/ai_assistant_page.dart';
 import 'package:moviroo/pages/tracking/track_ride_page.dart';
 
 import '../pages/onboarding/onboarding_page.dart';
@@ -41,7 +42,7 @@ class AppRouter {
   static const String rideDetails                = '/ride-details';
   static const String trajet                     = '/trajet';
   static const String membre                     = '/membre';
-
+  static const String aiAssistant                = '/ai-assistant';
   static const String initialRoute = home;
 
   static Map<String, WidgetBuilder> get routes => {
@@ -64,6 +65,7 @@ class AppRouter {
         trajet:                     (_) => const TrajetPage(),
         membre:                     (_) => const MembrePassScreen(),
         trackRide:                  (_) => const TrackRidePage(),
+        aiAssistant:                (_) => const AiAssistantPage(),
       };
 
   static Future<T?> push<T>(BuildContext context, String routeName,

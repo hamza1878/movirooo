@@ -70,8 +70,10 @@ class _MapPreviewWidgetState extends State<MapPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
 
+    // ✅ Une seule URL de tuiles OSM (sans subdomains, sans placeholders custom)
+    // Le filtre violet est appliqué via tileBuilder en dark mode
+    const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: Container(
@@ -170,7 +172,7 @@ const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
                       height: 44,
                       child: MapMarker(
                         icon: Icons.circle,
-                        color: Colors.white,
+                        color: const Color.fromARGB(255, 8, 184, 37),
                         isDark: isDark,
                       ),
                     ),

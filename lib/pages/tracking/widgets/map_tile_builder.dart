@@ -7,13 +7,28 @@ Widget darkModeTileBuilder(
   TileImage tile,
 ) {
   return ColorFiltered(
-    colorFilter:const ColorFilter.matrix([
-  0.10, 0.00, 0.20, 0.00, 0, // Red
-  0.00, 0.10, 0.30, 0.00, 0, // Green
-  0.10, 0.10, 0.80, 0.00, 0, // Blue 🔥
-  0.00, 0.00, 0.00, 1.00, 0, // Alpha
-]),
-    
+    colorFilter: const ColorFilter.matrix(<double>[
+      0.15,
+      0.00,
+      0.25,
+      0.00,
+      0,
+      0.05,
+      0.05,
+      0.20,
+      0.00,
+      0,
+      0.20,
+      0.05,
+      0.45,
+      0.00,
+      0,
+      0.00,
+      0.00,
+      0.00,
+      1.00,
+      0,
+    ]),
     child: tileWidget,
   );
 }

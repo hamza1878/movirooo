@@ -54,7 +54,7 @@ class MapMarker extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white.withOpacity(0.25),
+            color: const Color.fromARGB(255, 9, 120, 1).withOpacity(0.25),
           ),
         ),
         Container(
@@ -62,7 +62,7 @@ class MapMarker extends StatelessWidget {
           height: 12,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white,
+            color: Color.fromARGB(255, 1, 117, 18),
           ),
         ),
       ],
