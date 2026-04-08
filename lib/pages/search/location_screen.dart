@@ -32,7 +32,6 @@ class _LocationScreenState extends State<LocationScreen>
   DateTime _pickedDate = DateTime.now();
   TimeOfDay? _pickedTime;
 
-  // ← typed as String? so null subtitle is valid
   final _riders = <Map<String, String?>>[
     {'name': 'Me', 'subtitle': null},
     {'name': 'Youssef', 'subtitle': '+216 22 333 444'},

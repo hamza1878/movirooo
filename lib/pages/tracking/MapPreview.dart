@@ -71,8 +71,6 @@ class _MapPreviewWidgetState extends State<MapPreviewWidget> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // ✅ Une seule URL de tuiles OSM (sans subdomains, sans placeholders custom)
-    // Le filtre violet est appliqué via tileBuilder en dark mode
     const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
