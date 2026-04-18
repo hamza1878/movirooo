@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.example.moviroo"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.3.13750724" // matches your downloaded NDK r27d
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

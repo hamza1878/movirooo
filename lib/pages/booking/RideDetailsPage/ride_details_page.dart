@@ -56,7 +56,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
-
     return Scaffold(
       backgroundColor: AppColors.bg(context),
       body: SafeArea(

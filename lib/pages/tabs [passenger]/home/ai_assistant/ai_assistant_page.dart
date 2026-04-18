@@ -13,30 +13,33 @@ import 'transcript_card_widget.dart';
 import 'waveform_widget.dart';
 
 class AiAssistantPage extends StatefulWidget {
-  const AiAssistantPage({super.key});
-
+ 
+ final String language;
+ 
+  const AiAssistantPage({super.key, this.language = 'FR',});
   @override
   State<AiAssistantPage> createState() => _AiAssistantPageState();
 }
 
 class _AiAssistantPageState extends State<AiAssistantPage> {
-  final _ctrl = AiAssistantController();
+  late final AiAssistantController _ctrl;
 
-  @override
+@override
   void initState() {
     super.initState();
+    _ctrl = AiAssistantController(language: widget.language);
+    _ctrl.attachToContext(context); // ✅ Attachement sécurisé
     _ctrl.addListener(_rebuild);
   }
-
   void _rebuild() => setState(() {});
 
-  @override
+@override
   void dispose() {
     _ctrl.removeListener(_rebuild);
+    _ctrl.detachFromContext(); // ✅ Détachement explicite
     _ctrl.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final model = _ctrl.model;

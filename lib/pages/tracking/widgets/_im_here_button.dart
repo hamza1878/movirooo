@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../l10n/app_localizations.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// "I'm Here" CTA — shown only during driverArrived phase
-// ─────────────────────────────────────────────────────────────────────────────
 
 class ImHereButton extends StatelessWidget {
   final VoidCallback onTap;

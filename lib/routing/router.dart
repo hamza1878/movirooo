@@ -8,6 +8,10 @@ import 'package:moviroo/pages/booking/payment/payment_success/payment_success_pa
 import 'package:moviroo/pages/search/location_screen.dart';
 import 'package:moviroo/pages/tabs%20%5Bpassenger%5D/home/ai_assistant/ai_assistant_page.dart';
 import 'package:moviroo/pages/tracking/track_ride_page.dart';
+import 'package:moviroo/pages/voice_assistant_screen.dart';
+import 'package:moviroo/screens/navigation_screen.dart';
+
+// ✅ Voice Navigation import
 
 import '../pages/onboarding/onboarding_page.dart';
 import '../pages/auth/login_page.dart';
@@ -43,7 +47,13 @@ class AppRouter {
   static const String trajet                     = '/trajet';
   static const String membre                     = '/membre';
   static const String aiAssistant                = '/ai-assistant';
-  static const String initialRoute = home;
+  static const String dialog                     = '/dialog';
+
+  // ✅ Nouvelle route Voice Navigation
+  static const String voiceNavigation            = '/voice-navigation';
+  static const String VoiceAssistant      = '/voice-assistant';
+  // ✅ Corrigé : initialRoute est une String, pas une classe
+  static const String initialRoute               = VoiceAssistant;
 
   static Map<String, WidgetBuilder> get routes => {
         splash:                     (_) => const SplashPage(),
@@ -65,8 +75,14 @@ class AppRouter {
         trajet:                     (_) => const TrajetPage(),
         membre:                     (_) => const MembrePassScreen(),
         trackRide:                  (_) => const TrackRidePage(),
-        aiAssistant:                (_) => const AiAssistantPage(),
+        aiAssistant:                (_) => const AiAssistantPage(language: 'FR'),
+
+        // ✅ Voice Navigation
+        voiceNavigation:            (_) => const NavigationScreen(),
+        VoiceAssistant:      (_) => const VoiceAssistantScreen(),
       };
+
+  // ─── Navigation helpers ───────────────────────────────────────
 
   static Future<T?> push<T>(BuildContext context, String routeName,
       {Object? args}) {
@@ -81,9 +97,12 @@ class AppRouter {
 
   static Future<T?> clearAndGo<T>(BuildContext context, String routeName,
       {Object? args}) {
-    return Navigator.pushNamedAndRemoveUntil<T>(context, routeName,
-        (_) => false,
-        arguments: args);
+    return Navigator.pushNamedAndRemoveUntil<T>(
+      context,
+      routeName,
+      (_) => false,
+      arguments: args,
+    );
   }
 
   static void pop(BuildContext context, [dynamic result]) {

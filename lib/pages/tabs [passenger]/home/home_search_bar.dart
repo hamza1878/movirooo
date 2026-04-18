@@ -43,11 +43,14 @@ class HomeSearchBar extends StatelessWidget {
               ),
             ),
             
-      GestureDetector(
+   GestureDetector(
   onTap: () {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const AiAssistantPage()),
+      MaterialPageRoute(builder: (_) => const AiAssistantPage(
+        language: 'FR',
+        // ✅ Plus besoin de navigatorKey
+      )),
     );
   },
   child: Container(

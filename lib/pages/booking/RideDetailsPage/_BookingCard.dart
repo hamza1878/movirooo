@@ -3,15 +3,16 @@ import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_text_styles.dart';
 import '../../../../l10n/app_localizations.dart';
-
+// ignore: unused_import
+import 'package:flutter_localizations/flutter_localizations.dart';
+// ignore: duplicate_import
+import '../../../l10n/app_localizations.dart';
 class BookingCard extends StatelessWidget {
-  const BookingCard({super.key});
+  const BookingCard({super.key,});
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
-
-    return Column(
+final t = AppLocalizations.of(context);    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
