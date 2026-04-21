@@ -1,0 +1,177 @@
+import 'package:flutter/material.dart';
+import 'package:moviroo/routing/router.dart';
+import '../../../../theme/app_colors.dart';
+import '../../../../theme/app_text_styles.dart';
+import '../../../../l10n/app_localizations.dart';
+import '_PaymentSummaryCard.dart';
+import '_SavedCardSection.dart';
+import '_NewCardForm.dart';
+
+class PaymentPage extends StatefulWidget {
+  const PaymentPage({super.key});
+
+  @override
+  State<PaymentPage> createState() => _PaymentPageState();
+}
+
+class _PaymentPageState extends State<PaymentPage> {
+  bool _hasSavedCard = true;
+  bool _useNewCard   = false;
+
+  final _savedCardKey = GlobalKey<SavedCardSectionState>();
+  final _newCardKey   = GlobalKey<NewCardFormState>();
+
+  void _goBack() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacementNamed(context, AppRouter.booking);
+    }
+  }
+
+  void _onPay() {
+    bool valid = false;
+    if (_hasSavedCard && !_useNewCard) {
+      valid = _savedCardKey.currentState?.validate() ?? false;
+    } else {
+      valid = _newCardKey.currentState?.validate() ?? false;
+    }
+    if (!valid) return;
+    AppRouter.push(context, AppRouter.paymentSuccess);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
+    return Scaffold(
+      backgroundColor: AppColors.bg(context),
+      body: SafeArea(
+        child: Column(
+          children: [
+
+            // ── Top bar ────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: _goBack,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface(context),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(Icons.arrow_back_ios_new_rounded,
+                          size: 17, color: AppColors.text(context)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        t.translate('payment'),
+                        style: AppTextStyles.bodyLarge(context).copyWith(
+                            fontWeight: FontWeight.w800, fontSize: 18),
+                      ),
+                      Text(
+                        t.translate('booking_ref'),
+                        style: AppTextStyles.bodySmall(context).copyWith(
+                            color: AppColors.subtext(context)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // ── Scrollable content ─────────────────────────────
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                child: Column(
+                  children: [
+                    const PaymentSummaryCard(),
+                    const SizedBox(height: 16),
+
+                    if (_hasSavedCard && !_useNewCard) ...[
+                      SavedCardSection(
+                        key: _savedCardKey,
+                        onUseNewCard: () =>
+                            setState(() => _useNewCard = true),
+                      ),
+                    ] else ...[
+                      NewCardForm(
+                        key: _newCardKey,
+                        onBackToSaved: _hasSavedCard
+                            ? () => setState(() => _useNewCard = false)
+                            : null,
+                        onSaved: () => setState(() {
+                          _hasSavedCard = true;
+                          _useNewCard   = false;
+                        }),
+                      ),
+                    ],
+
+                    const SizedBox(height: 12),
+
+                    // ── Security note ──────────────────────────
+                    Row(
+                      children: [
+                        Icon(Icons.lock_outline_rounded,
+                            size: 14, color: AppColors.subtext(context)),
+                        const SizedBox(width: 6),
+                        Text(
+                          t.translate('secured_encryption'),
+                          style: AppTextStyles.bodySmall(context).copyWith(
+                              color: AppColors.subtext(context)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Pay button ─────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: _onPay,
+                  icon: const Icon(Icons.credit_card_outlined, size: 20),
+                  label: Text(
+                    t.translate('pay_amount'),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryPurple,
+                    foregroundColor: Colors.white,
+                    elevation: 12,
+                    shadowColor: AppColors.primaryPurple.withOpacity(0.45),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
